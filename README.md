@@ -21,7 +21,7 @@ An epic interface for audience interactive with live stream broadcasters.
 
 <img src='http://i.imgur.com/SplxupV.jpg'>
 
-> You can use the [chat robot](https://obsproject.com/)
+> You can use the [chat robot](https://github.com/XiangPingJun/chat-robot)
 
 ## Installation
 
