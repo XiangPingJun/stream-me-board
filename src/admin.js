@@ -15,14 +15,10 @@ firebase.initializeApp(FirebaseConf)
 const muiTheme = getMuiTheme({
   fontFamily: "'Noto Sans TC', sans-serif"
 })
-function onInputKey(e) {
-  console.log(e)
-}
-
 ReactDOM.render((
   <Provider store={store}>
     <MuiThemeProvider muiTheme={muiTheme}>
-      {isAdmin ? <Admin /> : <input onKeyDown={onInputKey} />}
+      <Admin />
     </MuiThemeProvider>
   </Provider>
 ), document.querySelector('main'))

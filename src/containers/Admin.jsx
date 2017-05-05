@@ -47,7 +47,14 @@ class Admin extends React.Component {
       this.forceUpdate()
     }, voteTimeout + 500)
   }
-  render = () => (
+  onLogInInputKey = e => {
+    if ('Enter' != e.key)
+      return
+    firebase.auth().signInWithEmailAndPassword('admin@admin.com', this.state.PW)
+      .then(() => this.setState({ isAdmin: true }))
+      .catch(() => alert('login failure'))
+  }
+  renderAdmin = () => (
     <div style={{ width: '90%' }}>
       {undefined === this.props.sysInfo.streaming ?
         <h1 style={{ color: '#AAAAAA', margin: 0 }}>載入中...</h1>
@@ -94,10 +101,12 @@ class Admin extends React.Component {
       票數：{this.getVoteCount()}
     </div>
   )
+  renderLogIn = () => <input type="password" onKeyPress={this.onLogInInputKey} onChange={e => this.setState({ PW: e.target.value })} value={this.state.PW} style={{ height: 20 }} />
+  render = () => this.state.isAdmin ? this.renderAdmin() : this.renderLogIn()
 }
 
 export default connect(
-  ({sysInfo, vote }) => ({
+  ({ sysInfo, vote }) => ({
     sysInfo: sysInfo,
     vote: vote
   }),
