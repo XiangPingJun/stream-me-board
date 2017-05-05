@@ -1,3 +1,4 @@
 node_modules
 ai/Data/
 config/firebase.js
+npm-debug.log.*
