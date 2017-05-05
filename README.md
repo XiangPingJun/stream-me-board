@@ -17,6 +17,11 @@ An epic interface for audience interactive with live stream broadcasters.
 > Broadcaster can also raise a vote that does not like any vote you have seen, we count all the mouse clicks for every body.
 > If the audience really like the candidate, they will sure hit harder on their mouse!
 
+## Chat robot!
+
+<img src='http://i.imgur.com/SplxupV.jpg'>
+
+> You can use the [chat robot](https://obsproject.com/)
 
 ## Installation
 
@@ -68,4 +73,4 @@ firebase deploy
 * `stream.html` shows the comic-like dialog and screen effect, can be merge to video source through [Open Broadcaster Software](https://obsproject.com/)
 * `watch.html` is the page audience will be look at.
 * `admin.html` can be used to manage the page.
-* A [chat robot](https://obsproject.com/) can be used for fun!
+* A [chat robot](https://obsproject.com/) that runs on different machine.
