@@ -1,0 +1,12 @@
+{
+  "rules": {
+    "system": {
+      ".read": true,
+      ".write": true
+    },
+    "user": {
+      ".read": true,
+      ".write": true
+    }
+  }
+}
