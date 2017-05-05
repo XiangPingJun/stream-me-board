@@ -73,4 +73,4 @@ firebase deploy
 * `stream.html` shows the comic-like dialog and screen effect, can be merge to video source through [Open Broadcaster Software](https://obsproject.com/)
 * `watch.html` is the page audience will be look at.
 * `admin.html` can be used to manage the page.
-* A [chat robot](https://obsproject.com/) that runs on different machine.
+* A [chat robot](https://github.com/XiangPingJun/chat-robot) that runs on different machine.
