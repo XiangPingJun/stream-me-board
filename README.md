@@ -57,6 +57,15 @@ firebase deploy
 ```
 
 * It will then all files in public/ for your production.
-* Merge stream.html to your Open Broadcaster Software for chat and screen effect.
-* Use admin.html with your password to begin a broadcast on youtube and start vote.
-* Share your 'watch.html' link to your audience!
+* Merge `stream.html` to your Open Broadcaster Software for chat and screen effect.
+* Use `admin.html` with your password to begin a broadcast on youtube and start vote.
+* Share your `watch.html` link to your audience!
+
+## System Architecture
+
+<img src='http://i.imgur.com/xmDqWPU.png'>
+
+* `stream.html` shows the comic-like dialog and screen effect, can be merge to video source through [Open Broadcaster Software](https://obsproject.com/)
+* `watch.html` is the page audience will be look at.
+* `admin.html` can be used to manage the page.
+* A [chat robot](https://obsproject.com/) can be used for fun!
