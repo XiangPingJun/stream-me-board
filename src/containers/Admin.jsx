@@ -36,10 +36,13 @@ class Admin extends React.Component {
       function convertToYoutube(id) { return '//www.youtube.com/embed/' + id + '?enablejsapi=1' }
     }
   }
-  getVoteCount = () =>
-    Object.keys(this.props.vote.optionVote).map((prev, curr) =>
+  getVoteCount = () => {
+    if (!this.props.vote)
+      return
+    return Object.keys(this.props.vote.optionVote).map((prev, curr) =>
       ' ' + String.fromCharCode('A'.charCodeAt(0) + curr) + ':' + this.props.vote.optionVote[curr] + '票 '
     )
+  }
   handleStartVote = () => {
     this.props.startVote(this.state.optionCount)
     setTimeout(() => {
@@ -51,8 +54,11 @@ class Admin extends React.Component {
     if ('Enter' != e.key)
       return
     firebase.auth().signInWithEmailAndPassword('admin@admin.com', this.state.PW)
-      .then(() => this.setState({ isAdmin: true }))
-      .catch(() => alert('login failure'))
+      .then(res => {
+        console.log('success', res)
+        this.setState({ isAdmin: true })
+      })
+      .catch(res => console.log('fail', res))
   }
   renderAdmin = () => (
     <div style={{ width: '90%' }}>
