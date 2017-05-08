@@ -5,3 +5,4 @@ npm-debug.log.*
 *.min.js
 *.js.map
 public/*.css
+.firebaserc
