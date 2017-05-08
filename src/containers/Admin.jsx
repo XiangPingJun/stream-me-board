@@ -8,11 +8,19 @@ import DropDownMenu from 'material-ui/DropDownMenu'
 import MenuItem from 'material-ui/MenuItem'
 import Checkbox from 'material-ui/Checkbox'
 
+const ADMIN_ACCOUNT = 'admin@admin.com'
+
 class Admin extends React.Component {
   state = {}
   componentDidMount = () => {
     this.props.subscribeSysInfo()
     this.props.subscribeVote()
+    firebase.auth().onAuthStateChanged(user => {
+      if (!user)
+        return
+      if (ADMIN_ACCOUNT == user.email)
+        this.setState({ isAdmin: true })
+    })
   }
   componentWillReceiveProps = newProps =>
     this.setState({
@@ -50,12 +58,9 @@ class Admin extends React.Component {
   onLogInInputKey = e => {
     if ('Enter' != e.key)
       return
-    firebase.auth().signInWithEmailAndPassword('admin@admin.com', this.state.PW)
-      .then(res => {
-        console.log('success', res)
-        this.setState({ isAdmin: true })
-      })
-      .catch(res => console.log('fail', res))
+    firebase.auth().signInWithEmailAndPassword(ADMIN_ACCOUNT, this.state.PW)
+      .then(() => this.setState({ isAdmin: true }))
+      .catch(() => alert('login failed'))
   }
   renderAdmin = () => (
     <div style={{ width: '90%' }}>
