@@ -32,7 +32,13 @@ An epic interface for audience interactive with live stream broadcasters.
 <img src='http://i.imgur.com/uvXzzk9.png'>
 
 4. Install [firebase CLI](https://firebase.google.com/docs/hosting/quickstart) for hosting the page on firebase
-5. Create a file `config/firebase.js` and fill your apiKey:
+5. Init the firebase
+
+```sh
+firebase init
+```
+
+6. Create a file `config/firebase.js` and fill your apiKey:
 
 ```javascript
 const FirebaseConf = {
@@ -45,7 +51,7 @@ const FirebaseConf = {
 export default FirebaseConf
 ```
 
-6. Install [node.js](https://nodejs.org/) and run command:
+7. Install [node.js](https://nodejs.org/) and run command:
 
 ```sh
 npm install
