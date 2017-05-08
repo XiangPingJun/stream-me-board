@@ -52,13 +52,18 @@ export default FirebaseConf
 npm install
 ```
 
+6. Install [firebase CLI](https://firebase.google.com/docs/hosting/quickstart) for hosting the page on firebase
+
 ## Build and deploy
 
 ```sh
 npm build-watch
 npm build-stream
 npm build-admin
+# This will build the watch, stream, admin page
+
 firebase deploy
+# Upload the built page to firebase hosting, you can later view on firebase
 ```
 
 * It will then all files in public/ for your production.
