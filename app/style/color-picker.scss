@@ -1,0 +1,27 @@
+.color-picker {
+	text-align: center;
+	padding: 0;
+	margin: 0;
+	display: inline-block;
+	li {
+		box-sizing: border-box;
+		list-style: none;
+		width: 50px;
+		height: 50px;
+		border-radius: 50%;
+		border-bottom: 5px solid rgba(0, 0, 0, .1);
+		display: inline-block;
+		margin: 5px 5px 5px 5px;
+		cursor: pointer;
+		transition-duration: .2s;
+		box-shadow: 0 2px 1px rgba(0, 0, 0, .2);
+		&:hover,
+		&.active-color {
+			width: 60px;
+			height: 60px;
+			margin: 0;
+			border-bottom: 10px solid rgba(0, 0, 0, .15);
+			box-shadow: 0 10px 10px rgba(0, 0, 0, .2);
+		}
+	}
+}

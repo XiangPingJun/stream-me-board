@@ -1,0 +1,40 @@
+.video-box {
+	position: relative;
+}
+
+.video-box:before,
+.video-box:after {
+	z-index: -1;
+	position: absolute;
+	content: "";
+	bottom: 15px;
+	left: 10px;
+	width: 50%;
+	top: 80%;
+	max-width: 378px;
+	box-shadow: 0 20px 20px rgba(0, 0, 0, 0.5);
+	-moz-transform: rotate(-5deg);
+	-ms-transform: rotate(-5deg);
+	-webkit-transform: rotate(-5deg);
+	transform: rotate(-5deg);
+	margin: 5px;
+}
+
+.video-box:after {
+	-moz-transform: rotate(5deg);
+	-ms-transform: rotate(5deg);
+	-webkit-transform: rotate(5deg);
+	transform: rotate(5deg);
+	right: 10px;
+	left: auto;
+}
+
+.video-box .container {
+	position: relative;
+	border-radius: 8px;
+	overflow: hidden;
+}
+
+.video-box .container iframe {
+	margin: 0 0 -7px 0;
+}

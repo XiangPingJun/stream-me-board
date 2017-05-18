@@ -1,0 +1,55 @@
+.icon-button {
+  text-shadow: 3px 2px 0 #1d9d74, 6px 5px 0 rgba(0, 0, 0, .15);
+  transition: ease .2s;
+  position: relative;
+  cursor: pointer;
+  color:white;
+  margin: 5px;
+  width: 65px;
+}
+.icon-button .text {
+  position: relative;
+  text-align: center;
+  margin-top: 5px;
+}
+.icon-button .fa {
+  font-size: 55px;
+}
+.icon-button:hover {
+  color: #227158;
+}
+
+.flat-button {
+  display: inline-block;
+  background-color: rgba(0,0,0,0); 
+  border: 2px solid white;
+  color:white; 
+  border-radius: 10px;
+  padding: 5px 10px; 
+  font-size: 18px;
+  cursor: pointer;
+  position: relative; 
+  text-align: center; 
+  text-decoration: none; 
+}
+.flat-button.small {
+  margin-left: 5px;
+  padding: 0 5px;
+  border-radius: 5px;
+}
+
+.flat-button:hover {
+  background-color: white; 
+}
+
+.flat-button:hover i {
+  color: #1D9E74; 
+}
+
+.flat-button:hover span {
+  color: #1D9E74; 
+}
+
+.flat-button:active {
+  box-shadow: inset 0px 2px 2px rgba(0, 0, 0, 0.3); 
+}

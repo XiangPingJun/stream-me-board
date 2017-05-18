@@ -1,0 +1,28 @@
+.click-me {
+  animation: blinker 0.1s step-end infinite;
+	color: #F44336;
+	font-size: 0.8em;
+	font-weight: bold;
+}
+
+@keyframes blinker {  
+  50% { color: #E57373; }
+}
+
+.vote-button {
+  display: inline-block;
+  background-color: rgba(0,0,0,0); 
+	border: 2px solid white;
+  color:white; 
+  border-radius: 10px;
+  padding: 0.25em 1.25em; 
+  font-size: 1.5em;
+	margin-right: 5; 
+  cursor: pointer;
+  position: relative; 
+  text-align: center; 
+  text-decoration: none; 
+}
+.vote-button:active {
+  box-shadow: inset 0px 2px 2px rgba(0, 0, 0, 0.3); 
+}
