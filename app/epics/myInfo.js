@@ -1,7 +1,7 @@
 import { Observable } from 'rxjs/Observable'
 import { receiveMyInfo, subscribeMyInfo as _subscribeMyInfo } from '../actions'
-import { randomColor } from '../misc/common.js'
-import store from '../misc/store.js'
+import { randomColor } from '../utils/common.js'
+//import store from '../store.js'
 
 export const subscribeMyInfo = action$ => action$
   .ofType('SUBSCRIBE_MY_INFO').mergeMap(() => {
@@ -38,10 +38,10 @@ export const setMyLastWatched = action$ => action$
   .ofType('SET_MY_LAST_WATCHED').mergeMap(() =>
     Observable.fromPromise(
       firebase.database().ref('user').child(localStorage.userName).transaction(function (user) {
-        if (user.lastWatched != store.getState().sysInfo.streamId) {
+        /*if (user.lastWatched != store.getState().sysInfo.streamId) {
           user.watchCount++
           user.lastWatched = store.getState().sysInfo.streamId
-        }
+        }*/
         return user
       })
     )

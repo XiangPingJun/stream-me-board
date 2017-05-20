@@ -99,6 +99,7 @@ if (!window.Intl) {
   }))
     .then(() => Promise.all([
       import('intl/locale-data/jsonp/en.js'),
+      import('intl/locale-data/jsonp/zh-Hant-TW.js'),
     ]))
     .then(() => render(translationMessages))
     .catch((err) => {

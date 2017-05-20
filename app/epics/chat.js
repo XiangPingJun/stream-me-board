@@ -1,6 +1,6 @@
 import { Observable } from 'rxjs/Observable'
 import { dummy, receiveChat } from '../actions'
-import { fingerprint, maxChatCount, getVideoTime } from '../misc/common.js'
+import { fingerprint, maxChatCount, getVideoTime } from '../utils/common.js'
 
 export const subscribeChat = action$ => action$
   .ofType('SUBSCRIBE_CHAT').mergeMap(() =>

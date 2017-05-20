@@ -1,16 +1,16 @@
 import React from 'react'
-//import ComicBubble from '../components/ComicBubble.jsx'
 import { getWindowWidth } from '../../utils/common.js'
 import '../../style/breeze-input.scss'
 import Rx from "rxjs/Rx"
 import { loginMyInfo } from '../../actions'
 import { connect } from 'react-redux'
-import Background from '../Background'
+import BreezeBackground from '../../components/BreezeBackground/'
+import ComicBubble from '../../components/ComicBubble/'
 
-class Welcome extends React.Component {
+export class Welcome extends React.Component {
   state = {}
   componentDidMount = () =>
-    Rx.Observable.timer(10000).subscribe(() => {
+    Rx.Observable.timer(5000).subscribe(() => {
       if (this.state.showTip)
         return
       this.setState({ showTip: true })
@@ -28,6 +28,7 @@ class Welcome extends React.Component {
   }
   render = () => (
     <div>
+      <BreezeBackground />
       <div style={{ width: '100vw', textAlign: 'center' }}>
         <h1 className="caption animated bounceInDown"
           style={{
@@ -45,11 +46,11 @@ class Welcome extends React.Component {
               style={{ fontFamily: "'Noto Sans TC', sans-serif" }} maxLength={16} />
           </form>
         </div>
-        {/*this.state.showTip ? (
-        <ComicBubble direction="right" vdirection="bottom" top="230px" left="calc(50vw - 50px)" className="animated jello">
-          打上暱稱之後按下輸入鍵<i className="fa fa-level-down fa-rotate-90" style={{ margin: '0 3px' }} />吧！
+        {this.state.showTip ? (
+          <ComicBubble direction="right" vdirection="bottom" top="230px" left="calc(50vw - 50px)" className="animated jello">
+            打上暱稱之後按下輸入鍵<i className="fa fa-level-down fa-rotate-90" style={{ margin: '0 3px' }} />吧！
         </ComicBubble>
-      ) : null*/}
+        ) : null}
       </div>
     </div>
   )

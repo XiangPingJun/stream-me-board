@@ -12,7 +12,8 @@
  */
 
 import React from 'react';
-import Background from '../Background/'
+import '../../style/common.scss'
+import '../../style/animate.scss'
 
 export default class App extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
 
@@ -23,7 +24,6 @@ export default class App extends React.PureComponent { // eslint-disable-line re
   render() {
     return (
       <div>
-        <Background />
         {React.Children.toArray(this.props.children)}
       </div>
     );

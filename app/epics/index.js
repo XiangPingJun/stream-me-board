@@ -1,4 +1,4 @@
-import { combineEpics } from 'redux-observable/lib/combineEpics.js'
+import { combineEpics } from 'redux-observable'
 import { subscribeSysInfo, startBroadcast, endBroadcast } from './sysInfo'
 import { subscribeMyInfo, loginMyInfo, setMyColor, setMyLastWatched } from './myInfo'
 import { subscribeChat, submitChat } from './chat'

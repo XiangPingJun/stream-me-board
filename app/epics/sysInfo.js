@@ -1,6 +1,6 @@
 import { Observable } from 'rxjs/Observable'
 import { receiveSysInfo, submitChat, dummy } from '../actions'
-import store from '../misc/store.js'
+//import store from '../store.js'
 
 export const subscribeSysInfo = action$ => action$
   .ofType('SUBSCRIBE_SYS_INFO')
@@ -27,13 +27,13 @@ export const startBroadcast = action$ => action$
         delete history[Object.keys(history)[0]]
         firebase.database().ref('chatHistory').set({
           ...history,
-          [store.getState().sysInfo.streamId]: chat
+          //[store.getState().sysInfo.streamId]: chat
         })
       })
       firebase.database().ref('oldChat').remove()
       firebase.database().ref('chat').remove()
-      firebase.database().ref('record').remove()
-        .then(() => store.dispatch(submitChat('系統', '實況開始囉！大家坐穩啦！', 'black', 'START')))
+      //firebase.database().ref('record').remove()
+      //        .then(() => store.dispatch(submitChat('系統', '實況開始囉！大家坐穩啦！', 'black', 'START')))
       firebase.database().ref('system').update({
         videoSrc: url,
         streaming: true,
