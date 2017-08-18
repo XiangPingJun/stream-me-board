@@ -37,6 +37,8 @@ export const sendVote = action$ => action$
 			const total = Object.keys(addVote).reduce((total, key) => parseInt(total) + parseInt(addVote[key]), 0)
 			let newUserInfo
 			firebase.database().ref('user/' + localStorage.userName).transaction(function (user) {
+				if (!user)
+					return
 				user.totalVoteCount = user.totalVoteCount ? user.totalVoteCount + total : total
 				newUserInfo = { ...user }
 				return user
