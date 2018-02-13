@@ -1,12 +1,13 @@
 <template>
   <div id="app">
     <img src="./assets/logo.png">
+    1
   </div>
 </template>
 
 <script>
 export default {
-  name: "App"
+  name: "App1"
 };
 </script>
 

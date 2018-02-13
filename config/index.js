@@ -20,7 +20,7 @@ module.exports = {
     notifyOnErrors: true,
     poll: false, // https://webpack.js.org/configuration/dev-server/#devserver-watchoptions-
 
-    
+
     /**
      * Source Maps
      */
@@ -38,7 +38,11 @@ module.exports = {
 
   build: {
     // Template for index.html
-    index: path.resolve(__dirname, '../dist/index.html'),
+    pcVisitor: path.resolve(__dirname, '../dist/pcVisitor.html'),
+    mobileVisitor: path.resolve(__dirname, '../dist/mobileVisitor.html'),
+    admin: path.resolve(__dirname, '../dist/admin.html'),
+    chatRoom: path.resolve(__dirname, '../dist/chatRoom.html'),
+    streamOverlay: path.resolve(__dirname, '../dist/streamOverlay.html'),
 
     // Paths
     assetsRoot: path.resolve(__dirname, '../dist'),

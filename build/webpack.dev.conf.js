@@ -53,9 +53,34 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     new webpack.NoEmitOnErrorsPlugin(),
     // https://github.com/ampedandwired/html-webpack-plugin
     new HtmlWebpackPlugin({
-      filename: 'index.html',
-      template: 'index.html',
-      inject: true
+      filename: 'pcVisitor.html',
+      template: 'pcVisitor.html',
+      inject: true,
+      chunks: ['pcVisitor']
+    }),
+    new HtmlWebpackPlugin({
+      filename: 'mobileVisitor.html',
+      template: 'mobileVisitor.html',
+      inject: true,
+      chunks: ['mobileVisitor']
+    }),
+    new HtmlWebpackPlugin({
+      filename: 'admin.html',
+      template: 'admin.html',
+      inject: true,
+      chunks: ['admin']
+    }),
+    new HtmlWebpackPlugin({
+      filename: 'chatRoom.html',
+      template: 'chatRoom.html',
+      inject: true,
+      chunks: ['chatRoom']
+    }),
+    new HtmlWebpackPlugin({
+      filename: 'streamOverlay.html',
+      template: 'streamOverlay.html',
+      inject: true,
+      chunks: ['streamOverlay']
     }),
     // copy custom static assets
     new CopyWebpackPlugin([
@@ -85,8 +110,8 @@ module.exports = new Promise((resolve, reject) => {
           messages: [`Your application is running here: http://${devWebpackConfig.devServer.host}:${port}`],
         },
         onErrors: config.dev.notifyOnErrors
-        ? utils.createNotifierCallback()
-        : undefined
+          ? utils.createNotifierCallback()
+          : undefined
       }))
 
       resolve(devWebpackConfig)

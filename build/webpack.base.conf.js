@@ -4,7 +4,7 @@ const utils = require('./utils')
 const config = require('../config')
 const vueLoaderConfig = require('./vue-loader.conf')
 
-function resolve (dir) {
+function resolve(dir) {
   return path.join(__dirname, '..', dir)
 }
 
@@ -13,7 +13,11 @@ function resolve (dir) {
 module.exports = {
   context: path.resolve(__dirname, '../'),
   entry: {
-    app: './src/main.js'
+    pcVisitor: './src/pcVisitor.js',
+    mobileVisitor: './src/mobileVisitor.js',
+    admin: './src/admin.js',
+    chatRoom: './src/chatRoom.js',
+    streamOverlay: './src/streamOverlay.js',
   },
   output: {
     path: config.build.assetsRoot,
