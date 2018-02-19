@@ -1,6 +1,9 @@
-<template></template>
+<template>
+  <canvas ref="canvas"></canvas>
+</template>
+
 <script>
-export const bgImages = [
+export const bgImageTouples = [
   { name: 'cake', count: 6 },
   { name: 'castle', count: 7 },
   { name: 'clouds', count: 9 },
@@ -10,34 +13,42 @@ export default {
   props: ['offsetX', 'offsetY'],
   data() {
     return {
-      image: '',
+      images: [],
       offset: { x: 0.5, y: 0.5 }
     }
   },
+  created() {
+    document.body.style.backgroundColor = "blue"
+
+    this.setRandomImage()
+  },
   methods: {
     setRandomImage() {
-      //      this.setImage(bgImages[Math.floor(Math.random() * bgImages.length)])
-      this.setImage(bgImages[0])
+      this.setImage(bgImageTouples[0])
     },
-    setImage(image) {
-      const src = [], size = []
-      for (let i = 0; i < image.count; i++) {
-        const path = require(`../assets/image/parallaxBackground/${image.name}/${i}.png`)
-        src.push(`url(${path})`)
-        size.push(`${100 + (image.count - i - 1) * 0.5}vw`)
+    setImage(imageTouple) {
+      this.images = []
+      for (let i = 0; i < imageTouple.count; i++) {
+        const img = new Image()
+        img.src = require(`../assets/image/parallaxBackground/${imageTouple.name}/${i}.png`)
+        this.images.unshift(img)
       }
-      this.image = image
-      document.body.style.backgroundImage = src.join(',')
-      document.body.style.backgroundSize = size.join(',')
     },
     moveImage(offset) {
+      this.$refs.canvas.width = document.body.clientWidth
+      this.$refs.canvas.height = document.body.clientHeight
+      const canvas = this.$refs.canvas
+      const context = canvas.getContext('2d')
       this.offset = { ...this.offset, ...offset }
+      //context.clearRect(0, 0, 100, 100)
       const position = []
-      for (let i = 0; i < this.image.count; i++) {
-        const factor = (this.image.count - i - 1) * 0.25
-        position.push(`${100 + factor * (this.offset.x - 0.5)}vw ${100 + factor * (this.offset.y - 0.5)}vh`)
-      }
-      document.body.style.backgroundPosition = position.join(',')
+      this.images.forEach((img, i) => {
+        const factor = (this.images.length - i - 1) * 5
+        //console.log(factor * (this.offset.x - 0.5), factor * (this.offset.y - 0.5))
+        //context.drawImage(img, 100 + factor * (this.offset.x - 0.5), 100 + factor * (this.offset.y - 0.5))
+        //context.drawImage(img, factor * (this.offset.x - 0.5), factor * (this.offset.y - 0.5))
+        context.drawImage(img, factor * (this.offset.x - 0.5), factor * (this.offset.y - 0.5), canvas.width, canvas.height)
+      })
     }
   },
   watch: {
@@ -47,26 +58,13 @@ export default {
     offsetY: function (newVal, oldVal) {
       this.moveImage({ y: newVal })
     }
-  },
-  created() {
-    this.setRandomImage()
   }
 }
 </script>
 
-<style>
-@keyframes moveing-bg {
-  0% {
-    background-position-x: 95vw, 96vw, 97vw, 98vw, 99vw;
-  }
-  100% {
-    background-position-x: 109vw, 108vw, 107vw, 106vw, 105vw;
-  }
-}
-body {
-  animation-name: moveing-bg;
-  animation-duration: 10s;
-  animation-direction: reverse;
-  animation-timing-function: linear;
+<style scoped>
+canvas {
+  width: 100vw;
+  height: 100vh;
 }
 </style>
