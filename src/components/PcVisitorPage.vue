@@ -1,31 +1,18 @@
 <template>
-  <background :offsetX="offsetX" :offsetY="offsetY" />
+  <well>Test</well>
 </template>
 
 <script>
-import PageBackground from "./PageBackground";
+import Well from './Well.vue'
 
 export default {
   data() {
-    return {
-      offsetX: 0,
-      offsetY: 0
-    };
+    return {}
   },
   components: {
-    background: PageBackground
+    well: Well
   },
   created() {
-    document.addEventListener("mousemove", this.mousemove);
-  },
-  methods: {
-    mousemove(event) {
-      this.offsetX = event.clientX / window.innerWidth;
-      this.offsetY = event.clientY / window.innerHeight;
-    },
-    timeout() {
-      this.offsetX += 0.001;
-    }
   }
-};
+}
 </script>
