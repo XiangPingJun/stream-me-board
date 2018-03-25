@@ -47,8 +47,9 @@
 .content {
   font-weight: bold;
   color: #f8ecd5;
+  text-shadow: 0px 4px #705749;
   background-color: #927964;
-  padding: 5px;
+  padding: 12px;
   box-shadow: 0px -4px #aa8c6e, -4px 0px #aa8c6e, 0px 4px #705749,
     0px 8px #2a2e30, 4px 0px #927964, -4px -4px #264e4a, -4px 4px #264e4a,
     4px -4px #57332d, 4px 4px #57332d;
