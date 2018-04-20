@@ -9,7 +9,7 @@
             <!-- //www.youtube.com/embed/Xzv7eh2VaNI?enablejsapi=1 -->
             <video-box :height="videoHeight" :width="videoWidth" src="todo"></video-box>
           </dialog-box>
-          <div style="width:350px">
+          <div class="page-right-side">
             <dialog-box>
               <personal-data />
             </dialog-box>
@@ -44,7 +44,10 @@ export default {
   created() {
     const width = document.documentElement.clientWidth
     const height = document.documentElement.clientHeight
-    this.videoWidth = width - 420
+    if (width / height < 16 / 9)
+      this.videoWidth = width - 420
+    else
+      this.videoHeight = height - 120
   }
 }
 </script>
@@ -65,8 +68,7 @@ export default {
   justify-content: center;
 }
 .page-right-side {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+  width: 320px;
+  margin-left: 10px;
 }
 </style>
