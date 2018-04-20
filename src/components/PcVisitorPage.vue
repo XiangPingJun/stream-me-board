@@ -2,21 +2,30 @@
   <div>
     <background></background>
     <div class="page-container">
-      <div class="middle">
-        <dialog-box>
-          <div style="margin-bottom: 12px;">&gt; 新注音實況台</div>
-          <video-box :height="videoHeight" :width="videoWidth" src="//www.youtube.com/embed/Xzv7eh2VaNI?enablejsapi=1"></video-box>
-        </dialog-box>
+      <div class="page-middle">
+        <div class="page-content">
+          <dialog-box>
+            <div style="margin-bottom: 12px;"><i style="font-size:-1px;" class="fas fa-video"></i> 新注音實況台</div>
+            <!-- //www.youtube.com/embed/Xzv7eh2VaNI?enablejsapi=1 -->
+            <video-box :height="videoHeight" :width="videoWidth" src="todo"></video-box>
+          </dialog-box>
+          <div style="width:350px">
+            <dialog-box>
+              <personal-data />
+            </dialog-box>
+          </div>          
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import Well from './Well.vue'
-import DialogBox from './DialogBox.vue'
-import VideoBox from './VideoBox.vue'
-import NightSkyBackground from './NightSkyBackground.vue'
+import Well from './Well'
+import DialogBox from './DialogBox'
+import VideoBox from './VideoBox'
+import NightSkyBackground from './NightSkyBackground'
+import PersonalData from './PersonalData'
 
 export default {
   data() {
@@ -29,16 +38,13 @@ export default {
     well: Well,
     'dialog-box': DialogBox,
     'video-box': VideoBox,
-    'background': NightSkyBackground
+    'background': NightSkyBackground,
+    'personal-data': PersonalData
   },
   created() {
     const width = document.documentElement.clientWidth
     const height = document.documentElement.clientHeight
-    console.log(width / height < 16 / 9)
-    if (width / height < 16 / 9)
-      this.videoWidth = width - 400
-    else
-      this.videoHeight = height - 120
+    this.videoWidth = width - 420
   }
 }
 </script>
@@ -49,7 +55,16 @@ export default {
   height: 100vh;
   justify-content: center;
 }
-.middle {
+.page-middle {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.page-content {
+  display: flex;
+  justify-content: center;
+}
+.page-right-side {
   display: flex;
   flex-direction: column;
   justify-content: center;
