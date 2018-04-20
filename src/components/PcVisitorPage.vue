@@ -5,13 +5,19 @@
       <div class="page-middle">
         <div class="page-content">
           <dialog-box>
-            <div style="margin-bottom: 12px;"><i style="font-size:-1px;" class="fas fa-video"></i> 新注音實況台</div>
+            <div style="margin-bottom:12px;"><i class="fas fa-video"></i> 新注音實況台</div>
             <!-- //www.youtube.com/embed/Xzv7eh2VaNI?enablejsapi=1 -->
             <video-box :height="videoHeight" :width="videoWidth" src="todo"></video-box>
           </dialog-box>
           <div class="page-right-side">
             <dialog-box>
               <personal-data />
+            </dialog-box>
+            <dialog-box>
+              todo
+            </dialog-box>
+            <dialog-box style="flex-grow:1">
+              todo
             </dialog-box>
           </div>          
         </div>
@@ -70,5 +76,7 @@ export default {
 .page-right-side {
   width: 320px;
   margin-left: 10px;
+  display: flex;
+  flex-direction: column;
 }
 </style>
