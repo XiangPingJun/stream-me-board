@@ -22,8 +22,8 @@
 
 .stars {
   z-index: 10;
-  width: 1px;
-  height: 1px;
+  width: 2px;
+  height: 2px;
   border-radius: 50%;
   background: transparent;
   box-shadow: 512px 2161px #fff, 529px 2053px #fff, 2457px 256px #fff,
@@ -135,8 +135,8 @@
 .stars:after {
   content: " ";
   top: -600px;
-  width: 1px;
-  height: 1px;
+  width: 2px;
+  height: 2px;
   border-radius: 50%;
   position: absolute;
   backgroud: transparent;
@@ -248,8 +248,8 @@
 
 .stars1 {
   z-index: 10;
-  width: 2px;
-  height: 2px;
+  width: 4px;
+  height: 4px;
   border-radius: 50%;
   background: transparent;
   box-shadow: 1239px 1805px #fff, 1235px 1498px #fff, 60px 2403px #fff,
@@ -301,8 +301,8 @@
 .stars1:after {
   content: " ";
   top: -600px;
-  width: 2px;
-  height: 2px;
+  width: 4px;
+  height: 4px;
   border-radius: 50%;
   position: absolute;
   backgroud: transparent;
@@ -354,8 +354,8 @@
 
 .stars2 {
   z-index: 10;
-  width: 3px;
-  height: 3px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
   background: transparent;
   box-shadow: 1196px 902px #fff, 2021px 2351px #fff, 984px 1748px #fff,
@@ -377,8 +377,8 @@
 .stars2:after {
   content: " ";
   top: -600px;
-  width: 3px;
-  height: 3px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
   position: absolute;
   backgroud: transparent;
