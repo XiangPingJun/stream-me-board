@@ -30,6 +30,7 @@
 <style scoped>
 .border {
   display: flex;
+  position: relative;
   flex-direction: column;
   margin: 10px;
 }
