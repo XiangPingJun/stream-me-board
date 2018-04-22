@@ -5,6 +5,7 @@
       <!-- //www.youtube.com/embed/Xzv7eh2VaNI?enablejsapi=1 -->
       <video-box :height="videoHeight" :width="videoWidth" src="//www.youtube.com/embed/Xzv7eh2VaNI?enablejsapi=1"></video-box>
       <div class="right-side">
+        <my-info />
         <quiz />
         <chat-box style="flex-grow:1" />
       </div>
@@ -19,6 +20,7 @@ import VideoBox from '../VideoBox'
 import NightSkyBackground from './NightSkyBackground'
 import ChatBox from './ChatBox'
 import Quiz from './Quiz'
+import MyInfo from './MyInfo'
 
 export default {
   data() {
@@ -28,12 +30,13 @@ export default {
     }
   },
   components: {
-    well: Well,
+    'well': Well,
     'dialog-box': DialogBox,
     'video-box': VideoBox,
     'background': NightSkyBackground,
     'chat-box': ChatBox,
-    'quiz': Quiz
+    'quiz': Quiz,
+    'my-info': MyInfo,
   },
   created() {
     const width = document.documentElement.clientWidth

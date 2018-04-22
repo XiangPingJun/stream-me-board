@@ -1,7 +1,6 @@
 <template>
 	<dialog-box>
     <div class="container">
-      <well>qwq</well>
       <div class="right">
         <div>(輸入暱稱一起來玩吧!)</div>
         <div>(輸入暱稱一起來玩吧!)</div>

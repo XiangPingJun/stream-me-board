@@ -13,7 +13,7 @@
   font-weight: bold;
   color: #f8ecd5;
   background-color: #3d3933;
-  padding: 4px;
+  padding: 0px 3px;
   box-shadow: 0 -4px #3d3933, -4px 0 #3d3933, 0 4px #3d3933, 4px 0 #3d3933,
     -4px -4px #2a2e30, -4px 4px #2a2e30, 4px -4px #2a2e30, 4px 4px #2a2e30;
   box-sizing: border-box;
