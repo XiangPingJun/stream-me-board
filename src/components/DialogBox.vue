@@ -70,7 +70,7 @@ export default {
   flex-grow: 1;
   min-width: 120px;
   color: #f8ecd5;
-  text-shadow: 0px 3px #705749;
+  text-shadow: 0px 3px #705749, 3px 3px #86674d;
   background-color: #927964;
   padding: 8px;
   box-shadow: 0px -4px #aa8c6e, -4px 0px #aa8c6e, 0px 4px #705749,

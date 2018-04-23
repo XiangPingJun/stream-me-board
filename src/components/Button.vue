@@ -1,6 +1,6 @@
 <template>
-  <div class="btn-border">
-    <div class="btn-content"><slot></slot></div>
+  <div class="border">
+    <div class="content"><slot></slot></div>
     <div class="stroke color-4" style="height:calc(100% - 16px); top:14px; right:-2px;"></div>    
     <div class="stroke color-3" style="top:10px; right:-2px;"></div>    
     <div class="stroke color-4" style="bottom:-2px; right:2px;"></div>    
@@ -18,7 +18,7 @@
 </template>
 
 <style scoped>
-.btn-border {
+.border {
   display: flex;
   position: relative;
   flex-direction: column;
@@ -49,7 +49,7 @@
 .color-5 {
   box-shadow: 0 0 0 2px #544035;
 }
-.btn-content {
+.content {
   display: flex;
   flex-grow: 1;
   color: #f8ecd5;
