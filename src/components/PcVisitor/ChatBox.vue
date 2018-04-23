@@ -1,7 +1,9 @@
 <template>
 	<dialog-box>
-    <chat-line />
-    <chat-line />
+    <div style="overflow-y: hidden">
+      <chat-line />
+      <chat-line />
+    </div>
 	</dialog-box>
 </template>
 

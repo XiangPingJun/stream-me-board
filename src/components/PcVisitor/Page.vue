@@ -5,9 +5,9 @@
       <!-- //www.youtube.com/embed/Xzv7eh2VaNI?enablejsapi=1 -->
       <video-box ref="video" :height="videoHeight" :width="videoWidth" src="//www.youtube.com/embed/Xzv7eh2VaNI?enablejsapi=1"></video-box>
       <div class="right-side">
-        <my-info />
+        <my-info style="flex-shrink: 0" />
         <quiz />
-        <chat-box style="flex-grow:1" />
+        <chat-box style="flex-grow: 1" />
       </div>
     </div>
   </div>

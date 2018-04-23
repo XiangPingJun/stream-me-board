@@ -28,5 +28,6 @@
   padding: 4px;
   box-shadow: 0 -4px #86674d, -4px 0 #86674d, 0 4px #86674d, 4px 0 #86674d;
   box-sizing: border-box;
+  margin: 8px 0px;
 }
 </style>

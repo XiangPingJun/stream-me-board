@@ -16,12 +16,14 @@
 import UnderlineText from '../UnderlineText'
 import DialogBox from '../DialogBox'
 import Thumbnail from '../Thumbnail'
+import Button from '../Button'
 
 export default {
   components: {
     'underline-text': UnderlineText,
     'dialog-box': DialogBox,
     'thumbnail': Thumbnail,
+    'btn': Button,
   }
 }
 </script>

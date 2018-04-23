@@ -47,7 +47,7 @@ export default {
   display: flex;
   position: relative;
   flex-direction: column;
-  margin: 10px;
+  margin: 8px;
 }
 .stroke {
   position: absolute;
@@ -88,5 +88,9 @@ export default {
 ::-webkit-scrollbar-thumb {
   border-radius: 3px;
   background-color: #3d3933;
+}
+::-webkit-scrollbar-button {
+  width: 7px;
+  height: 7px;
 }
 </style>
