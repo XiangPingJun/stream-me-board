@@ -1,6 +1,6 @@
 <template>
   <div class="border">
-    <div class="content">
+    <div class="content" :style="contentStyle">
       <slot></slot>
     </div>
     <div class="stroke color-2" style="top:-2px; right:2px;"></div>
@@ -26,6 +26,21 @@
     <div class="stroke color-3" style="bottom:-2px; right:10px;"></div>
   </div>
 </template>
+
+<script>
+export default {
+  props: ['overflowX', 'overflowY'],
+  computed: {
+    contentStyle() {
+      return {
+        'overflow-x': this.overflowX,
+        'overflow-y': this.overflowY
+      }
+    }
+  }
+}
+</script>
+
 
 <style scoped>
 .border {
@@ -54,9 +69,8 @@
 .content {
   flex-grow: 1;
   min-width: 120px;
-  font-weight: bold;
   color: #f8ecd5;
-  text-shadow: 0px 4px #705749;
+  text-shadow: 0px 3px #705749;
   background-color: #927964;
   padding: 8px;
   box-shadow: 0px -4px #aa8c6e, -4px 0px #aa8c6e, 0px 4px #705749,
@@ -64,5 +78,15 @@
     4px -4px #57332d, 4px 4px #57332d;
   box-sizing: border-box;
   line-height: 120%;
+}
+::-webkit-scrollbar-track {
+  background-color: #aa8c6e;
+}
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-thumb {
+  border-radius: 3px;
+  background-color: #3d3933;
 }
 </style>

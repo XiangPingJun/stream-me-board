@@ -1,11 +1,68 @@
 <template>
-  <dialog-box>
+  <dialog-box overflowY="auto">
     <div><underline-text>動漫通問答遊戲</underline-text></div>          
     <div class="question">截至目前「真●三國無雙7帝王傳」系列遊戲中，哪位無雙臉女將並沒有配對的夫君轉正登場？</div>
     <well>
-      <div style="display: flex;">
-        <div class="option">&lt;小喬大喬&gt;</div>
+      <div>&lt;小喬大喬&gt;</div>
+      <div style="display:flex;">
         <thumbnail index="11" />
+        <thumbnail index="12" />
+        <thumbnail index="12" />
+        <thumbnail index="12" />
+        <thumbnail index="12" />
+        <thumbnail index="12" />
+        <thumbnail index="12" />
+        <thumbnail index="12" />
+        <thumbnail index="12" />
+        <thumbnail index="12" />
+        <thumbnail index="12" />
+      </div>
+    </well>
+    <well>
+      <div>&lt;小喬大喬&gt;</div>
+      <div style="display:flex;">
+        <thumbnail index="11" />
+        <thumbnail index="12" />
+        <thumbnail index="12" />
+        <thumbnail index="12" />
+        <thumbnail index="12" />
+        <thumbnail index="12" />
+        <thumbnail index="12" />
+        <thumbnail index="12" />
+        <thumbnail index="12" />
+        <thumbnail index="12" />
+        <thumbnail index="12" />
+      </div>
+    </well>
+    <well>
+      <div>&lt;小喬大喬&gt;</div>
+      <div style="display:flex;">
+        <thumbnail index="11" />
+        <thumbnail index="12" />
+        <thumbnail index="12" />
+        <thumbnail index="12" />
+        <thumbnail index="12" />
+        <thumbnail index="12" />
+        <thumbnail index="12" />
+        <thumbnail index="12" />
+        <thumbnail index="12" />
+        <thumbnail index="12" />
+        <thumbnail index="12" />
+      </div>
+    </well>
+    <well>
+      <div>&lt;小喬大喬&gt;</div>
+      <div style="display:flex;">
+        <thumbnail index="11" />
+        <thumbnail index="12" />
+        <thumbnail index="12" />
+        <thumbnail index="12" />
+        <thumbnail index="12" />
+        <thumbnail index="12" />
+        <thumbnail index="12" />
+        <thumbnail index="12" />
+        <thumbnail index="12" />
+        <thumbnail index="12" />
         <thumbnail index="12" />
       </div>
     </well>
@@ -38,10 +95,14 @@ export default {
   align-self: center;
 }
 .question {
-  margin-bottom: 5px;
+  margin-bottom: 10px;
 }
 .option {
   display: inline-block;
-  padding: 0px 5px;
+  padding-top: 9px;
+  margin-right: 5px;
+}
+.player-list {
+  display: flex;
 }
 </style>

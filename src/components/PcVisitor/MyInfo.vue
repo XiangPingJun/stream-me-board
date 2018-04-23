@@ -1,8 +1,8 @@
 <template>
   <dialog-box>
     <div class="container">
-      <div class="thumbnail-box">
-        <thumbnail index="0" />
+      <div class="thumbnail-box" :style="{'background-image': 'url(static/thumbnail-border.png)'}">
+        <thumbnail index="0" large="true" />
       </div>
       <div class="right">
         <div><underline-text>未登錄的訪客</underline-text></div>
@@ -41,6 +41,5 @@ export default {
   padding-top: 15px;
   padding-left: 15px;
   display: inline-block;
-  background-image: url(../../assets/thumbnail-border.png);
 }
 </style>

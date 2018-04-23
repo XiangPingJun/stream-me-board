@@ -4,12 +4,17 @@
 
 <script>
 export default {
-	props: ['index'],
+	props: ['index', 'large'],
+	data: { bgImgSize: {} },
 	computed: {
 		style() {
+			const sideLen = this.large ? 32 : 24
 			return {
-				'background-position-x': 32 * (this.index % 10) + 'px',
-				'background-position-y': 32 * Math.floor(this.index / 10) + 'px',
+				'background-image': `url(static/character-${this.large ? 'large' : 'small'}.png)`,
+				'background-position-x': sideLen * (this.index % 10) + 'px',
+				'background-position-y': sideLen * Math.floor(this.index / 10) + 'px',
+				'width': sideLen + 'px',
+				'height': sideLen + 'px'
 			}
 		}
 	}
@@ -19,9 +24,6 @@ export default {
 <style scoped>
 .thumbnail {
   display: inline-block;
-  width: 32px;
-  height: 32px;
   border: none;
-  background: url(../assets/character.png);
 }
 </style>

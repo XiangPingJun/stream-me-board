@@ -3,7 +3,7 @@
     <background></background>
     <div class="page">
       <!-- //www.youtube.com/embed/Xzv7eh2VaNI?enablejsapi=1 -->
-      <video-box :height="videoHeight" :width="videoWidth" src="//www.youtube.com/embed/Xzv7eh2VaNI?enablejsapi=1"></video-box>
+      <video-box ref="video" :height="videoHeight" :width="videoWidth" src="//www.youtube.com/embed/Xzv7eh2VaNI?enablejsapi=1"></video-box>
       <div class="right-side">
         <my-info />
         <quiz />
@@ -38,13 +38,16 @@ export default {
     'quiz': Quiz,
     'my-info': MyInfo,
   },
-  created() {
+  mounted() {
     const width = document.documentElement.clientWidth
     const height = document.documentElement.clientHeight
-    if (width / height < 16 / 9)
-      this.videoWidth = width - 420
-    else
-      this.videoHeight = height - 120
+    this.videoWidth = width - 420
+    setTimeout(() => {
+      if (this.$refs.video.$refs.iframe.clientHeight > document.documentElement.clientHeight) {
+        this.videoWidth = undefined
+        this.videoHeight = height - 50
+      }
+    })
   }
 }
 </script>
