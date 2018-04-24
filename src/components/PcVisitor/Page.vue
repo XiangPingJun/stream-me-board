@@ -7,7 +7,7 @@
       <div class="right-side">
         <my-info style="flex-shrink: 0" />
         <quiz />
-        <chat-box style="flex-grow: 1" />
+        <chat-box style="flex-grow: 2" />
       </div>
     </div>
   </div>

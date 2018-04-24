@@ -5,7 +5,6 @@
 <script>
 export default {
 	props: ['index', 'large'],
-	data: { bgImgSize: {} },
 	computed: {
 		style() {
 			const sideLen = this.large ? 32 : 24

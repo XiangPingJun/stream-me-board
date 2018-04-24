@@ -1,29 +1,31 @@
 <template>
-  <div class="border">
-    <div class="content" :style="contentStyle">
-      <slot></slot>
+  <div style="margin:8px">
+    <div class="border">
+      <div class="content" :style="contentStyle">
+        <slot></slot>
+      </div>
+      <div class="stroke color-2" style="top:-2px; right:2px;"></div>
+      <div class="stroke color-2" style="top:2px; right:-2px;"></div>
+      <div class="stroke color-1" style="top:-2px; left:2px;"></div>
+      <div class="stroke color-1" style="top:2px; left:-2px;"></div>
+      <div class="stroke color-2" style="bottom:-2px; left:2px;"></div>
+      <div class="stroke color-2" style="bottom:2px; left:-2px;"></div>
+      <div class="stroke color-2" style="bottom:-2px; right:2px;"></div>
+      <div class="stroke color-2" style="bottom:2px; right:-2px;"></div>
+      <div class="stroke color-bg" style="width:30%; top:-2px; right:6px;"></div>
+      <div class="stroke color-bg" style="width:20px; top:-2px; left:14px;"></div>
+      <div class="stroke color-bg" style="width:44px; top:-2px; left:54px;"></div>
+      <div class="stroke color-bg" style="width:8px; top:-2px; left:108px;"></div>
+      <div class="stroke color-2" style="width:8px; top:-2px; right:20%;"></div>
+      <div class="stroke color-2" style="width:4px; top:-2px; right:10%;"></div>
+      <div class="stroke color-bg" style="height:50%; bottom:2px; left:-2px;"></div>
+      <div class="stroke color-2" style="bottom:40%; left:-2px;"></div>    
+      <div class="stroke color-2" style="bottom:25%; left:-2px;"></div>
+      <div class="stroke color-bg" style="bottom:-2px; left:6px;"></div>
+      <div class="stroke color-3" style="bottom:-2px; left:10px;"></div>
+      <div class="stroke color-bg" style="bottom:-2px; right:6px;"></div>
+      <div class="stroke color-3" style="bottom:-2px; right:10px;"></div>
     </div>
-    <div class="stroke color-2" style="top:-2px; right:2px;"></div>
-    <div class="stroke color-2" style="top:2px; right:-2px;"></div>
-    <div class="stroke color-1" style="top:-2px; left:2px;"></div>
-    <div class="stroke color-1" style="top:2px; left:-2px;"></div>
-    <div class="stroke color-2" style="bottom:-2px; left:2px;"></div>
-    <div class="stroke color-2" style="bottom:2px; left:-2px;"></div>
-    <div class="stroke color-2" style="bottom:-2px; right:2px;"></div>
-    <div class="stroke color-2" style="bottom:2px; right:-2px;"></div>
-    <div class="stroke color-bg" style="width:30%; top:-2px; right:6px;"></div>
-    <div class="stroke color-bg" style="width:20px; top:-2px; left:14px;"></div>
-    <div class="stroke color-bg" style="width:44px; top:-2px; left:54px;"></div>
-    <div class="stroke color-bg" style="width:8px; top:-2px; left:108px;"></div>
-    <div class="stroke color-2" style="width:8px; top:-2px; right:20%;"></div>
-    <div class="stroke color-2" style="width:4px; top:-2px; right:10%;"></div>
-    <div class="stroke color-bg" style="height:50%; bottom:2px; left:-2px;"></div>
-    <div class="stroke color-2" style="bottom:40%; left:-2px;"></div>    
-    <div class="stroke color-2" style="bottom:25%; left:-2px;"></div>
-    <div class="stroke color-bg" style="bottom:-2px; left:6px;"></div>
-    <div class="stroke color-3" style="bottom:-2px; left:10px;"></div>
-    <div class="stroke color-bg" style="bottom:-2px; right:6px;"></div>
-    <div class="stroke color-3" style="bottom:-2px; right:10px;"></div>
   </div>
 </template>
 
@@ -47,7 +49,6 @@ export default {
   display: flex;
   position: relative;
   flex-direction: column;
-  margin: 8px;
 }
 .stroke {
   position: absolute;
