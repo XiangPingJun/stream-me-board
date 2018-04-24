@@ -3,68 +3,32 @@
 </template>
 
 <style scoped>
-/*= input focus effects css
-=========================== */
-:focus {
+input {
+  font-size: 16px;
+  color: #705749;
+  text-align: center;
+  padding: 5px;
+  margin-left: 4px;
+  border: none;
+  box-shadow: 0px -3px #c19d6f, 0px 3px #c19d6f, 3px 0px #c19d6f,
+    -3px 0px #c19d6f, -3px -3px #86674d, -3px 3px #86674d, 3px 3px #86674d,
+    3px -3px #86674d;
+  width: calc(100% - 18px);
+  background-color: rgba(255, 255, 255, 0.1);
+  transition-duration: 0.25s;
+}
+input::placeholder {
+  color: #f8ecd5;
+}
+input:focus {
   outline: none;
+  margin-left: 0px;
+  width: calc(100% - 10px);
+  background-color: #f8ecd5;
+  box-shadow: 0px -3px #f8ecd5, 0px 3px #f8ecd5, 3px 0px #f8ecd5,
+    -3px 0px #f8ecd5;
 }
-
-input[type="text"] {
-  font: 15px/24px "Lato", Arial, sans-serif;
-  color: #333;
-  width: 100%;
-  box-sizing: border-box;
-  letter-spacing: 1px;
-}
-
-.effect-8 {
-  border: 1px solid #ccc;
-  padding: 7px 14px 9px;
-  transition: 0.4s;
-}
-
-.effect-8 ~ .focus-border:before,
-.effect-8 ~ .focus-border:after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 0;
-  height: 2px;
-  background-color: #3399ff;
-  transition: 0.3s;
-}
-.effect-8 ~ .focus-border:after {
-  top: auto;
-  bottom: 0;
-  left: auto;
-  right: 0;
-}
-.effect-8 ~ .focus-border i:before,
-.effect-8 ~ .focus-border i:after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 2px;
-  height: 0;
-  background-color: #3399ff;
-  transition: 0.4s;
-}
-.effect-8 ~ .focus-border i:after {
-  left: auto;
-  right: 0;
-  top: auto;
-  bottom: 0;
-}
-.effect-8:focus ~ .focus-border:before,
-.effect-8:focus ~ .focus-border:after {
-  width: 100%;
-  transition: 0.3s;
-}
-.effect-8:focus ~ .focus-border i:before,
-.effect-8:focus ~ .focus-border i:after {
-  height: 100%;
-  transition: 0.4s;
+input:focus::placeholder {
+  color: #927964;
 }
 </style>

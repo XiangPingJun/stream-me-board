@@ -1,10 +1,9 @@
 <template>
 	<dialog-box ref="dialog">
-    <div class="msgList">
-      <chat-line />
+    <div>
       <chat-line />
     </div>
-    <input-box />
+    <input-box placeholder="說點什麼吧…" style="margin-top: 10px; margin-bottom: 5px;" />
 	</dialog-box>
 </template>
 
@@ -20,15 +19,6 @@ export default {
     'well': Well,
     'chat-line': ChatLine,
     'input-box': InputBox,
-  },
-  computed: {
-    msgList() {
-      console.log(this.$refs)
-      return {
-        'height': '70px',
-        'overflow-y': 'auto'
-      }
-    }
   }
 }
 </script>
