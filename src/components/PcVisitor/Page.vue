@@ -6,8 +6,12 @@
       <video-box ref="video" :height="videoHeight" :width="videoWidth" src="//www.youtube.com/embed/Xzv7eh2VaNI?enablejsapi=1"></video-box>
       <div class="right-side">
         <my-info style="flex-shrink: 0" />
-        <quiz />
-        <chat-box style="flex-grow: 2" />
+        <dialog-box overflowY="auto" style="flex-grow:10; flex-shrink:0; min-height: 120px;">
+          <quiz />
+        </dialog-box>        
+        <dialog-box overflowY="auto" style="flex-grow:5; flex-shrink:1; min-height: 120px;">
+          <chat-box />
+        </dialog-box>
       </div>
     </div>
   </div>
@@ -65,6 +69,6 @@ export default {
   margin-left: 10px;
   display: flex;
   flex-direction: column;
-  padding: 15px 0px;
+  padding: 10px 5px;
 }
 </style>

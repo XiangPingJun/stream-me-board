@@ -1,5 +1,7 @@
 <template>
-  <input />
+  <div>
+    <input placeholder="說點什麼吧：" />
+  </div>
 </template>
 
 <style scoped>
@@ -14,7 +16,7 @@ input {
     -3px 0px #c19d6f, -3px -3px #86674d, -3px 3px #86674d, 3px 3px #86674d,
     3px -3px #86674d;
   width: calc(100% - 18px);
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: #9c8673;
   transition-duration: 0.25s;
 }
 input::placeholder {
