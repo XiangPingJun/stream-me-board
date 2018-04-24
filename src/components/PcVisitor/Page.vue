@@ -6,10 +6,10 @@
       <video-box ref="video" :height="videoHeight" :width="videoWidth" src="//www.youtube.com/embed/Xzv7eh2VaNI?enablejsapi=1"></video-box>
       <div class="right-side">
         <my-info style="flex-shrink: 0" />
-        <dialog-box overflowY="auto" style="flex-grow:10; flex-shrink:0; min-height: 120px;">
+        <dialog-box overflowY="auto" class="quiz">
           <quiz />
         </dialog-box>        
-        <dialog-box overflowY="auto" style="flex-grow:5; flex-shrink:1; min-height: 120px;">
+        <dialog-box overflowY="auto" class="chat-box">
           <chat-box />
         </dialog-box>
       </div>
@@ -70,5 +70,13 @@ export default {
   display: flex;
   flex-direction: column;
   padding: 10px 5px;
+}
+.quiz {
+  flex-shrink: 1;
+}
+.chat-box {
+  flex-grow: 1;
+  flex-shrink: 9999999;
+  min-height: 120px;
 }
 </style>

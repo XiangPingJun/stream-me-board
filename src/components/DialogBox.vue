@@ -50,11 +50,13 @@ export default {
   flex-direction: column;
   margin-top: 8px;
   margin-bottom: 8px;
+  transition-duration: 0.25s;
 }
 .stroke {
   position: absolute;
   width: 0px;
   height: 0px;
+  transition-duration: 0.25s;
 }
 .color-red {
   box-shadow: 0 0 0 2px red;
@@ -83,6 +85,7 @@ export default {
     4px -4px #57332d, 4px 4px #57332d;
   box-sizing: border-box;
   line-height: 120%;
+  transition-duration: 0.25s;
 }
 ::-webkit-scrollbar-track {
   background-color: #aa8c6e;
