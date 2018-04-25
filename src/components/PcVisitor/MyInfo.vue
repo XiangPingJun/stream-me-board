@@ -2,11 +2,11 @@
   <dialog-box>
     <div class="container">
       <div class="thumbnail-box" :style="{'background-image': 'url(static/thumbnail-border.png)'}">
-        <thumbnail index="0" large="true" />
+        <thumbnail index="0" large="true" whoAmI="true" />
       </div>
       <div class="right">
-        <div><underline-text>未登錄的訪客</underline-text></div>
-        <div>(輸入暱稱一起來玩吧!)</div>
+        <div><underline-text>{{myName}}</underline-text></div>
+        <div>{{levelMsg}}</div>
       </div>
     </div>
   </dialog-box>
@@ -24,6 +24,21 @@ export default {
     'dialog-box': DialogBox,
     'thumbnail': Thumbnail,
     'btn': Button,
+  },
+  data: () => {
+    return {
+      myName: '不知名的訪客',
+      levelMsg: '(輸入暱稱一起來玩吧!)',
+    }
+  },
+  created() {
+    console.log(this.$store.state.myInfo)
+  },
+  method: {
+    createUser(name) {
+      firebase.auth().createUserWithEmailAndPassword(encodeURI(name) + '@email.com', 'dummy password')
+        .catch(error => new Notyf().alert(error.message))
+    }
   }
 }
 </script>

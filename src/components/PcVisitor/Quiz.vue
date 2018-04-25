@@ -5,10 +5,10 @@
     <well>
       <div>&lt;小喬大喬&gt;</div>
       <div style="display:flex;">
-        <thumbnail index="11" />
+        <thumbnail index="11" whoAmI="true" />
         <thumbnail index="12" />
         <thumbnail index="12" />
-        <thumbnail index="12" />
+        <thumbnail index="12" whoAmI="true" />
         <thumbnail index="12" />
         <thumbnail index="12" />
         <thumbnail index="12" />
