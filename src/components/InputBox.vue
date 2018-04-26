@@ -1,8 +1,18 @@
 <template>
   <div>
-    <input placeholder="說點什麼吧：" />
+    <input ref="input" :placeholder="placeholder" />
   </div>
 </template>
+
+<script>
+export default {
+  props: ['placeholder', 'focusAtStart'],
+  mounted() {
+    if (this.focusAtStart)
+      this.$refs.input.focus()
+  }
+}
+</script>
 
 <style scoped>
 input {

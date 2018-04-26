@@ -7,7 +7,7 @@
     </div>
     <div class="mask top"></div>
     <div class="mask bottom"></div>    
-    <input-box placeholder="說點什麼吧…" class="input" />
+    <input-box placeholder="說點什麼吧：" class="input" />
 	</div>
 </template>
 

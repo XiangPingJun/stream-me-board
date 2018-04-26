@@ -4,15 +4,20 @@
     <div class="page">
       <video-box ref="video" :height="videoHeight" :width="videoWidth"></video-box>
       <div class="right-side">
-        <dialog-box class="top animated flipInY" :style="topAnimationStyle">
+        <!-- top section -->
+        <dialog-box v-if="'MY_INFO' == topDialogType"  class="top animated flipInY" :style="topAnimationStyle">
           <my-info />
         </dialog-box>
+        <dialog-box v-if="'LOGIN' == topDialogType" class="middle animated flipInY">
+          <login />
+        </dialog-box>
+
+        <!-- middle section -->
         <dialog-box v-if="'QUIZ' == mainDialogType" overflowY="auto" class="middle animated flipInY" :style="middleAnimationStyle">
           <quiz />
         </dialog-box>
-        <dialog-box v-if="'LOGIN' == mainDialogType" overflowY="auto" class="middle animated flipInY" :style="middleAnimationStyle">
-          <chat-box />
-        </dialog-box>
+
+        <!-- bottom section -->
         <dialog-box overflowY="auto" class="bottom animated flipInY" :style="bottomAnimationStyle">
           <chat-box />
         </dialog-box>
@@ -29,6 +34,7 @@ import NightSkyBackground from './NightSkyBackground'
 import ChatBox from './ChatBox'
 import Quiz from './Quiz'
 import MyInfo from './MyInfo'
+import Login from './Login'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -49,6 +55,7 @@ export default {
     'chat-box': ChatBox,
     'quiz': Quiz,
     'my-info': MyInfo,
+    'login': Login,
   },
   created() {
     this.$store.dispatch('getRealtimeUpdates')
@@ -66,7 +73,7 @@ export default {
     setTimeout(() => this.topAnimationStyle = this.middleAnimationStyle = this.bottomAnimationStyle = {}, 5000)
   },
   computed: {
-    ...mapGetters(['systemInfo', 'mainDialogType'])
+    ...mapGetters(['systemInfo', 'topDialogType', 'mainDialogType'])
   },
   watch: {
     systemInfo(val, oldVal) {

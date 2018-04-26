@@ -8,6 +8,7 @@ firestore.settings({ timestampsInSnapshots: true })
 export default new Vuex.Store({
 	state: {
 		myInfo: null,
+		topDialogType: 'MY_INFO',
 		mainDialogType: 'QUIZ',
 		stream: null,
 		systemInfo: null,
@@ -15,6 +16,7 @@ export default new Vuex.Store({
 	},
 	getters: {
 		myInfo: state => state.myInfo,
+		topDialogType: state => state.topDialogType,
 		mainDialogType: state => state.mainDialogType,
 		stream: state => state.stream,
 		systemInfo: state => state.systemInfo,
@@ -25,7 +27,7 @@ export default new Vuex.Store({
 		},
 	},
 	mutations: {
-		showLoginDialog: state => state.mainDialogType = 'LOGIN',
+		showLoginDialog: state => state.topDialogType = 'LOGIN',
 		setStream: (state, payload) => state.stream = payload,
 		setSystemInfo: (state, payload) => state.systemInfo = payload,
 	},
