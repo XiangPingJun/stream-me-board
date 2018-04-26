@@ -1,23 +1,19 @@
 <template>
   <div class="video-box animated" :class="{flipInX: loaded}" :style="{visibility: loaded ? 'visible': 'hidden'}">
     <div class="container">
-      <iframe ref="iframe" frameBorder="0" allowFullScreen="true" :src="src" :style="videoSize" />
+      <iframe ref="iframe" frameBorder="0" allowFullScreen="true" :src="videoUrl" :style="videoSize" />
     </div>
   </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
-  props: ['width', 'height', 'src'],
+  props: ['width', 'height'],
   data() {
     return {
       loaded: false
-    }
-  },
-  mounted() {
-    this.$refs.iframe.onload = () => {
-      this.loaded = true
-      this.setupYoutube()
     }
   },
   computed: {
@@ -25,6 +21,17 @@ export default {
       return {
         width: `${this.width || this.height * (16 / 9)}px`,
         height: `${this.height || this.width * (9 / 16)}px`,
+      }
+    },
+    ...mapGetters(['videoUrl'])
+  },
+  watch: {
+    videoUrl(val, oldVal) {
+      if (null === val)
+        return
+      this.$refs.iframe.onload = () => {
+        this.loaded = true
+        this.setupYoutube()
       }
     }
   },

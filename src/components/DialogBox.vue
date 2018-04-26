@@ -50,6 +50,7 @@ export default {
   flex-direction: column;
   margin-top: 8px;
   margin-bottom: 8px;
+  transition-property: width, height;
   transition-duration: 0.25s;
 }
 .stroke {
@@ -85,6 +86,7 @@ export default {
     4px -4px #57332d, 4px 4px #57332d;
   box-sizing: border-box;
   line-height: 120%;
+  transition-property: width, height;
   transition-duration: 0.25s;
 }
 ::-webkit-scrollbar-track {

@@ -1,15 +1,13 @@
 <template>
-  <dialog-box>
-    <div class="container">
-      <div class="thumbnail-box" :style="{'background-image': 'url(static/thumbnail-border.png)'}">
-        <thumbnail index="0" large="true" whoAmI="true" />
-      </div>
-      <div class="right">
-        <div><underline-text>{{myName}}</underline-text></div>
-        <div>{{levelMsg}}</div>
-      </div>
+  <div class="container" @click="onClickMyInfo">
+    <div class="thumbnail-box" :style="{'background-image': 'url(static/thumbnail-border.png)'}">
+      <thumbnail index="0" large="true" whoAmI="true" />
     </div>
-  </dialog-box>
+    <div class="right">
+      <div><underline-text>{{myName}}</underline-text></div>
+      <div>{{levelMsg}}</div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -31,10 +29,13 @@ export default {
       levelMsg: '(輸入暱稱一起來玩吧!)',
     }
   },
-  created() {
-    console.log(this.$store.state.myInfo)
+  mounted() {
   },
-  method: {
+  methods: {
+    onClickMyInfo() {
+      if (null === this.$store.state.myInfo)
+        this.$store.commit('showLoginDialog')
+    },
     createUser(name) {
       firebase.auth().createUserWithEmailAndPassword(encodeURI(name) + '@email.com', 'dummy password')
         .catch(error => new Notyf().alert(error.message))
@@ -47,6 +48,7 @@ export default {
 .container {
   display: flex;
   align-items: flex-start;
+  cursor: pointer;
 }
 .right {
   margin-left: 10px;

@@ -2,14 +2,18 @@
   <div>
     <background></background>
     <div class="page">
-      <!-- //www.youtube.com/embed/Xzv7eh2VaNI?enablejsapi=1 -->
-      <video-box ref="video" :height="videoHeight" :width="videoWidth" src="//www.youtube.com/embed/Xzv7eh2VaNI?enablejsapi=1"></video-box>
+      <video-box ref="video" :height="videoHeight" :width="videoWidth"></video-box>
       <div class="right-side">
-        <my-info style="flex-shrink: 0" />
-        <dialog-box overflowY="auto" class="quiz">
+        <dialog-box class="top">
+          <my-info />
+        </dialog-box>
+        <dialog-box overflowY="auto" class="animated flipInX" v-if="'QUIZ' == this.$store.state.mainDialogType">
           <quiz />
-        </dialog-box>        
-        <dialog-box overflowY="auto" class="chat-box">
+        </dialog-box>
+        <dialog-box overflowY="auto" class="animated flipInX" v-if="'LOGIN' == this.$store.state.mainDialogType">
+          <chat-box />
+        </dialog-box>
+        <dialog-box overflowY="auto" class="bottom">
           <chat-box />
         </dialog-box>
       </div>
@@ -25,6 +29,7 @@ import NightSkyBackground from './NightSkyBackground'
 import ChatBox from './ChatBox'
 import Quiz from './Quiz'
 import MyInfo from './MyInfo'
+import { mapGetters } from 'vuex'
 
 export default {
   data() {
@@ -42,6 +47,9 @@ export default {
     'quiz': Quiz,
     'my-info': MyInfo,
   },
+  created() {
+    this.$store.dispatch('getRealtimeUpdates')
+  },
   mounted() {
     const width = document.documentElement.clientWidth
     const height = document.documentElement.clientHeight
@@ -52,6 +60,15 @@ export default {
         this.videoHeight = height - 50
       }
     })
+  },
+  computed: {
+    ...mapGetters(['systemInfo'])
+  },
+  watch: {
+    systemInfo(val, oldVal) {
+      if (null !== val && null !== oldVal && val.version != oldVal.version)
+        window.location.reload(true)
+    }
   }
 }
 </script>
@@ -71,10 +88,13 @@ export default {
   flex-direction: column;
   padding: 10px 5px;
 }
-.quiz {
+.right-side .top {
+  flex-shrink: 0;
+}
+.right-side .middle {
   flex-shrink: 1;
 }
-.chat-box {
+.right-side .bottom {
   flex-grow: 1;
   flex-shrink: 9999999;
   min-height: 120px;
