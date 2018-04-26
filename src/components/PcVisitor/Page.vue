@@ -4,16 +4,16 @@
     <div class="page">
       <video-box ref="video" :height="videoHeight" :width="videoWidth"></video-box>
       <div class="right-side">
-        <dialog-box class="top">
+        <dialog-box class="top animated flipInY" :style="topAnimationStyle">
           <my-info />
         </dialog-box>
-        <dialog-box overflowY="auto" class="animated flipInX" v-if="'QUIZ' == this.$store.state.mainDialogType">
+        <dialog-box v-if="'QUIZ' == mainDialogType" overflowY="auto" class="middle animated flipInY" :style="middleAnimationStyle">
           <quiz />
         </dialog-box>
-        <dialog-box overflowY="auto" class="animated flipInX" v-if="'LOGIN' == this.$store.state.mainDialogType">
+        <dialog-box v-if="'LOGIN' == mainDialogType" overflowY="auto" class="middle animated flipInY" :style="middleAnimationStyle">
           <chat-box />
         </dialog-box>
-        <dialog-box overflowY="auto" class="bottom">
+        <dialog-box overflowY="auto" class="bottom animated flipInY" :style="bottomAnimationStyle">
           <chat-box />
         </dialog-box>
       </div>
@@ -35,7 +35,10 @@ export default {
   data() {
     return {
       videoWidth: 0,
-      videoHeight: 0
+      videoHeight: 0,
+      topAnimationStyle: { 'animation-delay': '0.5s' },
+      middleAnimationStyle: { 'animation-delay': '1s' },
+      bottomAnimationStyle: { 'animation-delay': '1.5s' },
     }
   },
   components: {
@@ -60,9 +63,10 @@ export default {
         this.videoHeight = height - 50
       }
     })
+    setTimeout(() => this.topAnimationStyle = this.middleAnimationStyle = this.bottomAnimationStyle = {}, 5000)
   },
   computed: {
-    ...mapGetters(['systemInfo'])
+    ...mapGetters(['systemInfo', 'mainDialogType'])
   },
   watch: {
     systemInfo(val, oldVal) {
