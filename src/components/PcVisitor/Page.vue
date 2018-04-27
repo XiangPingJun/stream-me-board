@@ -58,7 +58,7 @@ export default {
     'login': Login,
   },
   created() {
-    this.$store.dispatch('getRealtimeUpdates')
+    this.$store.dispatch('getUpdates')
   },
   mounted() {
     const width = document.documentElement.clientWidth

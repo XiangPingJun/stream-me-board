@@ -1,12 +1,12 @@
 <template>
-  <div>
+  <form v-on:submit.prevent="submit($refs.input.value)">
     <input ref="input" :placeholder="placeholder" />
-  </div>
+  </form>
 </template>
 
 <script>
 export default {
-  props: ['placeholder', 'focusAtStart'],
+  props: ['placeholder', 'focusAtStart', "submit"],
   mounted() {
     if (this.focusAtStart)
       this.$refs.input.focus()

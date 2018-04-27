@@ -1,7 +1,7 @@
 <template>
-  <div>
-		<div style="margin-bottom:10px;">歡迎！怎麼稱呼呢？</div>
-		<div><input-box placeholder="輸入暱稱吧：" class="input" focusAtStart="true" /></div>
+  <div style="margin-bottom:5px;">
+		<div style="margin-bottom:10px;">ヽ(ﾟ▽ﾟ)ノ 歡迎！怎麼稱呼呢？</div>
+		<div><input-box placeholder="輸入暱稱吧:↵" :submit="login" class="input" focusAtStart="true" /></div>
   </div>
 </template>
 
@@ -10,11 +10,15 @@ import UnderlineText from '../UnderlineText'
 import DialogBox from '../DialogBox'
 import Button from '../Button'
 import InputBox from '../InputBox'
+import { mapActions } from 'vuex'
 
 export default {
 	components: {
 		'underline-text': UnderlineText,
 		'input-box': InputBox,
+	},
+	methods: {
+		...mapActions(['login'])
 	}
 }
 </script>
