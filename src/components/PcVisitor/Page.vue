@@ -5,12 +5,12 @@
       <video-box ref="video" :height="videoHeight" :width="videoWidth"></video-box>
       <div class="right-side">
         <!-- top section -->
-        <dialog-box v-if="'MY_INFO' == topDialogType"  class="top animated flipInY" :style="topAnimationStyle">
-          <my-info />
-        </dialog-box>
-        <dialog-box v-if="'LOGIN' == topDialogType" class="middle animated flipInY">
+        <my-info v-if="'MY_INFO' == topDialogType" :style="topAnimationStyle" />
+        <dialog-box v-if="'LOGIN' == topDialogType" class="top animated flipInX">
           <login />
         </dialog-box>
+        <!-- login arrow -->
+        <img v-if="'LOGIN' == topDialogType" class="login-arrow animated jello" src="static/arrow.png" />
 
         <!-- middle section -->
         <dialog-box v-if="'QUIZ' == mainDialogType" overflowY="auto" class="middle animated flipInY" :style="middleAnimationStyle">
@@ -109,5 +109,11 @@ export default {
   flex-grow: 1;
   flex-shrink: 9999999;
   min-height: 120px;
+}
+.login-arrow {
+  position: fixed;
+  top: 60px;
+  right: 380px;
+  z-index: 999;
 }
 </style>

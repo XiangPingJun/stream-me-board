@@ -1,13 +1,15 @@
 <template>
-  <div class="container" @click="onClickMyInfo">
-    <div class="thumbnail-box" :style="{'background-image': 'url(static/thumbnail-border.png)'}">
-      <thumbnail index="0" large="true" whoAmI="true" />
+  <dialog-box class="top animated flipInY">
+    <div class="container" @click="onClickMyInfo">
+      <div class="thumbnail-box" :style="{'background-image': 'url(static/thumbnail-border.png)'}">
+        <thumbnail index="0" large="true" whoAmI="true" />
+      </div>
+      <div class="right">
+        <div><underline-text>{{myName}}</underline-text></div>
+        <div>{{levelMsg}}</div>
+      </div>
     </div>
-    <div class="right">
-      <div><underline-text>{{myName}}</underline-text></div>
-      <div>{{levelMsg}}</div>
-    </div>
-  </div>
+  </dialog-box>
 </template>
 
 <script>

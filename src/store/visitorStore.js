@@ -35,19 +35,19 @@ export default new Vuex.Store({
 		getUpdates: context => {
 			firestore.doc("system/stream").onSnapshot(doc => context.commit('setStream', doc.data()))
 			firestore.doc("system/info").onSnapshot(doc => context.commit('setSystemInfo', doc.data()))
+			firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+			firebase.auth().onAuthStateChanged(user => console.log(99, user))
 		},
-		login: (context, payload) => {
+		login: async (context, payload) => {
 			const email = `${encodeURI(payload)}@mail.net`, pw = 'dummy-password'
-			firebase.auth().signInWithEmailAndPassword(email, pw).then(
-				() => {
-					// success
-				}, error => 'auth/user-not-found' == error.code ? createUser(email, pw) : error => new Notyf().alert(error.message)
-			)
-			function createUser(email, pw) {
-				firebase.auth().createUserWithEmailAndPassword(email, pw).then(
-					getMyInfoUpdates,
-					error => new Notyf().alert(error.message)
-				)
+			let user
+			try {
+				await firebase.auth().signInWithEmailAndPassword(email, pw)
+			} catch (error) {
+				if ('auth/user-not-found' == error.code) {
+					await firebase.auth().createUserWithEmailAndPassword(email, pw)
+				} else
+					new Notyf().alert(error.message)
 			}
 		}
 	}
