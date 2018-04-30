@@ -1,12 +1,12 @@
 <template>
   <form v-on:submit.prevent="$emit('submit', $refs.input.value)">
-    <input ref="input" :placeholder="placeholder" @focus="$emit('focus')" />
+    <input ref="input" :placeholder="placeholder" @focus="$emit('focus')" :maxlength="maxlength" />
   </form>
 </template>
 
 <script>
 export default {
-  props: ['placeholder'],
+  props: ['placeholder', 'maxlength'],
   methods: {
     focus() { this.$refs.input.focus() },
     unfocus() { this.$refs.input.blur() },

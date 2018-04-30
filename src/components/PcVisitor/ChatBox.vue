@@ -7,7 +7,7 @@
     </div>
     <div class="mask top"></div>
     <div class="mask bottom"></div>    
-    <InputBox placeholder="說點什麼吧:↵" ref="input" @focus="onInputFocus" class="input" />
+    <InputBox placeholder="說點什麼吧:↵" ref="input" @focus="onInputFocus" class="input" maxlength="140" />
 	</div>
 </template>
 
