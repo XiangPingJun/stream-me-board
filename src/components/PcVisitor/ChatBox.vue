@@ -7,7 +7,7 @@
     </div>
     <div class="mask top"></div>
     <div class="mask bottom"></div>    
-    <input-box placeholder="說點什麼吧:↵" class="input" />
+    <input-box placeholder="說點什麼吧:↵" :onfocus="onInputFocus" class="input" ref="input" />
 	</div>
 </template>
 
@@ -15,12 +15,23 @@
 import Well from '../Well'
 import ChatLine from '../ChatLine'
 import InputBox from '../InputBox'
+import { mapGetters, mapMutations } from 'vuex'
 
 export default {
   components: {
     'well': Well,
     'chat-line': ChatLine,
     'input-box': InputBox,
+  },
+  computed: { ...mapGetters(['myInfo']) },
+  methods: {
+    onInputFocus() {
+      if (null !== this.myInfo)
+        return
+      this.showLoginDialog()
+      this.$refs.input.unfocus()
+    },
+    ...mapMutations(['showLoginDialog'])
   }
 }
 </script>

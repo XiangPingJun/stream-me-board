@@ -10,7 +10,7 @@
           <login />
         </dialog-box>
         <!-- login arrow -->
-        <img v-if="'LOGIN' == topDialogType" class="login-arrow animated jello" src="static/arrow.png" />
+        <arrow ref="arrow" v-if="'LOGIN' == topDialogType" class="login-arrow" />
 
         <!-- middle section -->
         <dialog-box v-if="'QUIZ' == mainDialogType" overflowY="auto" class="middle animated flipInY" :style="middleAnimationStyle">
@@ -35,6 +35,7 @@ import ChatBox from './ChatBox'
 import Quiz from './Quiz'
 import MyInfo from './MyInfo'
 import Login from './Login'
+import Arrow from './Arrow'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -56,6 +57,7 @@ export default {
     'quiz': Quiz,
     'my-info': MyInfo,
     'login': Login,
+    'arrow': Arrow,
   },
   created() {
     this.$store.dispatch('getUpdates')
@@ -71,6 +73,11 @@ export default {
       }
     })
     setTimeout(() => this.topAnimationStyle = this.middleAnimationStyle = this.bottomAnimationStyle = {}, 5000)
+
+    this.$store.subscribe((mutation, state) => {
+      if ('showLoginDialog' === mutation.type)
+        setTimeout(() => this.$refs.arrow.animate())
+    })
   },
   computed: {
     ...mapGetters(['systemInfo', 'topDialogType', 'mainDialogType'])
@@ -111,9 +118,7 @@ export default {
   min-height: 120px;
 }
 .login-arrow {
-  position: fixed;
   top: 60px;
   right: 380px;
-  z-index: 999;
 }
 </style>

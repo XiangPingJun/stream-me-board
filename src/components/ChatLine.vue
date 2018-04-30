@@ -28,12 +28,4 @@ export default {
 .msg {
   margin-bottom: 3px;
 }
-/*.chat-line .msg {
-  margin-top: -22px;
-  text-indent: 28px;
-  line-height: 23px;
-}
-.chat-line .msg::first-line {
-  line-height: 23px;
-}*/
 </style>

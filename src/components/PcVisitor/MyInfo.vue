@@ -17,6 +17,7 @@ import UnderlineText from '../UnderlineText'
 import DialogBox from '../DialogBox'
 import Thumbnail from '../Thumbnail'
 import Button from '../Button'
+import { mapGetters, mapMutations } from 'vuex'
 
 export default {
   components: {
@@ -31,18 +32,18 @@ export default {
       levelMsg: '(輸入暱稱一起來玩吧!)',
     }
   },
-  mounted() {
-  },
   methods: {
     onClickMyInfo() {
-      if (null === this.$store.state.myInfo)
-        this.$store.commit('showLoginDialog')
+      if (null === this.myInfo)
+        this.showLoginDialog()
     },
     createUser(name) {
       firebase.auth().createUserWithEmailAndPassword(encodeURI(name) + '@email.com', 'dummy password')
         .catch(error => new Notyf().alert(error.message))
-    }
-  }
+    },
+    ...mapMutations(['showLoginDialog'])
+  },
+  computed: { ...mapGetters(['myInfo']) }
 }
 </script>
 

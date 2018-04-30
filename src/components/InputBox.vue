@@ -1,15 +1,33 @@
 <template>
   <form v-on:submit.prevent="submit($refs.input.value)">
-    <input ref="input" :placeholder="placeholder" />
+    <input ref="input" :placeholder="placeholder" @focus="onfocus" />
   </form>
 </template>
 
 <script>
 export default {
-  props: ['placeholder', 'focusAtStart', "submit"],
+  props: {
+    placeholder: '',
+    focusAtStart: {
+      type: Boolean,
+      default: false
+    },
+    submit: {
+      type: Function,
+      default: () => { }
+    },
+    onfocus: {
+      type: Function,
+      default: () => { }
+    }
+  },
   mounted() {
     if (this.focusAtStart)
       this.$refs.input.focus()
+  },
+  methods: {
+    focus: function () { this.$refs.input.focus() },
+    unfocus: function () { this.$refs.input.blur() }
   }
 }
 </script>
