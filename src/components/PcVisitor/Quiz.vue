@@ -1,71 +1,71 @@
 <template>
   <div>
-    <div><underline-text>動漫通問答遊戲</underline-text></div>          
+    <div><UnderlineText>動漫通問答遊戲</UnderlineText></div>          
     <div class="question">截至目前「真●三國無雙7帝王傳」系列遊戲中，哪位無雙臉女將並沒有配對的夫君轉正登場？</div>
-    <well>
+    <Well>
       <div>&lt;小喬大喬&gt;</div>
       <div style="display:flex;">
-        <thumbnail index="11" whoAmI="true" />
-        <thumbnail index="12" />
-        <thumbnail index="12" />
-        <thumbnail index="12" whoAmI="true" />
-        <thumbnail index="12" />
-        <thumbnail index="12" />
-        <thumbnail index="12" />
-        <thumbnail index="12" />
-        <thumbnail index="12" />
-        <thumbnail index="12" />
-        <thumbnail index="12" />
+        <Thumbnail index="11" whoAmI="true" />
+        <Thumbnail index="12" />
+        <Thumbnail index="12" />
+        <Thumbnail index="12" whoAmI="true" />
+        <Thumbnail index="12" />
+        <Thumbnail index="12" />
+        <Thumbnail index="12" />
+        <Thumbnail index="12" />
+        <Thumbnail index="12" />
+        <Thumbnail index="12" />
+        <Thumbnail index="12" />
       </div>
-    </well>
-    <well>
+    </Well>
+    <Well>
       <div>&lt;小喬大喬&gt;</div>
       <div style="display:flex;">
-        <thumbnail index="11" />
-        <thumbnail index="12" />
-        <thumbnail index="12" />
-        <thumbnail index="12" />
-        <thumbnail index="12" />
-        <thumbnail index="12" />
-        <thumbnail index="12" />
-        <thumbnail index="12" />
-        <thumbnail index="12" />
-        <thumbnail index="12" />
-        <thumbnail index="12" />
+        <Thumbnail index="11" />
+        <Thumbnail index="12" />
+        <Thumbnail index="12" />
+        <Thumbnail index="12" />
+        <Thumbnail index="12" />
+        <Thumbnail index="12" />
+        <Thumbnail index="12" />
+        <Thumbnail index="12" />
+        <Thumbnail index="12" />
+        <Thumbnail index="12" />
+        <Thumbnail index="12" />
       </div>
-    </well>
-    <well>
+    </Well>
+    <Well>
       <div>&lt;小喬大喬&gt;</div>
       <div style="display:flex;">
-        <thumbnail index="11" />
-        <thumbnail index="12" />
-        <thumbnail index="12" />
-        <thumbnail index="12" />
-        <thumbnail index="12" />
-        <thumbnail index="12" />
-        <thumbnail index="12" />
-        <thumbnail index="12" />
-        <thumbnail index="12" />
-        <thumbnail index="12" />
-        <thumbnail index="12" />
+        <Thumbnail index="11" />
+        <Thumbnail index="12" />
+        <Thumbnail index="12" />
+        <Thumbnail index="12" />
+        <Thumbnail index="12" />
+        <Thumbnail index="12" />
+        <Thumbnail index="12" />
+        <Thumbnail index="12" />
+        <Thumbnail index="12" />
+        <Thumbnail index="12" />
+        <Thumbnail index="12" />
       </div>
-    </well>
-    <well>
+    </Well>
+    <Well>
       <div>&lt;小喬大喬&gt;</div>
       <div style="display:flex;">
-        <thumbnail index="11" />
-        <thumbnail index="12" />
-        <thumbnail index="12" />
-        <thumbnail index="12" />
-        <thumbnail index="12" />
-        <thumbnail index="12" />
-        <thumbnail index="12" />
-        <thumbnail index="12" />
-        <thumbnail index="12" />
-        <thumbnail index="12" />
-        <thumbnail index="12" />
+        <Thumbnail index="11" />
+        <Thumbnail index="12" />
+        <Thumbnail index="12" />
+        <Thumbnail index="12" />
+        <Thumbnail index="12" />
+        <Thumbnail index="12" />
+        <Thumbnail index="12" />
+        <Thumbnail index="12" />
+        <Thumbnail index="12" />
+        <Thumbnail index="12" />
+        <Thumbnail index="12" />
       </div>
-    </well>
+    </Well>
   </div>
 </template>
 
@@ -75,11 +75,7 @@ import Well from '../Well'
 import Thumbnail from '../Thumbnail'
 
 export default {
-  components: {
-    'underline-text': UnderlineText,
-    'well': Well,
-    'thumbnail': Thumbnail,
-  }
+  components: { UnderlineText, Well, Thumbnail, }
 }
 </script>
 

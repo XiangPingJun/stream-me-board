@@ -1,33 +1,32 @@
 <template>
   <div>
-    <background></background>
+    <NightSkyBackground />
     <div class="page">
-      <video-box ref="video" :height="videoHeight" :width="videoWidth"></video-box>
+      <VideoBox ref="video" :height="videoHeight" :width="videoWidth" />
       <div class="right-side">
         <!-- top section -->
-        <my-info v-if="'MY_INFO' == topDialogType" :style="topAnimationStyle" />
-        <dialog-box v-if="'LOGIN' == topDialogType" class="top animated flipInX">
-          <login />
-        </dialog-box>
+        <MyInfo v-if="sectionVisible.myInfo" :style="topAnimationStyle" />
+        <DialogBox v-if="sectionVisible.login" class="top animated flipInX">
+          <Login />
+        </DialogBox>
         <!-- login arrow -->
-        <arrow ref="arrow" v-if="'LOGIN' == topDialogType" class="login-arrow" />
+        <Arrow ref="arrow" v-if="sectionVisible.login" class="login-arrow" />
 
         <!-- middle section -->
-        <dialog-box v-if="'QUIZ' == mainDialogType" overflowY="auto" class="middle animated flipInY" :style="middleAnimationStyle">
+        <DialogBox v-if="sectionVisible.quiz" overflowY="auto" class="middle animated flipInY" :style="middleAnimationStyle">
           <quiz />
-        </dialog-box>
+        </DialogBox>
 
         <!-- bottom section -->
-        <dialog-box overflowY="auto" class="bottom animated flipInY" :style="bottomAnimationStyle">
-          <chat-box />
-        </dialog-box>
+        <DialogBox overflowY="auto" class="bottom animated flipInY" :style="bottomAnimationStyle">
+          <ChatBox />
+        </DialogBox>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import Well from '../Well'
 import DialogBox from '../DialogBox'
 import VideoBox from '../VideoBox'
 import NightSkyBackground from './NightSkyBackground'
@@ -36,7 +35,7 @@ import Quiz from './Quiz'
 import MyInfo from './MyInfo'
 import Login from './Login'
 import Arrow from './Arrow'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   data() {
@@ -48,20 +47,8 @@ export default {
       bottomAnimationStyle: { 'animation-delay': '1.5s' },
     }
   },
-  components: {
-    'well': Well,
-    'dialog-box': DialogBox,
-    'video-box': VideoBox,
-    'background': NightSkyBackground,
-    'chat-box': ChatBox,
-    'quiz': Quiz,
-    'my-info': MyInfo,
-    'login': Login,
-    'arrow': Arrow,
-  },
-  created() {
-    this.$store.dispatch('getUpdates')
-  },
+  components: { DialogBox, VideoBox, NightSkyBackground, ChatBox, Quiz, MyInfo, Login, Arrow, },
+  created() { this.observeUpdates() },
   mounted() {
     const width = document.documentElement.clientWidth
     const height = document.documentElement.clientHeight
@@ -74,20 +61,19 @@ export default {
     })
     setTimeout(() => this.topAnimationStyle = this.middleAnimationStyle = this.bottomAnimationStyle = {}, 5000)
 
-    this.$store.subscribe((mutation, state) => {
-      if ('showLoginDialog' === mutation.type)
+    this.$store.subscribeAction((action, state) => {
+      if ('promptLogin' === action.type)
         setTimeout(() => this.$refs.arrow.animate())
     })
-  },
-  computed: {
-    ...mapGetters(['systemInfo', 'topDialogType', 'mainDialogType'])
   },
   watch: {
     systemInfo(val, oldVal) {
       if (null !== val && null !== oldVal && val.version != oldVal.version)
         window.location.reload(true)
     }
-  }
+  },
+  computed: { ...mapGetters(['systemInfo', 'sectionVisible']) },
+  methods: { ...mapActions(['observeUpdates']) }
 }
 </script>
 

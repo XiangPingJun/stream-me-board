@@ -17,7 +17,7 @@ export default {
 			this.cssClass = ''
 			setTimeout(() => {
 				this.cssClass = 'animated jello'
-			})
+			}, 100)
 		}
 	}
 }

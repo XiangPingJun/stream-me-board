@@ -1,31 +1,25 @@
 <template>
-  <dialog-box class="top animated flipInY">
+  <DialogBox class="top animated flipInY">
     <div class="container" @click="onClickMyInfo">
       <div class="thumbnail-box" :style="{'background-image': 'url(static/thumbnail-border.png)'}">
-        <thumbnail index="0" large="true" whoAmI="true" />
+        <Thumbnail index="0" large="true" whoAmI="true" />
       </div>
       <div class="right">
-        <div><underline-text>{{myName}}</underline-text></div>
+        <div><UnderlineText>{{myName}}</UnderlineText></div>
         <div>{{levelMsg}}</div>
       </div>
     </div>
-  </dialog-box>
+  </DialogBox>
 </template>
 
 <script>
 import UnderlineText from '../UnderlineText'
 import DialogBox from '../DialogBox'
 import Thumbnail from '../Thumbnail'
-import Button from '../Button'
-import { mapGetters, mapMutations } from 'vuex'
+import { mapGetters, mapMutations, mapActions } from 'vuex'
 
 export default {
-  components: {
-    'underline-text': UnderlineText,
-    'dialog-box': DialogBox,
-    'thumbnail': Thumbnail,
-    'btn': Button,
-  },
+  components: { UnderlineText, DialogBox, Thumbnail, },
   data: () => {
     return {
       myName: '不知名的訪客',
@@ -35,13 +29,13 @@ export default {
   methods: {
     onClickMyInfo() {
       if (null === this.myInfo)
-        this.showLoginDialog()
+        this.promptLogin()
     },
     createUser(name) {
       firebase.auth().createUserWithEmailAndPassword(encodeURI(name) + '@email.com', 'dummy password')
         .catch(error => new Notyf().alert(error.message))
     },
-    ...mapMutations(['showLoginDialog'])
+    ...mapActions(['promptLogin'])
   },
   computed: { ...mapGetters(['myInfo']) }
 }

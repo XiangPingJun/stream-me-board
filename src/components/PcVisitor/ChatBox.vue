@@ -1,37 +1,32 @@
 <template>
 	<div>
     <div class="chat-list">
-      <chat-line />
-      <chat-line />
-      <chat-line />
+      <ChatLine />
+      <ChatLine />
+      <ChatLine />
     </div>
     <div class="mask top"></div>
     <div class="mask bottom"></div>    
-    <input-box placeholder="說點什麼吧:↵" :onfocus="onInputFocus" class="input" ref="input" />
+    <InputBox placeholder="說點什麼吧:↵" ref="input" @focus="onInputFocus" class="input" />
 	</div>
 </template>
 
 <script>
-import Well from '../Well'
 import ChatLine from '../ChatLine'
 import InputBox from '../InputBox'
-import { mapGetters, mapMutations } from 'vuex'
+import { mapGetters, mapMutations, mapActions } from 'vuex'
 
 export default {
-  components: {
-    'well': Well,
-    'chat-line': ChatLine,
-    'input-box': InputBox,
-  },
+  components: { ChatLine, InputBox, },
   computed: { ...mapGetters(['myInfo']) },
   methods: {
     onInputFocus() {
       if (null !== this.myInfo)
         return
-      this.showLoginDialog()
+      this.promptLogin()
       this.$refs.input.unfocus()
     },
-    ...mapMutations(['showLoginDialog'])
+    ...mapActions(['promptLogin'])
   }
 }
 </script>
