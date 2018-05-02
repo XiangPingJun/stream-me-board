@@ -32,10 +32,12 @@ export default {
 		onSubmit(text) {
 			this.userNameTest = text
 			setTimeout(() => {
-				console.log(2, this.$refs.invisible.getWidth())
+				if (this.$refs.invisible.getWidth() > 210)
+					return this.errMsg('暱稱太長了喲！')
+				this.login(text)
 			})
 		},
-		...mapActions(['login'])
+		...mapActions(['login', 'errMsg'])
 	},
 }
 </script>

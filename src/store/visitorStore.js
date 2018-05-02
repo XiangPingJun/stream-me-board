@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
+const MAX_THUMBNAIL_INDEX = 100
+
 Vue.use(Vuex)
 const firestore = firebase.firestore()
 firestore.settings({ timestampsInSnapshots: true })
@@ -8,6 +10,7 @@ firestore.settings({ timestampsInSnapshots: true })
 export default new Vuex.Store({
 	state: {
 		myInfo: null,
+		nextThumbnail: Math.floor(Math.random() * MAX_THUMBNAIL_INDEX),
 		stream: null,
 		systemInfo: null,
 		selectedVideoUrl: null,
@@ -27,6 +30,7 @@ export default new Vuex.Store({
 		myInfo: state => state.myInfo,
 		stream: state => state.stream,
 		systemInfo: state => state.systemInfo,
+		nextThumbnail: state => state.nextThumbnail,
 		videoUrl: state => {
 			if (!state.stream)
 				return null
@@ -41,7 +45,8 @@ export default new Vuex.Store({
 				...state.sectionVisible,
 				...payload
 			}
-		}
+		},
+		popNextThumbnail: (state, payload) => state.nextThumbnail = Math.floor(Math.random() * MAX_THUMBNAIL_INDEX),
 	},
 	actions: {
 		trophyMsg: (context, payload) => context.state.notyf.warn(payload),
@@ -55,7 +60,6 @@ export default new Vuex.Store({
 		},
 		login: async (context, payload) => {
 			const email = `${encodeURI(payload)}@mail.net`, pw = 'dummy-password'
-			let user
 			try {
 				await firebase.auth().signInWithEmailAndPassword(email, pw)
 			} catch (error) {
@@ -68,7 +72,9 @@ export default new Vuex.Store({
 			}
 			async function createUser() {
 				try {
-					await firebase.auth().createUserWithEmailAndPassword(email, pw)
+					const user = await firebase.auth().createUserWithEmailAndPassword(email, pw)
+					console.log(user)
+					//await firebase.doc(`user/${}`)
 				} catch (error) {
 					context.dispatch('errMsg', error.message)
 					throw error

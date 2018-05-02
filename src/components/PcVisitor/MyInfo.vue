@@ -2,7 +2,7 @@
   <DialogBox class="top animated flipInY">
     <div class="container" @click="onClickMyInfo">
       <div class="thumbnail-box" :style="{'background-image': 'url(static/thumbnail-border.png)'}">
-        <Thumbnail index="0" large="true" whoAmI="true" />
+        <Thumbnail :index="nextThumbnail" :large="true" :whoAmI="true" />
       </div>
       <div class="right">
         <div><UnderlineText>{{myName}}</UnderlineText></div>
@@ -16,7 +16,7 @@
 import UnderlineText from '../UnderlineText'
 import DialogBox from '../DialogBox'
 import Thumbnail from '../Thumbnail'
-import { mapGetters, mapMutations, mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   components: { UnderlineText, DialogBox, Thumbnail, },
@@ -35,9 +35,9 @@ export default {
       firebase.auth().createUserWithEmailAndPassword(encodeURI(name) + '@email.com', 'dummy password')
         .catch(error => new Notyf().alert(error.message))
     },
-    ...mapActions(['promptLogin'])
+    ...mapActions(['promptLogin', 'trophyMsg'])
   },
-  computed: { ...mapGetters(['myInfo']) }
+  computed: { ...mapGetters(['myInfo', 'nextThumbnail']) }
 }
 </script>
 
