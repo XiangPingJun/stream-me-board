@@ -89,6 +89,10 @@ export default {
   transition-property: width, height;
   transition-duration: 0.25s;
 }
+.content .blue {
+  color: #639bff;
+  text-shadow: 0px 3px #5b6ee1, 3px 3px #86674d;
+}
 ::-webkit-scrollbar-track {
   background-color: #aa8c6e;
 }

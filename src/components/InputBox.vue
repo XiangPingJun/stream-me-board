@@ -1,5 +1,5 @@
 <template>
-  <form v-on:submit.prevent="$emit('submit', $refs.input.value)">
+  <form v-on:submit.prevent="$emit('submit', $refs.input.value.trim())">
     <input ref="input" :placeholder="placeholder" @focus="$emit('focus')" :maxlength="maxlength" />
   </form>
 </template>

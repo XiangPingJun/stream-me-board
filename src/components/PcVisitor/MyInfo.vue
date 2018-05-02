@@ -1,13 +1,14 @@
 <template>
   <DialogBox class="top animated flipInY">
-    <div class="container" @click="onClickMyInfo">
-      <div class="thumbnail-box" :style="{'background-image': 'url(static/thumbnail-border.png)'}">
-        <Thumbnail :index="nextThumbnail" :large="true" :whoAmI="true" />
+    <div class="container">
+      <div class="thumbnail-box" @click="onClickThumbnail" :style="{'background-image': 'url(static/thumbnail-border.png)'}">
+        <Thumbnail :index="nextThumbnail" :large="true" :whoAmI="null == myInfo" />
       </div>
       <div class="right">
-        <div><UnderlineText>{{myName}}</UnderlineText></div>
+        <UnderlineText>{{myName}}</UnderlineText>
         <div>{{levelMsg}}</div>
       </div>
+      <Button><span class="fa fa-times"></span></Button>
     </div>
   </DialogBox>
 </template>
@@ -16,28 +17,27 @@
 import UnderlineText from '../UnderlineText'
 import DialogBox from '../DialogBox'
 import Thumbnail from '../Thumbnail'
+import Button from '../Button'
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
-  components: { UnderlineText, DialogBox, Thumbnail, },
+  components: { UnderlineText, DialogBox, Thumbnail, Button, },
   data: () => {
     return {
-      myName: '不知名的訪客',
       levelMsg: '(輸入暱稱一起來玩吧!)',
     }
   },
   methods: {
-    onClickMyInfo() {
+    onClickThumbnail() {
       if (null === this.myInfo)
         this.promptLogin()
     },
-    createUser(name) {
-      firebase.auth().createUserWithEmailAndPassword(encodeURI(name) + '@email.com', 'dummy password')
-        .catch(error => new Notyf().alert(error.message))
-    },
     ...mapActions(['promptLogin', 'trophyMsg'])
   },
-  computed: { ...mapGetters(['myInfo', 'nextThumbnail']) }
+  computed: {
+    myName() { return this.myInfo ? this.myInfo.name : '不知名的訪客' },
+    ...mapGetters(['myInfo', 'nextThumbnail'])
+  }
 }
 </script>
 
@@ -45,7 +45,6 @@ export default {
 .container {
   display: flex;
   align-items: flex-start;
-  cursor: pointer;
 }
 .right {
   margin-left: 10px;
@@ -57,5 +56,6 @@ export default {
   padding-top: 15px;
   padding-left: 15px;
   display: inline-block;
+  cursor: pointer;
 }
 </style>

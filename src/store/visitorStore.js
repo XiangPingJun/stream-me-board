@@ -40,13 +40,13 @@ export default new Vuex.Store({
 	mutations: {
 		setStream: (state, payload) => state.stream = payload,
 		setSystemInfo: (state, payload) => state.systemInfo = payload,
+		setMyInfo: (state, payload) => state.myInfo = payload,
 		setSectionVisible: (state, payload) => {
 			state.sectionVisible = {
 				...state.sectionVisible,
 				...payload
 			}
-		},
-		popNextThumbnail: (state, payload) => state.nextThumbnail = Math.floor(Math.random() * MAX_THUMBNAIL_INDEX),
+		}
 	},
 	actions: {
 		trophyMsg: (context, payload) => context.state.notyf.warn(payload),
@@ -56,10 +56,15 @@ export default new Vuex.Store({
 			firestore.doc("system/stream").onSnapshot(doc => context.commit('setStream', doc.data()))
 			firestore.doc("system/info").onSnapshot(doc => context.commit('setSystemInfo', doc.data()))
 			firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
-			firebase.auth().onAuthStateChanged(user => console.log(99, user))
+			firebase.auth().onAuthStateChanged(user =>
+				firestore.collection(`user`).where('email', '==', user.email)
+					.onSnapshot(snap => context.commit('setMyInfo', snap.docs[0].data()))
+			)
 		},
 		login: async (context, payload) => {
-			const email = `${encodeURI(payload)}@mail.net`, pw = 'dummy-password'
+			const name = payload
+			const email = `${encodeURI(name)}@mail.net`.toLowerCase()
+			const pw = 'dummy-password'
 			try {
 				await firebase.auth().signInWithEmailAndPassword(email, pw)
 			} catch (error) {
@@ -72,9 +77,13 @@ export default new Vuex.Store({
 			}
 			async function createUser() {
 				try {
-					const user = await firebase.auth().createUserWithEmailAndPassword(email, pw)
-					console.log(user)
-					//await firebase.doc(`user/${}`)
+					await firestore.doc(`user/${name}`).set({
+						name: name,
+						thumbnailList: [context.state.nextThumbnail],
+						thumbnailSelected: context.state.nextThumbnail,
+						email: email,
+					})
+					await firebase.auth().createUserWithEmailAndPassword(email, pw)
 				} catch (error) {
 					context.dispatch('errMsg', error.message)
 					throw error

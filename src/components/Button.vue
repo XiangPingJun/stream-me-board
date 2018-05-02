@@ -3,17 +3,15 @@
     <div class="content"><slot></slot></div>
     <div class="stroke color-4" style="height:calc(100% - 16px); top:14px; right:-2px;"></div>    
     <div class="stroke color-3" style="top:10px; right:-2px;"></div>    
-    <div class="stroke color-4" style="bottom:-2px; right:2px;"></div>    
+    <div class="stroke color-4" style="bottom:-2px; right:2px;"></div>
     <div class="stroke color-5" style="bottom:2px; right:2px;"></div>    
     <div class="stroke color-5" style="width: calc(100% - 12px); bottom:-2px; left:6px;"></div>    
     <div class="stroke color-5" style="bottom:2px; left:2px;"></div>
     <div class="stroke color-bg" style="bottom:2px; left:10px;"></div>        
     <div class="stroke color-bg" style="bottom:2px; right:10px;"></div> 
     <div class="stroke color-3" style="width: calc(100% - 28px); bottom:2px; left:14px;"></div>        
-    <div class="stroke color-1" style="top:2px; left:6px;"></div>        
+    <div class="stroke color-1" style="top:2px; left:6px;"></div>
     <div class="stroke color-1" style="height:12px; top:6px; left:2px;"></div>        
-    <div class="stroke color-1" style="top:30px; left:2px;"></div>        
-    <div class="stroke color-2" style="top:6px; left:6px;"></div>        
   </div>
 </template>
 
@@ -55,7 +53,7 @@
   color: #f8ecd5;
   text-shadow: 0px 3px #705749;
   background-color: #927964;
-  padding: 4px;
+  padding: 2px;
   margin: 4px;
   box-shadow: 0px -4px #aa8c6e, 0px 4px #aa8c6e, 4px 0px #aa8c6e,
     -4px 0px #aa8c6e;
