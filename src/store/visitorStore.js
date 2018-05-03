@@ -61,7 +61,7 @@ export default new Vuex.Store({
 		trophyMsg: ({ state }, payload) => state.notyf.warn(payload),
 		infoMsg: ({ state }, payload) => state.notyf.confirm(payload),
 		errMsg: ({ state }, payload) => state.notyf.alert(payload),
-		subscribeData: ({ commit }) => {
+		subscribeData: ({ commit, dispatch }) => {
 			firestore.doc("system/stream").onSnapshot(doc => commit('setStream', doc.data()))
 			firestore.doc("system/info").onSnapshot(doc => commit('setSystemInfo', doc.data()))
 			firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
@@ -69,6 +69,10 @@ export default new Vuex.Store({
 				if (user) {
 					firestore.collection('user').where('email', '==', user.email)
 						.onSnapshot(snap => {
+							if (!snap.docs[0]) {
+								dispatch('errMsg', `${user.email} not found!`)
+								return
+							}
 							commit('setMyInfo', snap.docs[0].data())
 							commit('setSectionVisible', { myInfo: true, anonymousInfo: false, login: false })
 						})
