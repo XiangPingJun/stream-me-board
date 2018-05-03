@@ -1,13 +1,21 @@
 <template>
-  <form v-on:submit.prevent="$emit('submit', $refs.input.value.trim())">
-    <input ref="input" :placeholder="placeholder" @focus="$emit('focus')" :maxlength="maxlength" />
+  <form v-on:submit.prevent="onSubmit">
+    <input v-model="text" :placeholder="placeholder" @focus="$emit('focus')" :maxlength="maxlength" :disabled="disabled || loading" ref="input" />
   </form>
 </template>
 
 <script>
 export default {
-  props: ['placeholder', 'maxlength'],
+  props: ['placeholder', 'maxlength', 'disabled', 'loading'],
+  data() { return { text: '' } },
   methods: {
+    onSubmit() {
+      const text = this.text.trim()
+      if (!text)
+        return
+      this.text = '載入中...'
+      this.$emit('submit', text)
+    },
     focus() { this.$refs.input.focus() },
     unfocus() { this.$refs.input.blur() },
   }

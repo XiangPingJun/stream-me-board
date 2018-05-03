@@ -29,9 +29,7 @@ export default new Vuex.Store({
 		stream: state => state.stream,
 		systemInfo: state => state.systemInfo,
 		randomNextThumbnail: state => {
-
 			let result = generateRandomThumbnail()
-
 			if (null === state.myInfo)
 				return result
 			else if (state.myInfo.thumbnailList.length == MAX_THUMBNAIL_INDEX + 1)
@@ -68,13 +66,13 @@ export default new Vuex.Store({
 			firestore.doc("system/info").onSnapshot(doc => commit('setSystemInfo', doc.data()))
 			firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
 			firebase.auth().onAuthStateChanged(user => {
-				if (user)
-					firestore.collection(`user`).where('email', '==', user.email)
+				if (user) {
+					firestore.collection('user').where('email', '==', user.email)
 						.onSnapshot(snap => {
 							commit('setMyInfo', snap.docs[0].data())
 							commit('setSectionVisible', { myInfo: true, anonymousInfo: false, login: false })
 						})
-				else {
+				} else {
 					commit('setMyInfo', null)
 					commit('setSectionVisible', { myInfo: false, anonymousInfo: true, login: false })
 				}
@@ -98,8 +96,8 @@ export default new Vuex.Store({
 				try {
 					await firestore.doc(`user/${name}`).set({
 						name: name,
-						thumbnailList: [getters.randomNextThumbnail],
-						thumbnailSelected: getters.randomNextThumbnail,
+						thumbnailList: [getters.anonymousThumbnail],
+						thumbnailSelected: getters.anonymousThumbnail,
 						email: email,
 					})
 					await firebase.auth().createUserWithEmailAndPassword(email, pw)
@@ -109,8 +107,9 @@ export default new Vuex.Store({
 				}
 			}
 		},
-		logout: async ({ dispatch }) => {
+		logout: async ({ dispatch, commit }) => {
 			try {
+				commit('generateAnonymousThumbnail')
 				await firebase.auth().signOut()
 			} catch (error) {
 				dispatch('errMsg', error.message)
