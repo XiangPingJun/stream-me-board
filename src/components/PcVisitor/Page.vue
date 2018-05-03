@@ -5,7 +5,8 @@
       <VideoBox ref="video" :height="videoHeight" :width="videoWidth" />
       <div class="right-side">
         <!-- top section -->
-        <MyInfo v-if="sectionVisible.myInfo" :style="topAnimationStyle" />
+        <MyInfo v-if="sectionVisible.myInfo" class="top animated flipInX" />
+        <AnonymousInfo v-if="sectionVisible.anonymousInfo" class="top animated flipInX" />
         <DialogBox v-if="sectionVisible.login" class="top animated flipInX">
           <Login />
         </DialogBox>
@@ -13,12 +14,12 @@
         <Arrow ref="arrow" v-if="sectionVisible.login" class="login-arrow" />
 
         <!-- middle section -->
-        <DialogBox v-if="sectionVisible.quiz" overflowY="auto" class="middle animated flipInY" :style="middleAnimationStyle">
+        <DialogBox v-if="sectionVisible.quiz" overflowY="auto" class="middle animated flipInY">
           <quiz />
         </DialogBox>
 
         <!-- bottom section -->
-        <DialogBox overflowY="auto" class="bottom animated flipInY" :style="bottomAnimationStyle">
+        <DialogBox v-if="sectionVisible.chat" overflowY="auto" class="bottom animated flipInX">
           <ChatBox />
         </DialogBox>
       </div>
@@ -33,6 +34,7 @@ import NightSkyBackground from './NightSkyBackground'
 import ChatBox from './ChatBox'
 import Quiz from './Quiz'
 import MyInfo from './MyInfo'
+import AnonymousInfo from './AnonymousInfo'
 import Login from './Login'
 import Arrow from './Arrow'
 import { mapGetters, mapActions } from 'vuex'
@@ -42,13 +44,11 @@ export default {
     return {
       videoWidth: 0,
       videoHeight: 0,
-      topAnimationStyle: { 'animation-delay': '0.5s' },
-      middleAnimationStyle: { 'animation-delay': '1s' },
-      bottomAnimationStyle: { 'animation-delay': '1.5s' },
+      unsubscribeAction: () => { },
     }
   },
-  components: { DialogBox, VideoBox, NightSkyBackground, ChatBox, Quiz, MyInfo, Login, Arrow, },
-  created() { this.observeUpdates() },
+  components: { DialogBox, VideoBox, NightSkyBackground, ChatBox, Quiz, MyInfo, AnonymousInfo, Login, Arrow, },
+  created() { this.subscribeData() },
   mounted() {
     const width = document.documentElement.clientWidth
     const height = document.documentElement.clientHeight
@@ -59,12 +59,13 @@ export default {
         this.videoHeight = height - 50
       }
     })
-    setTimeout(() => this.topAnimationStyle = this.middleAnimationStyle = this.bottomAnimationStyle = {}, 5000)
-
-    this.$store.subscribeAction((action, state) => {
+    this.unsubscribeAction = this.$store.subscribeAction((action, state) => {
       if ('promptLogin' === action.type)
         setTimeout(() => this.$refs.arrow.animate())
     })
+  },
+  beforeDestroy() {
+    this.unsubscribeAction()
   },
   watch: {
     systemInfo(val, oldVal) {
@@ -73,7 +74,7 @@ export default {
     }
   },
   computed: { ...mapGetters(['systemInfo', 'sectionVisible']) },
-  methods: { ...mapActions(['observeUpdates']) }
+  methods: { ...mapActions(['subscribeData']) }
 }
 </script>
 

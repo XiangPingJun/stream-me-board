@@ -1,14 +1,16 @@
 <template>
-  <DialogBox class="top animated flipInY">
+  <DialogBox>
     <div class="container">
-      <div class="thumbnail-box" @click="onClickThumbnail" :style="{'background-image': 'url(static/thumbnail-border.png)'}">
-        <Thumbnail :index="nextThumbnail" :large="true" :whoAmI="null == myInfo" />
+      <div v-tooltip.left="'更換頭像'" class="thumbnail-box" @click="onClickThumbnail" :style="{'background-image': 'url(static/thumbnail-border.png)'}">
+        <Thumbnail :index="randomNextThumbnail" :large="true" :whoAmI="null == myInfo" />
       </div>
-      <div class="right">
+      <div class="info">
         <UnderlineText>{{myName}}</UnderlineText>
         <div>{{levelMsg}}</div>
       </div>
-      <Button><span class="fa fa-times"></span></Button>
+      <div v-if="myInfo" class="logout" @click="logout">
+        <DarkButton v-tooltip.left="'登出'"><i class="fa fa-sign-out-alt" /></DarkButton>
+      </div>
     </div>
   </DialogBox>
 </template>
@@ -17,11 +19,11 @@
 import UnderlineText from '../UnderlineText'
 import DialogBox from '../DialogBox'
 import Thumbnail from '../Thumbnail'
-import Button from '../Button'
+import DarkButton from '../DarkButton'
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
-  components: { UnderlineText, DialogBox, Thumbnail, Button, },
+  components: { UnderlineText, DialogBox, Thumbnail, DarkButton, },
   data: () => {
     return {
       levelMsg: '(輸入暱稱一起來玩吧!)',
@@ -32,11 +34,11 @@ export default {
       if (null === this.myInfo)
         this.promptLogin()
     },
-    ...mapActions(['promptLogin', 'trophyMsg'])
+    ...mapActions(['promptLogin', 'trophyMsg', 'logout'])
   },
   computed: {
     myName() { return this.myInfo ? this.myInfo.name : '不知名的訪客' },
-    ...mapGetters(['myInfo', 'nextThumbnail'])
+    ...mapGetters(['myInfo', 'randomNextThumbnail'])
   }
 }
 </script>
@@ -46,7 +48,7 @@ export default {
   display: flex;
   align-items: flex-start;
 }
-.right {
+.info {
   margin-left: 10px;
   align-self: center;
 }
@@ -57,5 +59,11 @@ export default {
   padding-left: 15px;
   display: inline-block;
   cursor: pointer;
+}
+.logout {
+  flex-grow: 2;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
 }
 </style>

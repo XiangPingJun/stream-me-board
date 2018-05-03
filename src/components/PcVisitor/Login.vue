@@ -18,12 +18,13 @@ export default {
 	components: { InputBox, Invisible, DialogBox },
 	data() {
 		return {
-			userNameTest: ''
+			userNameTest: '',
+			unsubscribeAction: () => { },
 		}
 	},
 	mounted() {
 		this.$refs.input.focus()
-		this.$store.subscribeAction((action, state) => {
+		this.unsubscribeAction = this.$store.subscribeAction((action, state) => {
 			if ('promptLogin' === action.type)
 				this.$refs.input.focus()
 		})
@@ -39,6 +40,9 @@ export default {
 		},
 		...mapActions(['login', 'errMsg'])
 	},
+	beforeDestroy() {
+		this.unsubscribeAction()
+	}
 }
 </script>
 
