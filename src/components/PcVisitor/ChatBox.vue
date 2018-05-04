@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<DialogBox overflowY="auto">
     <div class="chat-list">
       <ChatLine />
       <ChatLine />
@@ -8,16 +8,17 @@
     <div class="mask top"></div>
     <div class="mask bottom"></div>    
     <InputBox placeholder="說點什麼吧:↵" ref="input" @focus="onInputFocus" class="input" maxlength="140" />
-	</div>
+	</DialogBox>
 </template>
 
 <script>
 import ChatLine from '../ChatLine'
 import InputBox from '../InputBox'
+import DialogBox from '../DialogBox'
 import { mapGetters, mapMutations, mapActions } from 'vuex'
 
 export default {
-  components: { ChatLine, InputBox, },
+  components: { ChatLine, InputBox, DialogBox },
   computed: { ...mapGetters(['myInfo']) },
   methods: {
     onInputFocus() {

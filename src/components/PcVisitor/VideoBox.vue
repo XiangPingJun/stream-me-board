@@ -1,6 +1,6 @@
 <template>
   <div class="video-box animated" :class="{flipInX: loaded}" :style="{visibility: loaded ? 'visible': 'hidden'}">
-    <div class="container">
+    <div class="video-container">
       <iframe ref="iframe" frameBorder="0" allowFullScreen="true" :src="videoUrl" :style="videoSize" />
     </div>
   </div>
@@ -11,11 +11,7 @@ import { mapGetters } from 'vuex'
 
 export default {
   props: ['width', 'height'],
-  data() {
-    return {
-      loaded: false
-    }
-  },
+  data() { return { loaded: false } },
   computed: {
     videoSize: function () {
       return {
@@ -44,7 +40,8 @@ export default {
           'onReady': () => {
             if (this.props.autoPlay)
               player.playVideo()
-            player.setPlaybackQuality(isMobileDevice() ? 'medium' : 'hd720')
+            player.setPlaybackQuality('hd720')
+            //player.setPlaybackQuality(isMobileDevice() ? 'medium' : 'hd720')
           }
         }
       })
@@ -76,12 +73,12 @@ export default {
   right: 10px;
   left: auto;
 }
-.video-box .container {
+.video-box .video-container {
   position: relative;
   border-radius: 8px;
   overflow: hidden;
 }
-.video-box .container iframe {
+.video-box .video-container iframe {
   margin: 0 0 -7px 0;
 }
 </style>

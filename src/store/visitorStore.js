@@ -1,13 +1,13 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-const MAX_THUMBNAIL_INDEX = 100
+const TOTAL_THUMBNAIL = 100
 
 Vue.use(Vuex)
 const firestore = firebase.firestore()
 firestore.settings({ timestampsInSnapshots: true })
 
-const generateRandomThumbnail = () => Math.floor(Math.random() * MAX_THUMBNAIL_INDEX)
+const generateRandomThumbnail = () => Math.floor(Math.random() * TOTAL_THUMBNAIL)
 
 export default new Vuex.Store({
 	state: {
@@ -15,24 +15,29 @@ export default new Vuex.Store({
 		stream: null,
 		systemInfo: null,
 		selectedVideoUrl: null,
-		sectionVisible: { quiz: true, chat: true },
+		uiMode: {
+			account: null,
+			quiz: true,
+			chat: true,
+		},
 		notyf: new Notyf({
 			confirmIcon: 'fa fa-info-circle',
 			alertIcon: 'fa fa-exclamation-triangle',
 			warnIcon: 'fa fa-trophy'
 		}),
-		anonymousThumbnail: generateRandomThumbnail()
+		anonymousThumbnail: generateRandomThumbnail(),
 	},
 	getters: {
-		sectionVisible: state => state.sectionVisible,
+		uiMode: state => state.uiMode,
 		myInfo: state => state.myInfo,
 		stream: state => state.stream,
 		systemInfo: state => state.systemInfo,
+		totalThumbnail: state => TOTAL_THUMBNAIL,
 		randomNextThumbnail: state => {
 			let result = generateRandomThumbnail()
 			if (null === state.myInfo)
 				return result
-			else if (state.myInfo.thumbnailList.length == MAX_THUMBNAIL_INDEX + 1)
+			else if (state.myInfo.thumbnailList.length == TOTAL_THUMBNAIL)
 				return null
 			for (; ; result = generateRandomThumbnail())
 				if (!state.myInfo.thumbnailList.find(thumbnail => thumbnail == result))
@@ -49,9 +54,9 @@ export default new Vuex.Store({
 		setStream: (state, payload) => state.stream = payload,
 		setSystemInfo: (state, payload) => state.systemInfo = payload,
 		setMyInfo: (state, payload) => state.myInfo = payload,
-		setSectionVisible: (state, payload) => {
-			state.sectionVisible = {
-				...state.sectionVisible,
+		setUiMode: (state, payload) => {
+			state.uiMode = {
+				...state.uiMode,
 				...payload,
 			}
 		},
@@ -74,11 +79,11 @@ export default new Vuex.Store({
 								return
 							}
 							commit('setMyInfo', snap.docs[0].data())
-							commit('setSectionVisible', { myInfo: true, anonymousInfo: false, login: false })
+							commit('setUiMode', { account: 'MY_INFO' })
 						})
 				} else {
 					commit('setMyInfo', null)
-					commit('setSectionVisible', { myInfo: false, anonymousInfo: true, login: false })
+					commit('setUiMode', { account: 'ANONYMOUS' })
 				}
 			})
 		},
@@ -121,12 +126,11 @@ export default new Vuex.Store({
 			}
 		},
 		promptLogin: ({ commit, dispatch }) => {
-			commit('setSectionVisible', {
-				myInfo: false,
-				anonymousInfo: false,
-				login: true,
-			})
+			commit('setUiMode', { account: 'LOGIN' })
 			dispatch('infoMsg', '輸入暱稱才能繼續喲！')
-		}
+		},
+		promptSelectThumbnail: ({ commit }) => {
+			commit('setUiMode', { selectThumbnail: true })
+		},
 	}
 })

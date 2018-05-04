@@ -1,6 +1,6 @@
 <template>
-  <div class="border">
-    <div class="content"><slot></slot></div>
+  <div class="btn-border">
+    <div class="btn-content"><slot></slot></div>
     <div class="stroke color-4" style="top:2px; left:2px;"></div>    		
     <div class="stroke color-4" style="top:2px; right:2px;"></div>    		
 		<div class="stroke color-4" style="bottom:2px; left:2px;"></div>    		
@@ -12,11 +12,12 @@
 </template>
 
 <style scoped>
-.border {
+.btn-border {
   display: flex;
   position: relative;
   flex-direction: column;
   margin: 0px;
+  cursor: pointer;
 }
 .stroke {
   position: absolute;
@@ -47,7 +48,7 @@
 .color-6 {
   box-shadow: 0 0 0 2px #2a2e30;
 }
-.content {
+.btn-content {
   cursor: pointer;
   display: flex;
   flex-grow: 1;

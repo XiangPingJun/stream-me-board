@@ -1,6 +1,6 @@
 <template>
-  <div class="border">
-    <div class="content" :style="contentStyle">
+  <div class="dialog-border">
+    <div class="dialog-content" :style="contentStyle">
       <slot></slot>
     </div>
     <div class="stroke color-bg" style="width: 100%; top:2px; right:2px;"></div>    
@@ -44,7 +44,7 @@ export default {
 
 
 <style scoped>
-.border {
+.dialog-border {
   display: flex;
   position: relative;
   flex-direction: column;
@@ -74,7 +74,7 @@ export default {
 .color-3 {
   box-shadow: 0 0 0 2px #86674d;
 }
-.content {
+.dialog-content {
   flex-grow: 1;
   min-width: 120px;
   color: #f8ecd5;
@@ -89,7 +89,7 @@ export default {
   transition-property: width, height;
   transition-duration: 0.25s;
 }
-.content .blue {
+.dialog-content .blue {
   color: #639bff;
   text-shadow: 0px 3px #5b6ee1, 3px 3px #86674d;
 }

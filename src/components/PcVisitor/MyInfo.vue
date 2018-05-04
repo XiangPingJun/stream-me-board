@@ -1,12 +1,12 @@
 <template>
   <DialogBox>
     <div class="container">
-      <div v-tooltip.left="'更換頭像'" class="thumbnail-box" @click="onClickThumbnail" :style="{'background-image': 'url(static/thumbnail-border.png)'}">
+      <div v-tooltip.left="'更換角色'" class="thumbnail-box" @click="promptSelectThumbnail" :style="{'background-image': 'url(static/thumbnail-border.png)'}">
         <Thumbnail :index="myInfo.thumbnailSelected" :large="true" />
       </div>
       <div class="info">
         <UnderlineText>{{myInfo.name}}</UnderlineText>
-        <div>{{levelMsg}}</div>
+        <div v-tooltip.bottom="'一起聊聊天、參加小遊戲就可以解鎖更多新角色！'" style="cursor:default">{{levelMsg}}</div>
       </div>
       <div class="logout" @click="logout">
         <DarkButton v-tooltip.left="'登出'"><i class="fa fa-sign-out-alt" /></DarkButton>
@@ -24,11 +24,7 @@ import { mapGetters, mapActions } from 'vuex'
 
 export default {
   components: { UnderlineText, DialogBox, Thumbnail, DarkButton, },
-  methods: {
-    onClickThumbnail() {
-    },
-    ...mapActions(['promptLogin', 'logout'])
-  },
+  methods: { ...mapActions(['promptLogin', 'logout', 'promptSelectThumbnail']) },
   computed: {
     levelMsg() { return 'Lv 1. (40%)' },
     ...mapGetters(['myInfo'])

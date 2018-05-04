@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <DialogBox overflowY="auto">
     <div><UnderlineText>動漫通問答遊戲</UnderlineText></div>          
     <div class="question">截至目前「真●三國無雙7帝王傳」系列遊戲中，哪位無雙臉女將並沒有配對的夫君轉正登場？</div>
     <Well>
@@ -66,16 +66,17 @@
         <Thumbnail index="12" />
       </div>
     </Well>
-  </div>
+  </DialogBox>
 </template>
 
 <script>
 import UnderlineText from '../UnderlineText'
 import Well from '../Well'
 import Thumbnail from '../Thumbnail'
+import DialogBox from '../DialogBox'
 
 export default {
-  components: { UnderlineText, Well, Thumbnail, }
+  components: { UnderlineText, Well, Thumbnail, DialogBox, }
 }
 </script>
 
@@ -83,10 +84,6 @@ export default {
 .container {
   display: flex;
   align-items: flex-start;
-}
-.right {
-  margin-left: 10px;
-  align-self: center;
 }
 .question {
   margin-bottom: 10px;

@@ -5,23 +5,18 @@
       <VideoBox ref="video" :height="videoHeight" :width="videoWidth" />
       <div class="right-side">
         <!-- top section -->
-        <MyInfo v-if="sectionVisible.myInfo" class="top animated flipInX" />
-        <AnonymousInfo v-if="sectionVisible.anonymousInfo" class="top animated flipInX" />
-        <DialogBox v-if="sectionVisible.login" class="top animated flipInX">
-          <Login />
-        </DialogBox>
+        <MyInfo v-if="showMyInfo" class="top animated flipInX" />
+        <AnonymousInfo v-if="showAnonymous" class="top animated flipInX" />
+        <Login v-if="showLogin" class="top animated flipInX" />
         <!-- login arrow -->
-        <Arrow ref="arrow" v-if="sectionVisible.login" class="login-arrow" />
+        <Arrow ref="arrow" v-if="'LOGIN' == uiMode.account" class="login-arrow" />
 
         <!-- middle section -->
-        <DialogBox v-if="sectionVisible.quiz" overflowY="auto" class="middle animated flipInY">
-          <quiz />
-        </DialogBox>
+        <Quiz v-if="showQuiz" class="middle animated flipInY" />
+        <ThumbnailPicker v-if="showThumbnailPicker" class="middle animated flipInY" />
 
         <!-- bottom section -->
-        <DialogBox v-if="sectionVisible.chat" overflowY="auto" class="bottom animated flipInX">
-          <ChatBox />
-        </DialogBox>
+        <ChatBox v-if="uiMode.chat" class="bottom animated flipInX" />
       </div>
     </div>
   </div>
@@ -29,7 +24,7 @@
 
 <script>
 import DialogBox from '../DialogBox'
-import VideoBox from '../VideoBox'
+import VideoBox from './VideoBox'
 import NightSkyBackground from './NightSkyBackground'
 import ChatBox from './ChatBox'
 import Quiz from './Quiz'
@@ -37,6 +32,7 @@ import MyInfo from './MyInfo'
 import AnonymousInfo from './AnonymousInfo'
 import Login from './Login'
 import Arrow from './Arrow'
+import ThumbnailPicker from './ThumbnailPicker'
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
@@ -47,7 +43,7 @@ export default {
       unsubscribeAction: () => { },
     }
   },
-  components: { DialogBox, VideoBox, NightSkyBackground, ChatBox, Quiz, MyInfo, AnonymousInfo, Login, Arrow, },
+  components: { DialogBox, VideoBox, NightSkyBackground, ChatBox, Quiz, MyInfo, AnonymousInfo, Login, Arrow, ThumbnailPicker },
   created() { this.subscribeData() },
   mounted() {
     const width = document.documentElement.clientWidth
@@ -73,7 +69,14 @@ export default {
         window.location.reload(true)
     }
   },
-  computed: { ...mapGetters(['systemInfo', 'sectionVisible']) },
+  computed: {
+    showMyInfo() { return 'MY_INFO' == this.uiMode.account },
+    showAnonymous() { return 'ANONYMOUS' == this.uiMode.account },
+    showLogin() { return 'LOGIN' == this.uiMode.account },
+    showQuiz() { return !this.uiMode.selectThumbnail && this.uiMode.quiz },
+    showThumbnailPicker() { return this.uiMode.selectThumbnail },
+    ...mapGetters(['systemInfo', 'uiMode'])
+  },
   methods: { ...mapActions(['subscribeData']) }
 }
 </script>
@@ -87,7 +90,7 @@ export default {
 }
 .right-side {
   align-self: stretch;
-  width: 320px;
+  width: 325px;
   margin-left: 10px;
   display: flex;
   flex-direction: column;
@@ -102,7 +105,7 @@ export default {
 .right-side .bottom {
   flex-grow: 1;
   flex-shrink: 9999999;
-  min-height: 120px;
+  min-height: 150px;
 }
 .login-arrow {
   top: 60px;

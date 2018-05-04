@@ -1,11 +1,11 @@
 <template>
-  <div style="margin-bottom:5px;">
+  <DialogBox style="margin-bottom:5px;">
 		<div style="margin-bottom:10px;">ヽ(ﾟ▽ﾟ)ノ 歡迎！怎麼稱呼呢？</div>
 		<div><InputBox ref="input" placeholder="輸入暱稱吧:↵" @submit="onSubmit" :loading="loading" class="input" /></div>
 		<Invisible ref="invisible">
 			<DialogBox>{{userNameTest}}</DialogBox>
 		</Invisible>
-  </div>
+  </DialogBox>
 </template>
 
 <script>

@@ -1,6 +1,6 @@
 <template>
-  <div class="border">
-    <div class="content"></div>
+  <div class="white-border">
+    <div class="white-content"></div>
     <div class="stroke color-6" style="width:calc(100% - 16px); top:2px; left:6px;"></div>
     <div class="stroke color-4" style="width:calc(100% - 16px); top:6px; left:6px;"></div>
     <div class="stroke color-3" style="height:calc(100% - 16px); top:6px; left:6px;"></div>
@@ -18,7 +18,7 @@
 </template>
 
 <style scoped>
-.border {
+.white-border {
   display: flex;
   position: relative;
   flex-direction: column;
@@ -52,7 +52,7 @@
 .color-6 {
   box-shadow: 0 0 0 2px #f8ecd5;
 }
-.content {
+.white-content {
   display: flex;
   margin: 8px;
 }

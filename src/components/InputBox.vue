@@ -1,6 +1,7 @@
 <template>
   <form v-on:submit.prevent="onSubmit">
-    <input v-model="text" :placeholder="placeholder" @focus="$emit('focus')" :maxlength="maxlength" :disabled="disabled || loading" ref="input" />
+    <input v-model="text" :placeholder="placeholder" @focus="$emit('focus')" :maxlength="maxlength" 
+      :disabled="disabled || loading" ref="input"  :style="inputStyle" />
   </form>
 </template>
 
@@ -18,6 +19,13 @@ export default {
     },
     focus() { this.$refs.input.focus() },
     unfocus() { this.$refs.input.blur() },
+  },
+  computed: {
+    inputStyle() {
+      if (this.loading) return { cursor: 'wait' }
+      else if (this.disabled) return { cursor: 'not-allowed' }
+      else return { cursor: 'text' }
+    }
   }
 }
 </script>
