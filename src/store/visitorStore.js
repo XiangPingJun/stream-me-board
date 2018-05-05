@@ -63,12 +63,46 @@ export default new Vuex.Store({
 		generateAnonymousThumbnail: (state, payload) => state.anonymousThumbnail = generateRandomThumbnail()
 	},
 	actions: {
-		trophyMsg: ({ state }, payload) => state.notyf.warn(payload),
+		trophyMsg: ({ state }, payload) => {
+
+			state.notyf.warn(`<div style="font-size:50% !important; margin-bottom:5px;">獲得獎盃</div><div>${payload}</div>`)
+		},
 		infoMsg: ({ state }, payload) => state.notyf.confirm(payload),
 		errMsg: ({ state }, payload) => state.notyf.alert(payload),
+		saveMyInfo: ({ state }, payload) => {
+			firestore.collection('user').doc(state.myInfo.name).set(payload)
+				.catch(error => {
+					dispatch('errMsg', error.message)
+					throw error
+				})
+		},
+		addExp: ({ state }, payload) => {
+			const newMyInfo = JSON.parse(JSON.stringify(state.myInfo))
+			newMyInfo.exp += payload
+			newMyInfo.level = Math.floor(myInfo.exp / 100)
+			newMyInfo.exp %= 100
+			commit('saveMyInfo', myInfo)
+		},
+		checkTrophy: ({ state, dispatch, getters }) => {
+			if (state.myInfo && state.stream.streaming && !state.myInfo.viewedStream.includes(state.stream.time)) {
+				const newMyInfo = JSON.parse(JSON.stringify(state.myInfo))
+				newMyInfo.level += 1
+				newMyInfo.viewedStream.push(state.stream.time)
+				newMyInfo.thumbnailList.push(getters.randomNextThumbnail)
+				dispatch('saveMyInfo', newMyInfo)
+				let msg = state.myInfo.viewedStream.length ? '第一次來看直播！' : '一起來看直播！'
+				dispatch('trophyMsg', msg)
+			}
+		},
 		subscribeData: ({ commit, dispatch }) => {
-			firestore.doc("system/stream").onSnapshot(doc => commit('setStream', doc.data()))
-			firestore.doc("system/info").onSnapshot(doc => commit('setSystemInfo', doc.data()))
+			firestore.doc("system/stream").onSnapshot(doc => {
+				commit('setStream', doc.data())
+				dispatch('checkTrophy')
+			})
+			firestore.doc("system/info").onSnapshot(doc => {
+				commit('setSystemInfo', doc.data())
+				dispatch('checkTrophy')
+			})
 			firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
 			firebase.auth().onAuthStateChanged(user => {
 				if (user) {
@@ -80,6 +114,7 @@ export default new Vuex.Store({
 							}
 							commit('setMyInfo', snap.docs[0].data())
 							commit('setUiMode', { account: 'MY_INFO' })
+							dispatch('checkTrophy')
 						})
 				} else {
 					commit('setMyInfo', null)
@@ -107,7 +142,10 @@ export default new Vuex.Store({
 						name: name,
 						thumbnailList: [getters.anonymousThumbnail],
 						thumbnailSelected: getters.anonymousThumbnail,
+						level: 1,
+						exp: 0,
 						email: email,
+						viewedStream: [],
 					})
 					await firebase.auth().createUserWithEmailAndPassword(email, pw)
 				} catch (error) {

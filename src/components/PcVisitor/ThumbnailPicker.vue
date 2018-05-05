@@ -22,7 +22,7 @@ export default {
   computed: {
     thumbnailList() {
       const list = [...this.myInfo.thumbnailList]
-      for (let i = 0; i < this.myInfo.thumbnailList; i++)
+      for (let i = 0; i < this.totalThumbnail; i++)
         if (!this.myInfo.thumbnailList.includes(i))
           list.push(i)
       return list

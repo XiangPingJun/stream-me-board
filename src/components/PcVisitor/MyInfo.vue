@@ -6,7 +6,8 @@
       </div>
       <div class="info">
         <UnderlineText>{{myInfo.name}}</UnderlineText>
-        <div v-tooltip.bottom="'一起聊聊天、參加小遊戲就可以解鎖更多新角色！'" style="cursor:default">{{levelMsg}}</div>
+        <div v-tooltip.bottom="'一起聊聊天、參加小遊戲就可以解鎖更多新角色！'"
+          style="cursor:default">Lv {{myInfo.level}}. ({{myInfo.exp}}%){{levelMsg}}</div>
       </div>
       <div class="logout" @click="logout">
         <DarkButton v-tooltip.left="'登出'"><i class="fa fa-sign-out-alt" /></DarkButton>
@@ -26,7 +27,7 @@ export default {
   components: { UnderlineText, DialogBox, Thumbnail, DarkButton, },
   methods: { ...mapActions(['promptLogin', 'logout', 'promptSelectThumbnail']) },
   computed: {
-    levelMsg() { return 'Lv 1. (40%)' },
+    levelMsg() { return '' },
     ...mapGetters(['myInfo'])
   }
 }
