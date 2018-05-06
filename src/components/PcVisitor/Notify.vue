@@ -1,5 +1,5 @@
 <template>
-  <notifications group="notify" position="bottom left" width="auto">
+  <notifications group="notify" position="top left" width="auto">
     <template slot="body" slot-scope="props">
       <div class="notification vue-notification" :class="props.item.type">
         <i class="symbol" v-if="props.item.data.symbol" :class="`fas fa-${props.item.data.symbol}`" />
