@@ -23,7 +23,10 @@ export default new Vuex.Store({
 		notyf: new Notyf({
 			confirmIcon: 'fa fa-info-circle',
 			alertIcon: 'fa fa-exclamation-triangle',
-			warnIcon: 'fa fa-trophy'
+			warnIcon: 'fa fa-trophy',
+			alertDelay: 3000,
+			warnDelay: 3000,
+			confirmDelay: 3000,
 		}),
 		anonymousThumbnail: generateRandomThumbnail(),
 	},
@@ -63,10 +66,7 @@ export default new Vuex.Store({
 		generateAnonymousThumbnail: (state, payload) => state.anonymousThumbnail = generateRandomThumbnail()
 	},
 	actions: {
-		trophyMsg: ({ state }, payload) => {
-
-			state.notyf.warn(`<div style="font-size:50% !important; margin-bottom:5px;">獲得獎盃</div><div>${payload}</div>`)
-		},
+		trophyMsg: ({ state }, payload) => state.notyf.warn(`[獲得獎盃]<br>${payload}`),
 		infoMsg: ({ state }, payload) => state.notyf.confirm(payload),
 		errMsg: ({ state }, payload) => state.notyf.alert(payload),
 		saveMyInfo: ({ state }, payload) => {
@@ -157,6 +157,7 @@ export default new Vuex.Store({
 		logout: async ({ dispatch, commit }) => {
 			try {
 				commit('generateAnonymousThumbnail')
+				commit('setUiMode', { selectThumbnail: false })
 				await firebase.auth().signOut()
 			} catch (error) {
 				dispatch('errMsg', error.message)
@@ -165,7 +166,7 @@ export default new Vuex.Store({
 		},
 		promptLogin: ({ commit, dispatch }) => {
 			commit('setUiMode', { account: 'LOGIN' })
-			dispatch('infoMsg', '輸入暱稱才能繼續喲！')
+			dispatch('infoMsg', '要先輸入暱稱才能繼續喲！')
 		},
 		promptSelectThumbnail: ({ commit }) => {
 			commit('setUiMode', { selectThumbnail: true })
