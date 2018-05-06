@@ -19,6 +19,8 @@
         <ChatBox v-if="uiMode.chat" class="bottom animated flipInX" />
       </div>
     </div>
+    <notifications position="bottom center" />
+    <Notify position="bottom left" />
   </div>
 </template>
 
@@ -33,6 +35,7 @@ import AnonymousInfo from './AnonymousInfo'
 import Login from './Login'
 import Arrow from './Arrow'
 import ThumbnailPicker from './ThumbnailPicker'
+import Notify from './Notify'
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
@@ -43,7 +46,7 @@ export default {
       unsubscribeAction: () => { },
     }
   },
-  components: { DialogBox, VideoBox, NightSkyBackground, ChatBox, Quiz, MyInfo, AnonymousInfo, Login, Arrow, ThumbnailPicker },
+  components: { DialogBox, VideoBox, NightSkyBackground, ChatBox, Quiz, MyInfo, AnonymousInfo, Login, Arrow, ThumbnailPicker, Notify },
   created() { this.subscribeData() },
   mounted() {
     const width = document.documentElement.clientWidth
@@ -56,8 +59,16 @@ export default {
       }
     })
     this.unsubscribeAction = this.$store.subscribeAction((action, state) => {
-      if ('promptLogin' === action.type)
-        setTimeout(() => this.$refs.arrow.animate())
+      switch (action.type) {
+        case 'promptLogin':
+          return setTimeout(() => this.$refs.arrow.animate())
+        case 'notify':
+          return this.$notify({
+            group: 'notify',
+            data: { ...action.payload.data },
+            ...action.payload
+          })
+      }
     })
   },
   beforeDestroy() {

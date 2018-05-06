@@ -2,16 +2,18 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import VTooltip from 'v-tooltip'
-import PcVisitorPage from './components/PcVisitor/Page'
+import Page from './components/PcVisitor/Page'
 import store from './store/visitorStore'
+import Notifications from 'vue-notification'
 
 Vue.config.productionTip = false
 Vue.use(VTooltip)
+Vue.use(Notifications)
 
 /* eslint-disable no-new */
 new Vue({
   store: store,
   el: '#app',
-  components: { PcVisitorPage },
-  template: '<PcVisitorPage/>'
+  components: { Page },
+  template: '<Page/>'
 })

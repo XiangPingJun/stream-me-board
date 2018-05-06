@@ -32,15 +32,15 @@ export default {
 	},
 	methods: {
 		onSubmit(text) {
-			this.loading = true
 			this.userNameTest = text
 			setTimeout(() => {
 				if (this.$refs.invisible.getWidth() > 210)
-					return this.errMsg('暱稱太長了喲！')
+					return this.notify({ type: 'error', text: '暱稱太長了喲！' })
+				this.loading = true
 				this.login(text)
 			})
 		},
-		...mapActions(['login', 'errMsg'])
+		...mapActions(['login', 'notify'])
 	},
 	beforeDestroy() {
 		this.unsubscribeAction()

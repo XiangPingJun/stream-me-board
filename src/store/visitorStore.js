@@ -8,6 +8,7 @@ const firestore = firebase.firestore()
 firestore.settings({ timestampsInSnapshots: true })
 
 const generateRandomThumbnail = () => Math.floor(Math.random() * TOTAL_THUMBNAIL)
+let unsubscribeMyInfoHandle = () => { }
 
 export default new Vuex.Store({
 	state: {
@@ -20,14 +21,6 @@ export default new Vuex.Store({
 			quiz: true,
 			chat: true,
 		},
-		notyf: new Notyf({
-			confirmIcon: 'fa fa-info-circle',
-			alertIcon: 'fa fa-exclamation-triangle',
-			warnIcon: 'fa fa-trophy',
-			alertDelay: 3000,
-			warnDelay: 3000,
-			confirmDelay: 3000,
-		}),
 		anonymousThumbnail: generateRandomThumbnail(),
 	},
 	getters: {
@@ -66,32 +59,43 @@ export default new Vuex.Store({
 		generateAnonymousThumbnail: (state, payload) => state.anonymousThumbnail = generateRandomThumbnail()
 	},
 	actions: {
-		trophyMsg: ({ state }, payload) => state.notyf.warn(`[獲得獎盃]<br>${payload}`),
-		infoMsg: ({ state }, payload) => state.notyf.confirm(payload),
-		errMsg: ({ state }, payload) => state.notyf.alert(payload),
-		saveMyInfo: ({ state }, payload) => {
+		notify: ({ }, payload) => { },
+		saveMyInfo: ({ state, dispatch }, payload) => {
 			firestore.collection('user').doc(state.myInfo.name).set(payload)
 				.catch(error => {
-					dispatch('errMsg', error.message)
+					dispatch('notify', { type: 'error', text: error.message })
 					throw error
 				})
 		},
-		addExp: ({ state }, payload) => {
+		addExp: ({ state, dispatch, getters }, payload) => {
+			if (payload > 100)
+				dispatch('notify', { type: 'error', text: `unsupport addExp ${payload}` })
 			const newMyInfo = JSON.parse(JSON.stringify(state.myInfo))
 			newMyInfo.exp += payload
-			newMyInfo.level = Math.floor(myInfo.exp / 100)
-			newMyInfo.exp %= 100
-			commit('saveMyInfo', myInfo)
+			if (newMyInfo.exp >= 100) {
+				newMyInfo.level++
+				newMyInfo.exp -= 100
+				const nextThumbnail = getters.randomNextThumbnail
+				newMyInfo.thumbnailList.push(nextThumbnail)
+				dispatch('notify', { data: { thumbnail: nextThumbnail }, text: '升級! 獲得新角色!' })
+			}
+			dispatch('saveMyInfo', newMyInfo)
 		},
 		checkTrophy: ({ state, dispatch, getters }) => {
-			if (state.myInfo && state.stream.streaming && !state.myInfo.viewedStream.includes(state.stream.time)) {
+			if (!state.myInfo)
+				return
+			if (state.stream.streaming && !state.myInfo.viewedStream.includes(state.stream.time)) {
 				const newMyInfo = JSON.parse(JSON.stringify(state.myInfo))
-				newMyInfo.level += 1
 				newMyInfo.viewedStream.push(state.stream.time)
-				newMyInfo.thumbnailList.push(getters.randomNextThumbnail)
+				if (!state.myInfo.trophy.includes('WATCH_FIRST_TIME')) {
+					newMyInfo.trophy.push('WATCH_FIRST_TIME')
+					notify('第一次來看直播！')
+				}
 				dispatch('saveMyInfo', newMyInfo)
-				let msg = state.myInfo.viewedStream.length ? '第一次來看直播！' : '一起來看直播！'
-				dispatch('trophyMsg', msg)
+				dispatch('addExp', 100)
+			}
+			function notify(msg) {
+				dispatch('notify', { data: { symbol: 'trophy' }, text: msg })
 			}
 		},
 		subscribeData: ({ commit, dispatch }) => {
@@ -104,21 +108,26 @@ export default new Vuex.Store({
 				dispatch('checkTrophy')
 			})
 			firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
-			firebase.auth().onAuthStateChanged(user => {
-				if (user) {
-					firestore.collection('user').where('email', '==', user.email)
-						.onSnapshot(snap => {
-							if (!snap.docs[0]) {
-								dispatch('errMsg', `${user.email} not found!`)
-								return
-							}
+			firebase.auth().onAuthStateChanged(async user => {
+				try {
+					if (user) {
+						const docRef = firestore.collection('user').where('email', '==', user.email)
+
+						const snap = await docRef.get()
+						commit('setMyInfo', snap.docs[0].data())
+						commit('setUiMode', { account: 'MY_INFO' })
+						dispatch('checkTrophy')
+
+						unsubscribeMyInfoHandle = docRef.onSnapshot(snap => {
 							commit('setMyInfo', snap.docs[0].data())
-							commit('setUiMode', { account: 'MY_INFO' })
-							dispatch('checkTrophy')
 						})
-				} else {
-					commit('setMyInfo', null)
-					commit('setUiMode', { account: 'ANONYMOUS' })
+					} else {
+						commit('setMyInfo', null)
+						commit('setUiMode', { account: 'ANONYMOUS' })
+					}
+				} catch (error) {
+					dispatch('notify', { type: 'error', text: error.message })
+					throw error
 				}
 			})
 		},
@@ -132,7 +141,7 @@ export default new Vuex.Store({
 				if ('auth/user-not-found' == error.code)
 					createUser()
 				else {
-					dispatch('errMsg', error.message)
+					dispatch('notify', { type: 'error', text: error.message })
 					throw error
 				}
 			}
@@ -146,27 +155,29 @@ export default new Vuex.Store({
 						exp: 0,
 						email: email,
 						viewedStream: [],
+						trophy: []
 					})
 					await firebase.auth().createUserWithEmailAndPassword(email, pw)
 				} catch (error) {
-					dispatch('errMsg', error.message)
+					dispatch('notify', { type: 'error', text: error.message })
 					throw error
 				}
 			}
 		},
 		logout: async ({ dispatch, commit }) => {
 			try {
+				await firebase.auth().signOut()
 				commit('generateAnonymousThumbnail')
 				commit('setUiMode', { selectThumbnail: false })
-				await firebase.auth().signOut()
+				unsubscribeMyInfoHandle()
 			} catch (error) {
-				dispatch('errMsg', error.message)
+				dispatch('notify', { type: 'error', text: error.message })
 				throw error
 			}
 		},
 		promptLogin: ({ commit, dispatch }) => {
 			commit('setUiMode', { account: 'LOGIN' })
-			dispatch('infoMsg', '要先輸入暱稱才能繼續喲！')
+			dispatch('notify', { type: 'warn', text: '要先輸入暱稱才能繼續喲！' })
 		},
 		promptSelectThumbnail: ({ commit }) => {
 			commit('setUiMode', { selectThumbnail: true })

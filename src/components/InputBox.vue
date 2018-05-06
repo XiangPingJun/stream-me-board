@@ -12,10 +12,8 @@ export default {
   methods: {
     onSubmit() {
       const text = this.text.trim()
-      if (!text)
-        return
-      this.text = '載入中...'
-      this.$emit('submit', text)
+      if (text)
+        this.$emit('submit', text)
     },
     focus() { this.$refs.input.focus() },
     unfocus() { this.$refs.input.blur() },
@@ -25,6 +23,12 @@ export default {
       if (this.loading) return { cursor: 'wait' }
       else if (this.disabled) return { cursor: 'not-allowed' }
       else return { cursor: 'text' }
+    }
+  },
+  watch: {
+    loading(newVal) {
+      if (newVal)
+        this.text = '載入中...'
     }
   }
 }
