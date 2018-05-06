@@ -3,7 +3,10 @@
     <div><UnderlineText>選擇您的角色： (已獲得{{myInfo.thumbnailList.length}}/{{totalThumbnail}})</UnderlineText></div>          
     <Well>
 			<div class="grid">
-        <ThumbnailPickerBtn v-for="thumbnail in thumbnailList" :index="thumbnail" :key="thumbnail" :whoAmI="!myInfo.thumbnailList.includes(thumbnail)" />
+        <ThumbnailPickerBtn v-for="thumbnail in thumbnailList" 
+          :index="thumbnail" :key="thumbnail" 
+          :whoAmI="!myInfo.thumbnailList.includes(thumbnail)" 
+        />
 			</div>
     </Well>
   </DialogBox>

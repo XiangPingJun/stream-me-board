@@ -1,5 +1,5 @@
 <template>
-  <div class="btn-border" :style="containerStyle">
+  <div class="btn-border" :style="containerStyle" @click="changeThumbnail(index)">
     <div class="btn-content">
 			<Thumbnail :index="index" :large="true" :whoAmI="whoAmI" />
 		</div>
@@ -15,15 +15,17 @@
 
 <script>
 import Thumbnail from '../Thumbnail'
+import { mapActions } from 'vuex'
 
 export default {
-	components: { Thumbnail },
-	props: ['whoAmI', 'index'],
-	computed: {
-		containerStyle() {
-			return { cursor: this.whoAmI ? 'not-allowed' : 'pointer' }
-		}
-	}
+  components: { Thumbnail },
+  props: ['whoAmI', 'index', 'click'],
+  computed: {
+    containerStyle() {
+      return { cursor: this.whoAmI ? 'not-allowed' : 'pointer' }
+    }
+  },
+  methods: { ...mapActions(['changeThumbnail']) }
 }
 </script>
 

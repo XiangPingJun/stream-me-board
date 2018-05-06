@@ -60,7 +60,8 @@ export default new Vuex.Store({
 	},
 	actions: {
 		notify: ({ }, payload) => { },
-		saveMyInfo: ({ state, dispatch }, payload) => {
+		saveMyInfo: ({ state, dispatch, commit }, payload) => {
+			commit('setMyInfo', payload)
 			firestore.collection('user').doc(state.myInfo.name).set(payload)
 				.catch(error => {
 					dispatch('notify', { type: 'error', text: error.message })
@@ -174,6 +175,14 @@ export default new Vuex.Store({
 				dispatch('notify', { type: 'error', text: error.message })
 				throw error
 			}
+		},
+		changeThumbnail: ({ dispatch, commit, state }, payload) => {
+			const newMyInfo = JSON.parse(JSON.stringify(state.myInfo))
+			if (!state.myInfo.thumbnailList.includes(payload))
+				return
+			newMyInfo.thumbnailSelected = payload
+			dispatch('saveMyInfo', newMyInfo)
+			commit('setUiMode', { selectThumbnail: false })
 		},
 		promptLogin: ({ commit, dispatch }) => {
 			commit('setUiMode', { account: 'LOGIN' })
