@@ -10,8 +10,6 @@
 
 <style scoped>
 .well-content {
-  font-weight: bold;
-  color: #f8ecd5;
   background-color: #3d3933;
   padding: 0px 0px;
   box-shadow: 0 -4px #3d3933, -4px 0 #3d3933, 0 4px #3d3933, 4px 0 #3d3933,
