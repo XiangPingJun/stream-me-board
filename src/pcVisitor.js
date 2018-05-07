@@ -3,7 +3,7 @@
 import Vue from 'vue'
 import VTooltip from 'v-tooltip'
 import Page from './components/PcVisitor/Page'
-import store from './store/visitorStore'
+import store from './store/store'
 import Notifications from 'vue-notification'
 
 Vue.config.productionTip = false

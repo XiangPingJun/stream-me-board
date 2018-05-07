@@ -1,8 +1,8 @@
 <template>
 	<div class="line">
 		<Thumbnail :index="data.thumbnail" class="vertical" />
-		<i>{{data.name}}:</i>
-		<span>{{data.text}}</span>
+    <i>{{data.name}}:</i>
+    <span>{{data.text}}</span>
 	</div>
 </template>
 
