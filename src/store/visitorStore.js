@@ -20,7 +20,6 @@ export default new Vuex.Store({
 		uiMode: {
 			account: null,
 			quiz: true,
-			chat: true,
 		},
 		anonymousThumbnail: generateRandomThumbnail(),
 		chatLines: [],
@@ -108,9 +107,10 @@ export default new Vuex.Store({
 				const stream = doc.data()
 				if (!state.stream || state.stream.time != stream.time) {
 					unsubscribeChat()
-					unsubscribeChat = firestore.collection(`allChat/${stream.time}/chat-line`).onSnapshot(snap =>
+					unsubscribeChat = firestore.collection(`allChat/${stream.time}/chat-line`).onSnapshot(snap => {
 						commit('setChatLines', snap.docs.map(doc => doc.data()).reverse())
-					)
+						commit('setUiMode', { chat: true })
+					})
 				}
 				commit('setStream', stream)
 				dispatch('checkTrophy')
@@ -197,8 +197,8 @@ export default new Vuex.Store({
 		},
 		submitChat: async ({ dispatch, commit, state }, payload) => {
 			try {
-				let index = (parseInt('AAA', 36) - state.chatLines.length).toString(36)
-				index += ' ' + payload.text.substr(0, 10)
+				let index = (parseInt('zzz', 36) - state.chatLines.length).toString(36)
+				index += payload.text.substr(0, 10)
 				await firestore.collection(`allChat/${state.stream.time}/chat-line`).doc(index).set(payload)
 			} catch (error) {
 				dispatch('notify', { type: 'error', text: error.message })

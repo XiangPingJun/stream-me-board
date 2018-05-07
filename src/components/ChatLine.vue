@@ -1,9 +1,8 @@
 <template>
-	<div>
-		<div class="nickname">
-			<Thumbnail :index="data.thumbnail" /><span>{{data.name}}</span><Thumbnail :index="data.thumbnail" />：
-		</div>
-		<div class="text">{{data.text}}</div>
+	<div class="line">
+		<Thumbnail :index="data.thumbnail" class="vertical" />
+		<i>{{data.name}}:</i>
+		<span>{{data.text}}</span>
 	</div>
 </template>
 
@@ -17,14 +16,10 @@ export default {
 </script>
 
 <style scoped>
-.nickname {
-  display: inline-flex;
-  align-items: center;
+.line {
+  margin-top: 5px;
 }
-.nickname > span {
-  margin: 4px;
-}
-.text {
-  margin-bottom: 3px;
+.thumbnail {
+  vertical-align: middle;
 }
 </style>

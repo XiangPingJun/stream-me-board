@@ -1,7 +1,7 @@
 <template>
 	<DialogBox overflowY="auto" ref="chatBox">
     <div class="chat-list">
-      <ChatLine v-for="(line, key) in chatLines" :key="key" :data="line"  />
+      <ChatLine v-for="(line, key) in chatLines" :key="key" :data="line" class="animated flipInX" />
     </div>
     <div class="mask top"></div>
     <div class="mask bottom"></div>
@@ -30,6 +30,7 @@ export default {
   computed: { ...mapGetters(['myInfo', 'chatLines']) },
   mounted() {
     this.scrollContent = this.$refs.chatBox.$refs.content
+    this.scrollToButton()
   },
   methods: {
     onInputFocus() {
@@ -87,7 +88,7 @@ export default {
   bottom: 8px;
 }
 .chat-list {
-  padding-bottom: 35px;
+  padding-bottom: 40px;
 }
 .scroll-to-bottom {
   position: absolute;
