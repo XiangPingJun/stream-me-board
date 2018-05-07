@@ -1,9 +1,9 @@
 <template>
 	<div>
 		<div class="nickname">
-			<Thumbnail index="12" /><span>油炸可樂</span><Thumbnail index="12" />：
+			<Thumbnail :index="data.thumbnail" /><span>{{data.name}}</span><Thumbnail :index="data.thumbnail" />：
 		</div>
-		<div class="msg">我還追了強殖裝甲 一堆都不知道我死之前能不能完結的作品</div>
+		<div class="text">{{data.text}}</div>
 	</div>
 </template>
 
@@ -11,6 +11,7 @@
 import Thumbnail from './Thumbnail'
 
 export default {
+	props: ['data'],
 	components: { Thumbnail }
 }
 </script>
@@ -23,7 +24,7 @@ export default {
 .nickname > span {
   margin: 4px;
 }
-.msg {
+.text {
   margin-bottom: 3px;
 }
 </style>

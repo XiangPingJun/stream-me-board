@@ -8,7 +8,8 @@ const firestore = firebase.firestore()
 firestore.settings({ timestampsInSnapshots: true })
 
 const generateRandomThumbnail = () => Math.floor(Math.random() * TOTAL_THUMBNAIL)
-let unsubscribeMyInfoHandle = () => { }
+let unsubscribeMyInfo = () => { }
+let unsubscribeChat = () => { }
 
 export default new Vuex.Store({
 	state: {
@@ -22,6 +23,7 @@ export default new Vuex.Store({
 			chat: true,
 		},
 		anonymousThumbnail: generateRandomThumbnail(),
+		chatLines: [],
 	},
 	getters: {
 		uiMode: state => state.uiMode,
@@ -44,7 +46,8 @@ export default new Vuex.Store({
 				return null
 			return state.stream.streaming ? state.stream.videoUrl : state.selectedVideoUrl
 		},
-		anonymousThumbnail: state => state.anonymousThumbnail
+		anonymousThumbnail: state => state.anonymousThumbnail,
+		chatLines: state => state.chatLines
 	},
 	mutations: {
 		setStream: (state, payload) => state.stream = payload,
@@ -56,6 +59,7 @@ export default new Vuex.Store({
 				...payload,
 			}
 		},
+		setChatLines: (state, payload) => state.chatLines = payload,
 		generateAnonymousThumbnail: (state, payload) => state.anonymousThumbnail = generateRandomThumbnail()
 	},
 	actions: {
@@ -99,9 +103,16 @@ export default new Vuex.Store({
 				dispatch('notify', { data: { symbol: 'trophy' }, text: msg })
 			}
 		},
-		subscribeData: ({ commit, dispatch }) => {
+		subscribeData: ({ state, commit, dispatch }) => {
 			firestore.doc("system/stream").onSnapshot(doc => {
-				commit('setStream', doc.data())
+				const stream = doc.data()
+				if (!state.stream || state.stream.time != stream.time) {
+					unsubscribeChat()
+					unsubscribeChat = firestore.collection(`allChat/${stream.time}/chat-line`).onSnapshot(snap =>
+						commit('setChatLines', snap.docs.map(doc => doc.data()).reverse())
+					)
+				}
+				commit('setStream', stream)
 				dispatch('checkTrophy')
 			})
 			firestore.doc("system/info").onSnapshot(doc => {
@@ -119,7 +130,7 @@ export default new Vuex.Store({
 						commit('setUiMode', { account: 'MY_INFO' })
 						dispatch('checkTrophy')
 
-						unsubscribeMyInfoHandle = docRef.onSnapshot(snap => {
+						unsubscribeMyInfo = docRef.onSnapshot(snap => {
 							commit('setMyInfo', snap.docs[0].data())
 						})
 					} else {
@@ -170,7 +181,7 @@ export default new Vuex.Store({
 				await firebase.auth().signOut()
 				commit('generateAnonymousThumbnail')
 				commit('setUiMode', { selectThumbnail: false })
-				unsubscribeMyInfoHandle()
+				unsubscribeMyInfo()
 			} catch (error) {
 				dispatch('notify', { type: 'error', text: error.message })
 				throw error
@@ -184,9 +195,19 @@ export default new Vuex.Store({
 			dispatch('saveMyInfo', newMyInfo)
 			commit('setUiMode', { selectThumbnail: false })
 		},
+		submitChat: async ({ dispatch, commit, state }, payload) => {
+			try {
+				let index = (parseInt('AAA', 36) - state.chatLines.length).toString(36)
+				index += ' ' + payload.text.substr(0, 10)
+				await firestore.collection(`allChat/${state.stream.time}/chat-line`).doc(index).set(payload)
+			} catch (error) {
+				dispatch('notify', { type: 'error', text: error.message })
+				throw error
+			}
+		},
 		promptLogin: ({ commit, dispatch }) => {
 			commit('setUiMode', { account: 'LOGIN' })
-			dispatch('notify', { type: 'warn', text: '要先輸入暱稱才能繼續喲！' })
+			dispatch('notify', { type: 'warn', text: '要先輸入暱稱才能繼續喲！', data: { symbol: 'exclamation-triangle' } })
 		},
 		promptSelectThumbnail: ({ commit }) => {
 			commit('setUiMode', { selectThumbnail: true })

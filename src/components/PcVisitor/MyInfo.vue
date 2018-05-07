@@ -1,16 +1,16 @@
 <template>
   <DialogBox>
     <div class="container">
-      <div v-tooltip.left="'更換角色'" class="thumbnail-box" @click="promptSelectThumbnail" :style="{'background-image': 'url(static/thumbnail-border.png)'}">
+      <div v-tooltip.left="{content:'更換角色', offset:3}" class="thumbnail-box" @click="promptSelectThumbnail" :style="{'background-image': 'url(static/thumbnail-border.png)'}">
         <Thumbnail :index="myInfo.thumbnailSelected" :large="true" />
       </div>
       <div class="info">
         <UnderlineText>{{myInfo.name}}</UnderlineText>
-        <div v-tooltip.bottom="'一起聊聊天、參加小遊戲就可以解鎖更多新角色！'"
+        <div v-tooltip.bottom="{content:'一起聊聊天、參加小遊戲就可以解鎖更多新角色！', offset:3}"
           style="cursor:default">Lv {{myInfo.level}}. ({{myInfo.exp}}%){{levelMsg}}</div>
       </div>
-      <div class="logout" @click="logout">
-        <DarkButton v-tooltip.left="'登出'"><i class="fa fa-sign-out-alt" /></DarkButton>
+      <div class="logout">
+        <DarkButton @click="logout" v-tooltip.left="{content:'登出', offset:3}"><i class="fa fa-sign-out-alt" /></DarkButton>
       </div>
     </div>
   </DialogBox>

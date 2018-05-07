@@ -1,6 +1,6 @@
 <template>
   <div class="dialog-border">
-    <div class="dialog-content" :style="contentStyle">
+    <div class="dialog-content" :style="contentStyle" ref="content">
       <slot></slot>
     </div>
     <div class="stroke color-bg" style="width: 100%; top:2px; right:2px;"></div>    

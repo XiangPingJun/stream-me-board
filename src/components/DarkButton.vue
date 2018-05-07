@@ -1,5 +1,5 @@
 <template>
-  <div class="btn-border">
+  <div class="btn-border" @click="$emit('click')">
     <div class="btn-content"><slot></slot></div>
     <div class="stroke color-4" style="top:2px; left:2px;"></div>    		
     <div class="stroke color-4" style="top:2px; right:2px;"></div>    		
