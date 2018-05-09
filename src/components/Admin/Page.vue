@@ -8,7 +8,9 @@
     <h1 v-if="stream.streaming">直播中</h1>
     <h1 v-if="!stream.streaming">沒有直播</h1>
     <div>影片網址:</div>
-    <input v-model="videoUrl" :placeholder="stream.videoUrl" />
+    <input v-model="videoUrl" :placeholder="videoUrlPlaceholder" />
+    <button @click="startStream(videoUrl)" :disabled="!videoUrl"><i class="fas fa-link" /> 開始</button>
+    <button @click="stopStream" :disabled="!stream.streaming"><i class="fas fa-unlink" /> 結束</button>
     <notifications position="bottom left" />
   </div>
 </template>
@@ -21,10 +23,13 @@ export default {
     return { videoUrl: '', name: '', password: '' }
   },
   created() { this.subscribeData() },
-  methods: {
-    ...mapActions(['subscribeData', 'loginAdmin'])
+  methods: { ...mapActions(['subscribeData', 'loginAdmin', 'startStream', 'stopStream']) },
+  computed: {
+    videoUrlPlaceholder() {
+      return this.stream.streaming ? this.stream.videoUrl : ''
+    },
+    ...mapGetters(['stream', 'systemInfo', 'isAdmin'])
   },
-  computed: { ...mapGetters(['stream', 'systemInfo', 'isAdmin']) },
   watch: {
     systemInfo(val, oldVal) {
       if (null !== val && null !== oldVal && val.version != oldVal.version)
@@ -52,5 +57,10 @@ h5 {
 input {
   width: 100%;
   font-size: 200%;
+}
+button {
+  font-size: 200%;
+  margin: 5px;
+  cursor: pointer;
 }
 </style>

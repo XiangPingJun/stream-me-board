@@ -24,6 +24,7 @@ export default new Vuex.Store({
 		},
 		anonymousThumbnail: generateRandomThumbnail(),
 		chatLines: [],
+		youtubePlayer: null,
 	},
 	getters: {
 		uiMode: state => state.uiMode,
@@ -47,6 +48,14 @@ export default new Vuex.Store({
 				return null
 			return state.stream.streaming ? state.stream.videoUrl : state.selectedVideoUrl
 		},
+		videoTime: state => {
+			try {
+				const time = state.youtubePlayer.getCurrentTime()
+				return Math.floor(time / 3600) + ':' + Math.floor(time % 3600 / 60) + ':' + Math.floor(time % 3600 % 60)
+			} catch (error) {
+				return -1
+			}
+		},
 		anonymousThumbnail: state => state.anonymousThumbnail,
 		chatLines: state => state.chatLines
 	},
@@ -62,6 +71,7 @@ export default new Vuex.Store({
 		},
 		setChatLines: (state, payload) => state.chatLines = payload,
 		setIsAdmin: (state, payload) => state.isAdmin = payload,
+		setYoutubePlayer: (state, payload) => state.youtubePlayer = payload,
 		generateAnonymousThumbnail: (state, payload) => state.anonymousThumbnail = generateRandomThumbnail()
 	},
 	actions: {
@@ -83,8 +93,12 @@ export default new Vuex.Store({
 				newMyInfo.level++
 				newMyInfo.exp -= 100
 				const nextThumbnail = getters.randomNextThumbnail
-				newMyInfo.thumbnailList.push(nextThumbnail)
-				dispatch('notify', { data: { thumbnail: nextThumbnail }, text: '升級! 獲得新角色!' })
+				if (null === nextThumbnail) {
+					dispatch('notify', { text: '升滿了?! 你真的有認真在看實況嗎?' })
+				} else {
+					newMyInfo.thumbnailList.push(nextThumbnail)
+					dispatch('notify', { data: { thumbnail: nextThumbnail }, text: '升級! 獲得新角色!' })
+				}
 			}
 			dispatch('saveMyInfo', newMyInfo)
 		},
@@ -233,5 +247,40 @@ export default new Vuex.Store({
 		promptSelectThumbnail: ({ commit }) => {
 			commit('setUiMode', { selectThumbnail: true })
 		},
+		startStream: async ({ state }, payload) => {
+			try {
+				await firestore.doc('system/stream').set({
+					...state.stream,
+					videoUrl: convertToEmbeded(payload),
+					streaming: true
+				})
+			} catch (error) {
+				dispatch('notify', { type: 'error', text: error.message })
+				throw error
+			}
+		},
+		stopStream: async ({ dispatch, state }, payload) => {
+			try {
+				await firestore.doc('system/stream').set({ ...state.stream, streaming: false })
+			} catch (error) {
+				dispatch('notify', { type: 'error', text: error.message })
+				throw error
+			}
+		},
 	}
 })
+
+//fetch('https://www.googleapis.com/youtube/v3/search?key=AIzaSyBCYPReX74lujmX9tg8AiM-OFGqmKYMZkU&channelId=UCLeQT6hvBgnq_-aKKlcgj1Q&part=snippet,id&order=date&maxResults=50').then(res => console.log(res))
+
+function convertToEmbeded(url) {
+	let arr = /\/\/youtu.be\/(.*)/.exec(url)
+	if (arr)
+		return convertToYoutube(arr[1])
+	arr = /\/\/www\.youtube\.com\/watch\?v=([^&]+)/.exec(url)
+	if (arr)
+		return convertToYoutube(arr[1])
+	arr = /\/\/www\.youtube\.com\/embed\/([^?]+)/.exec(url)
+	if (arr)
+		return convertToYoutube(arr[1])
+	function convertToYoutube(id) { return '//www.youtube.com/embed/' + id + '?enablejsapi=1' }
+}

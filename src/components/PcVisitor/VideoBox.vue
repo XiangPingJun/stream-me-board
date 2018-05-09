@@ -35,11 +35,10 @@ export default {
     setupYoutube() {
       if ('undefined' === typeof YT || !YT.Player)
         return setTimeout(() => this.setupYoutube(), 1000)
-      const player = new YT.Player(this.refs.iframe, {
+      const player = new YT.Player(this.$refs.iframe, {
         events: {
-          'onReady': () => {
-            if (this.props.autoPlay)
-              player.playVideo()
+          onReady: () => {
+            player.playVideo()
             player.setPlaybackQuality('hd720')
             //player.setPlaybackQuality(isMobileDevice() ? 'medium' : 'hd720')
           }
