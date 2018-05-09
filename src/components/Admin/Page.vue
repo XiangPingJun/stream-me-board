@@ -1,6 +1,6 @@
 <template>
-  <div v-if="stream">
-    <form v-if="false===isAdmin" @submit.prevent="loginAdmin({name,password})">
+  <div>
+    <form v-if="!isAdmin" @submit.prevent="loginAdmin({name,password})">
       <h2>無管理權限，登入暱稱:<input v-model="name" />密碼<input type="password" v-model="password" /></h2>
       <input type="submit" style="display:none;" />
     </form>

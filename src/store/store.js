@@ -15,7 +15,7 @@ export default new Vuex.Store({
 	state: {
 		myInfo: null,
 		isAdmin: null,
-		stream: null,
+		stream: {},
 		systemInfo: null,
 		selectedVideoUrl: null,
 		uiMode: {
@@ -43,11 +43,7 @@ export default new Vuex.Store({
 				if (!state.myInfo.thumbnailList.find(thumbnail => thumbnail == result))
 					return result
 		},
-		videoUrl: state => {
-			if (!state.stream)
-				return null
-			return state.stream.streaming ? state.stream.videoUrl : state.selectedVideoUrl
-		},
+		videoUrl: state => state.stream.streaming ? state.stream.videoUrl : state.selectedVideoUrl,
 		videoTime: state => {
 			try {
 				const time = state.youtubePlayer.getCurrentTime()
@@ -122,7 +118,7 @@ export default new Vuex.Store({
 		subscribeData: ({ state, commit, dispatch }) => {
 			firestore.doc("system/stream").onSnapshot(doc => {
 				const stream = doc.data()
-				if (!state.stream || state.stream.time != stream.time) {
+				if (state.stream.time != stream.time) {
 					unsubscribeChat()
 					unsubscribeChat = firestore.collection(`allChat/${stream.time}/chat-line`).onSnapshot(snap => {
 						commit('setChatLines', snap.docs.map(doc => doc.data()).reverse())
@@ -250,12 +246,17 @@ export default new Vuex.Store({
 		promptSelectThumbnail: ({ commit }) => {
 			commit('setUiMode', { selectThumbnail: true })
 		},
-		startStream: async ({ state }, payload) => {
+		startStream: async ({ state, dispatch }, payload) => {
 			try {
 				await firestore.doc('system/stream').set({
-					...state.stream,
+					time: new Date().getTime(),
 					videoUrl: convertToEmbeded(payload),
 					streaming: true
+				})
+				dispatch('submitChat', {
+					name: '系統',
+					thumbnail: 0,
+					text: '實況開始囉！大家坐穩啦！',
 				})
 			} catch (error) {
 				dispatch('notify', { type: 'error', text: error.message })

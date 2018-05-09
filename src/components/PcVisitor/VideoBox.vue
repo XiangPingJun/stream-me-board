@@ -1,19 +1,22 @@
 <template>
-  <div class="video-box animated" :class="{flipInX: loaded}" :style="{visibility: loaded && videoUrl ? 'visible': 'hidden'}">
-    <div class="video-container">
-      <iframe ref="iframe" frameBorder="0" allowFullScreen="true" :src="videoUrl" :style="videoSize" />
+  <div :style="videoSize" style="display:flex; justify-content:center;">
+    <div class="video-box animated" :class="{flipInX: loaded}" v-show="loaded && videoUrl">
+      <div class="video-container">
+        <iframe ref="iframe" frameBorder="0" allowFullScreen="true" :src="videoUrl" :style="videoSize" />
+      </div>
     </div>
+    <img src="static/thank.png" class="animated flipInY" v-if="null===videoUrl" :style="{height: videoSize.height}" />
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-
+// :style="{display:loaded&&videoUrl?'block':'none'}"
 export default {
   props: ['width', 'height'],
   data() { return { loaded: false } },
   computed: {
-    videoSize: function () {
+    videoSize() {
       return {
         width: `${this.width || this.height * (16 / 9)}px`,
         height: `${this.height || this.width * (9 / 16)}px`,

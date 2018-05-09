@@ -86,7 +86,7 @@ export default {
     showLogin() { return 'LOGIN' == this.uiMode.account },
     showQuiz() { return !this.uiMode.selectThumbnail && this.uiMode.quiz },
     showThumbnailPicker() { return this.uiMode.selectThumbnail },
-    ...mapGetters(['systemInfo', 'uiMode'])
+    ...mapGetters(['systemInfo', 'uiMode', 'videoUrl'])
   },
   methods: { ...mapActions(['subscribeData']) }
 }
