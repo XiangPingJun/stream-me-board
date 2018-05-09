@@ -14,6 +14,7 @@ let unsubscribeChat = () => { }
 export default new Vuex.Store({
 	state: {
 		myInfo: null,
+		isAdmin: null,
 		stream: null,
 		systemInfo: null,
 		selectedVideoUrl: null,
@@ -27,6 +28,7 @@ export default new Vuex.Store({
 	getters: {
 		uiMode: state => state.uiMode,
 		myInfo: state => state.myInfo,
+		isAdmin: state => state.isAdmin,
 		stream: state => state.stream,
 		systemInfo: state => state.systemInfo,
 		totalThumbnail: state => TOTAL_THUMBNAIL,
@@ -59,6 +61,7 @@ export default new Vuex.Store({
 			}
 		},
 		setChatLines: (state, payload) => state.chatLines = payload,
+		setIsAdmin: (state, payload) => state.isAdmin = payload,
 		generateAnonymousThumbnail: (state, payload) => state.anonymousThumbnail = generateRandomThumbnail()
 	},
 	actions: {
@@ -133,6 +136,15 @@ export default new Vuex.Store({
 						unsubscribeMyInfo = docRef.onSnapshot(snap => {
 							commit('setMyInfo', snap.docs[0].data())
 						})
+						try {
+							await firestore.collection('adminUser').get()
+							commit('setIsAdmin', true)
+						} catch (error) {
+							if ("permission-denied" == error.code)
+								commit('setIsAdmin', false)
+							else
+								throw error
+						}
 					} else {
 						commit('setMyInfo', null)
 						commit('setUiMode', { account: 'ANONYMOUS' })
@@ -142,6 +154,15 @@ export default new Vuex.Store({
 					throw error
 				}
 			})
+		},
+		loginAdmin: async ({ dispatch, getters }, payload) => {
+			try {
+				const email = `${encodeURI(payload.name)}@mail.net`.toLowerCase()
+				await firebase.auth().signInWithEmailAndPassword(email, payload.password)
+			} catch (error) {
+				dispatch('notify', { type: 'error', text: error.message })
+				throw error
+			}
 		},
 		login: async ({ dispatch, getters }, payload) => {
 			const name = payload

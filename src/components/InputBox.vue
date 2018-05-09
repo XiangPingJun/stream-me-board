@@ -1,5 +1,5 @@
 <template>
-  <form v-on:submit.prevent="onSubmit">
+  <form @submit.prevent="onSubmit">
     <input v-model="text" :placeholder="placeholder" @focus="$emit('focus')" :maxlength="maxlength" 
       :disabled="disabled || loading" ref="input"  :style="inputStyle" />
   </form>
