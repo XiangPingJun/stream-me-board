@@ -187,7 +187,10 @@ export default new Vuex.Store({
 			} catch (error) {
 				if ('auth/user-not-found' == error.code)
 					createUser()
-				else {
+				else if ('auth/wrong-password' == error.code) {
+					dispatch('notify', { type: 'error', text: '暱稱已被使用!' })
+					dispatch('promptLogin')
+				} else {
 					dispatch('notify', { type: 'error', text: error.message })
 					throw error
 				}

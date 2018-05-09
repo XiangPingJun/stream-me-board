@@ -1,5 +1,5 @@
 <template>
-  <div class="video-box animated" :class="{flipInX: loaded}" :style="{visibility: loaded ? 'visible': 'hidden'}">
+  <div class="video-box animated" :class="{flipInX: loaded}" :style="{visibility: loaded && videoUrl ? 'visible': 'hidden'}">
     <div class="video-container">
       <iframe ref="iframe" frameBorder="0" allowFullScreen="true" :src="videoUrl" :style="videoSize" />
     </div>

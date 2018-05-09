@@ -63,7 +63,11 @@ export default {
         case 'promptLogin':
           return setTimeout(() => this.$refs.arrow.animate())
         case 'notify':
-          return this.$notify({ group: 'notify', ...action.payload })
+          return this.$notify({
+            group: 'notify',
+            data: { ...action.payload.data },
+            ...action.payload
+          })
       }
     })
   },
