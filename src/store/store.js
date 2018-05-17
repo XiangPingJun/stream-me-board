@@ -25,6 +25,7 @@ export default new Vuex.Store({
 		anonymousThumbnail: generateRandomThumbnail(),
 		chatLines: [],
 		youtubePlayer: null,
+		fingerprint: null,
 	},
 	getters: {
 		uiMode: state => state.uiMode,
@@ -53,7 +54,8 @@ export default new Vuex.Store({
 			}
 		},
 		anonymousThumbnail: state => state.anonymousThumbnail,
-		chatLines: state => state.chatLines
+		chatLines: state => state.chatLines,
+		fingerprint: state => state.fingerprint,
 	},
 	mutations: {
 		setStream: (state, payload) => state.stream = payload,
@@ -68,7 +70,8 @@ export default new Vuex.Store({
 		setChatLines: (state, payload) => state.chatLines = payload,
 		setIsAdmin: (state, payload) => state.isAdmin = payload,
 		setYoutubePlayer: (state, payload) => state.youtubePlayer = payload,
-		generateAnonymousThumbnail: (state, payload) => state.anonymousThumbnail = generateRandomThumbnail()
+		generateAnonymousThumbnail: (state, payload) => state.anonymousThumbnail = generateRandomThumbnail(),
+		setFingerprint: (state, payload) => state.fingerprint = payload,
 	},
 	actions: {
 		notify: ({ }, payload) => { },
@@ -98,7 +101,7 @@ export default new Vuex.Store({
 			}
 			dispatch('saveMyInfo', newMyInfo)
 		},
-		checkTrophy: ({ state, dispatch, getters }) => {
+		checkTrophy: ({ state, dispatch }) => {
 			if (!state.myInfo)
 				return
 			if (state.stream.streaming && !state.myInfo.viewedStream.includes(state.stream.time)) {
@@ -115,7 +118,15 @@ export default new Vuex.Store({
 				dispatch('notify', { data: { symbol: 'trophy' }, text: msg })
 			}
 		},
-		subscribeData: ({ state, commit, dispatch }) => {
+		subscribeData: ({ state, commit, dispatch, getters }) => {
+			new Fingerprint2().get(result => commit('setFingerprint', result))
+			firestore.doc("system/ban").onSnapshot(doc => {
+				if (doc.data().fingerprint.find(hash => hash == getters.fingerprint)) {
+					dispatch('logout')
+					dispatch('notify', { type: 'error', text: 'You got banned!' })
+				}
+			})
+
 			firestore.doc("system/stream").onSnapshot(doc => {
 				const stream = doc.data()
 				if (state.stream.time != stream.time) {
@@ -155,6 +166,7 @@ export default new Vuex.Store({
 							else
 								throw error
 						}
+
 					} else {
 						commit('setMyInfo', null)
 						commit('setUiMode', { account: 'ANONYMOUS' })
@@ -165,7 +177,7 @@ export default new Vuex.Store({
 				}
 			})
 		},
-		loginAdmin: async ({ dispatch, getters }, payload) => {
+		loginAdmin: async ({ dispatch }, payload) => {
 			try {
 				const email = `${encodeURI(payload.name)}@mail.net`.toLowerCase()
 				await firebase.auth().signInWithEmailAndPassword(email, payload.password)
