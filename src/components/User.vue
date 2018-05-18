@@ -1,15 +1,14 @@
 <template>
-	<Thumbnail index="12" />
+	<Avatar index="12" />
 </template>
 
 <script>
-import Thumbnail from './Thumbnail'
+import Avatar from './Avatar'
 
 export default {
-	components: { 'thumbnail': Thumbnail }
+	components: { 'avatar': Avatar }
 }
 </script>
 
 <style scoped>
-
 </style>

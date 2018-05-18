@@ -1,8 +1,8 @@
 <template>
   <DialogBox>
     <div class="container">
-      <div v-tooltip.left="{content:'更換角色', offset:3}" class="thumbnail-box" @click="promptSelectThumbnail" :style="{'background-image': 'url(static/thumbnail-border.png)'}">
-        <Thumbnail :index="myInfo.thumbnailSelected" :large="true" />
+      <div v-tooltip.left="{content:'更換角色', offset:3}" class="avatar-box" @click="promptSelectAvatar" :style="{'background-image': 'url(static/avatar-border.png)'}">
+        <Avatar :index="myInfo.avatarSelected" :large="true" />
       </div>
       <div class="info">
         <UnderlineText>{{myInfo.name}}</UnderlineText>
@@ -19,13 +19,13 @@
 <script>
 import UnderlineText from '../UnderlineText'
 import DialogBox from '../DialogBox'
-import Thumbnail from '../Thumbnail'
+import Avatar from '../Avatar'
 import DarkButton from '../DarkButton'
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
-  components: { UnderlineText, DialogBox, Thumbnail, DarkButton, },
-  methods: { ...mapActions(['promptLogin', 'logout', 'promptSelectThumbnail']) },
+  components: { UnderlineText, DialogBox, Avatar, DarkButton, },
+  methods: { ...mapActions(['promptLogin', 'logout', 'promptSelectAvatar']) },
   computed: {
     levelMsg() { return '' },
     ...mapGetters(['myInfo'])
@@ -42,7 +42,7 @@ export default {
   margin-left: 10px;
   align-self: center;
 }
-.thumbnail-box {
+.avatar-box {
   width: 48px;
   height: 51px;
   padding-top: 15px;

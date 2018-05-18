@@ -22,8 +22,11 @@ export default {
   data() {
     return { videoUrl: '', name: '', password: '' }
   },
-  created() { this.subscribeData() },
-  methods: { ...mapActions(['subscribeData', 'loginAdmin', 'startStream', 'stopStream']) },
+  created() {
+    this.subscribeData()
+    this.subscribeAdminData()
+  },
+  methods: { ...mapActions(['subscribeData', 'loginAdmin', 'startStream', 'stopStream', 'subscribeAdminData']) },
   computed: {
     videoUrlPlaceholder() {
       return this.stream.streaming ? this.stream.videoUrl : ''

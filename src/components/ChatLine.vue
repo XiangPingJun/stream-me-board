@@ -1,17 +1,17 @@
 <template>
 	<div class="line">
-		<Thumbnail :index="data.thumbnail" class="vertical" />
-    <i>{{data.name}}:</i>
+		<Avatar :index="data.avatar" class="vertical" />
+    <b class="blue">{{data.name}}</b>:
     <span>{{data.text}}</span>
 	</div>
 </template>
 
 <script>
-import Thumbnail from './Thumbnail'
+import Avatar from './Avatar'
 
 export default {
 	props: ['data'],
-	components: { Thumbnail }
+	components: { Avatar }
 }
 </script>
 
@@ -19,7 +19,10 @@ export default {
 .line {
   margin-top: 5px;
 }
-.thumbnail {
+.avatar {
   vertical-align: middle;
+}
+b {
+  margin-left: -3px;
 }
 </style>

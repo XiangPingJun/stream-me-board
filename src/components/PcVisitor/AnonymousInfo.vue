@@ -1,8 +1,8 @@
 <template>
   <DialogBox>
     <div class="container" @click="promptLogin">
-      <div class="thumbnail-box" :style="{'background-image': 'url(static/thumbnail-border.png)'}">
-        <Thumbnail :index="anonymousThumbnail" :large="true" :whoAmI="true" />
+      <div class="avatar-box" :style="{'background-image': 'url(static/avatar-border.png)'}">
+        <Avatar :index="anonymousAvatar" :whoAmI="true" :large="true" />
       </div>
       <div class="info">
         <UnderlineText>不知名的訪客</UnderlineText>
@@ -15,16 +15,16 @@
 <script>
 import UnderlineText from '../UnderlineText'
 import DialogBox from '../DialogBox'
-import Thumbnail from '../Thumbnail'
+import Avatar from '../Avatar'
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
-  components: { UnderlineText, DialogBox, Thumbnail, },
+  components: { UnderlineText, DialogBox, Avatar, },
   methods: {
     ...mapActions(['promptLogin'])
   },
   computed: {
-    ...mapGetters(['anonymousThumbnail'])
+    ...mapGetters(['anonymousAvatar'])
   }
 }
 </script>
@@ -39,7 +39,7 @@ export default {
   margin-left: 10px;
   align-self: center;
 }
-.thumbnail-box {
+.avatar-box {
   width: 48px;
   height: 51px;
   padding-top: 15px;

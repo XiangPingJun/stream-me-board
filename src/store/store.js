@@ -7,7 +7,7 @@ Vue.use(Vuex)
 const firestore = firebase.firestore()
 firestore.settings({ timestampsInSnapshots: true })
 
-const generateRandomThumbnail = () => Math.floor(Math.random() * TOTAL_THUMBNAIL)
+const generateRandomAvatar = () => Math.floor(Math.random() * TOTAL_THUMBNAIL) + 1
 let unsubscribeMyInfo = () => { }
 let unsubscribeChat = () => { }
 
@@ -20,12 +20,14 @@ export default new Vuex.Store({
 		selectedVideoUrl: null,
 		uiMode: {
 			account: null,
-			quiz: true,
+			quiz: null,
+			playground: null,
 		},
-		anonymousThumbnail: generateRandomThumbnail(),
+		anonymousAvatar: generateRandomAvatar(),
 		chatLines: [],
 		youtubePlayer: null,
 		fingerprint: null,
+		onlineUser: []
 	},
 	getters: {
 		uiMode: state => state.uiMode,
@@ -33,15 +35,15 @@ export default new Vuex.Store({
 		isAdmin: state => state.isAdmin,
 		stream: state => state.stream,
 		systemInfo: state => state.systemInfo,
-		totalThumbnail: state => TOTAL_THUMBNAIL,
-		randomNextThumbnail: state => {
-			let result = generateRandomThumbnail()
+		totalAvatar: state => TOTAL_THUMBNAIL,
+		randomNextAvatar: state => {
+			let result = generateRandomAvatar()
 			if (null === state.myInfo)
 				return result
-			else if (state.myInfo.thumbnailList.length == TOTAL_THUMBNAIL)
+			else if (state.myInfo.avatarList.length == TOTAL_THUMBNAIL)
 				return null
-			for (; ; result = generateRandomThumbnail())
-				if (!state.myInfo.thumbnailList.find(thumbnail => thumbnail == result))
+			for (; ; result = generateRandomAvatar())
+				if (!state.myInfo.avatarList.find(avatar => avatar == result))
 					return result
 		},
 		videoUrl: state => state.stream.streaming ? state.stream.videoUrl : state.selectedVideoUrl,
@@ -53,9 +55,10 @@ export default new Vuex.Store({
 				return -1
 			}
 		},
-		anonymousThumbnail: state => state.anonymousThumbnail,
+		anonymousAvatar: state => state.anonymousAvatar,
 		chatLines: state => state.chatLines,
 		fingerprint: state => state.fingerprint,
+		onlineUser: state => state.onlineUser,
 	},
 	mutations: {
 		setStream: (state, payload) => state.stream = payload,
@@ -70,8 +73,9 @@ export default new Vuex.Store({
 		setChatLines: (state, payload) => state.chatLines = payload,
 		setIsAdmin: (state, payload) => state.isAdmin = payload,
 		setYoutubePlayer: (state, payload) => state.youtubePlayer = payload,
-		generateAnonymousThumbnail: (state, payload) => state.anonymousThumbnail = generateRandomThumbnail(),
+		generateAnonymousAvatar: (state, payload) => state.anonymousAvatar = generateRandomAvatar(),
 		setFingerprint: (state, payload) => state.fingerprint = payload,
+		setOnlineUser: (state, payload) => state.onlineUser = payload,
 	},
 	actions: {
 		notify: ({ }, payload) => { },
@@ -82,6 +86,7 @@ export default new Vuex.Store({
 					dispatch('notify', { type: 'error', text: error.message })
 					throw error
 				})
+			dispatch('touchUser')
 		},
 		addExp: ({ state, dispatch, getters }, payload) => {
 			if (payload > 100)
@@ -91,12 +96,12 @@ export default new Vuex.Store({
 			if (newMyInfo.exp >= 100) {
 				newMyInfo.level++
 				newMyInfo.exp -= 100
-				const nextThumbnail = getters.randomNextThumbnail
-				if (null === nextThumbnail) {
+				const nextAvatar = getters.randomNextAvatar
+				if (null === nextAvatar) {
 					dispatch('notify', { text: '升滿了?! 你真的有認真在看實況嗎?' })
 				} else {
-					newMyInfo.thumbnailList.push(nextThumbnail)
-					dispatch('notify', { data: { thumbnail: nextThumbnail }, text: '升級! 獲得新角色!' })
+					newMyInfo.avatarList.push(nextAvatar)
+					dispatch('notify', { data: { avatar: nextAvatar }, text: '升級! 獲得新角色!' })
 				}
 			}
 			dispatch('saveMyInfo', newMyInfo)
@@ -118,16 +123,47 @@ export default new Vuex.Store({
 				dispatch('notify', { data: { symbol: 'trophy' }, text: msg })
 			}
 		},
+		subscribeAdminData: ({ state, commit }) => {
+			// remove outdated online user
+			firestore.collection('onlineUser').onSnapshot(snap => {
+				snap.docs.forEach(doc => {
+					if (!doc.data().touched)
+						return
+					if (new Date().getTime() - doc.data().touched.seconds * 1000 > 120000)
+						doc.ref.delete()
+				})
+				commit('setUiMode', { playground: true })
+			})
+		},
+		touchUser: ({ getters }) => {
+			if (getters.myInfo)
+				firestore.collection('onlineUser').doc(getters.myInfo.name).set({
+					...getters.myInfo,
+					touched: firebase.firestore.FieldValue.serverTimestamp()
+				})
+			else
+				firestore.collection('onlineUser').doc(getters.fingerprint).set({
+					avatarSelected: getters.anonymousAvatar,
+					touched: firebase.firestore.FieldValue.serverTimestamp()
+				})
+		},
 		subscribeData: ({ state, commit, dispatch, getters }) => {
+			// Is me banned?
 			new Fingerprint2().get(result => commit('setFingerprint', result))
-			firestore.doc("system/ban").onSnapshot(doc => {
+			firestore.doc('system/ban').onSnapshot(doc => {
 				if (doc.data().fingerprint.find(hash => hash == getters.fingerprint)) {
 					dispatch('logout')
 					dispatch('notify', { type: 'error', text: 'You got banned!' })
 				}
 			})
-
-			firestore.doc("system/stream").onSnapshot(doc => {
+			// online user
+			setInterval(() => dispatch('touchUser'), 60000)
+			firestore.collection('onlineUser').onSnapshot(snap => {
+				commit('setOnlineUser', snap.docs.map(doc => doc.data()))
+				commit('setUiMode', { playground: true })
+			})
+			// system info
+			firestore.doc('system/stream').onSnapshot(doc => {
 				const stream = doc.data()
 				if (state.stream.time != stream.time) {
 					unsubscribeChat()
@@ -143,6 +179,7 @@ export default new Vuex.Store({
 				commit('setSystemInfo', doc.data())
 				dispatch('checkTrophy')
 			})
+			// my login info
 			firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
 			firebase.auth().onAuthStateChanged(async user => {
 				try {
@@ -166,7 +203,6 @@ export default new Vuex.Store({
 							else
 								throw error
 						}
-
 					} else {
 						commit('setMyInfo', null)
 						commit('setUiMode', { account: 'ANONYMOUS' })
@@ -207,8 +243,8 @@ export default new Vuex.Store({
 				try {
 					await firestore.doc(`user/${name}`).set({
 						name: name,
-						thumbnailList: [getters.anonymousThumbnail],
-						thumbnailSelected: getters.anonymousThumbnail,
+						avatarList: [getters.anonymousAvatar],
+						avatarSelected: getters.anonymousAvatar,
 						level: 1,
 						exp: 0,
 						email: email,
@@ -225,21 +261,21 @@ export default new Vuex.Store({
 		logout: async ({ dispatch, commit }) => {
 			try {
 				await firebase.auth().signOut()
-				commit('generateAnonymousThumbnail')
-				commit('setUiMode', { selectThumbnail: false })
+				commit('generateAnonymousAvatar')
+				commit('setUiMode', { selectAvatar: false })
 				unsubscribeMyInfo()
 			} catch (error) {
 				dispatch('notify', { type: 'error', text: error.message })
 				throw error
 			}
 		},
-		changeThumbnail: ({ dispatch, commit, state }, payload) => {
+		changeAvatar: ({ dispatch, commit, state }, payload) => {
 			const newMyInfo = JSON.parse(JSON.stringify(state.myInfo))
-			if (!state.myInfo.thumbnailList.includes(payload))
+			if (!state.myInfo.avatarList.includes(payload))
 				return
-			newMyInfo.thumbnailSelected = payload
+			newMyInfo.avatarSelected = payload
 			dispatch('saveMyInfo', newMyInfo)
-			commit('setUiMode', { selectThumbnail: false })
+			commit('setUiMode', { selectAvatar: false })
 		},
 		submitChat: async ({ dispatch, commit, state }, payload) => {
 			try {
@@ -255,8 +291,8 @@ export default new Vuex.Store({
 			commit('setUiMode', { account: 'LOGIN' })
 			dispatch('notify', { type: 'warn', text: '要先輸入暱稱才能繼續喲！', data: { symbol: 'exclamation-triangle' } })
 		},
-		promptSelectThumbnail: ({ commit }) => {
-			commit('setUiMode', { selectThumbnail: true })
+		promptSelectAvatar: ({ commit }) => {
+			commit('setUiMode', { selectAvatar: true })
 		},
 		startStream: async ({ state, dispatch }, payload) => {
 			try {
@@ -267,7 +303,7 @@ export default new Vuex.Store({
 				})
 				dispatch('submitChat', {
 					name: '系統',
-					thumbnail: 0,
+					avatar: -1,
 					text: '實況開始囉！大家坐穩啦！',
 				})
 			} catch (error) {

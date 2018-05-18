@@ -12,8 +12,9 @@
         <Arrow ref="arrow" v-if="'LOGIN' == uiMode.account" class="login-arrow" />
 
         <!-- middle section -->
+        <Playground v-if="showPlayground" class="middle animated flipInY" />
         <Quiz v-if="showQuiz" class="middle animated flipInY" />
-        <ThumbnailPicker v-if="showThumbnailPicker" class="middle animated flipInY" />
+        <AvatarPicker v-if="showAvatarPicker" class="middle animated flipInY" />
 
         <!-- bottom section -->
         <ChatBox v-if="uiMode.chat" class="bottom animated flipInX" />
@@ -34,7 +35,8 @@ import MyInfo from './MyInfo'
 import AnonymousInfo from './AnonymousInfo'
 import Login from './Login'
 import Arrow from './Arrow'
-import ThumbnailPicker from './ThumbnailPicker'
+import AvatarPicker from './AvatarPicker'
+import Playground from './Playground'
 import Notify from './Notify'
 import { mapGetters, mapActions } from 'vuex'
 
@@ -46,7 +48,7 @@ export default {
       unsubscribeAction: () => { },
     }
   },
-  components: { DialogBox, VideoBox, NightSkyBackground, ChatBox, Quiz, MyInfo, AnonymousInfo, Login, Arrow, ThumbnailPicker, Notify },
+  components: { DialogBox, VideoBox, NightSkyBackground, ChatBox, Quiz, MyInfo, AnonymousInfo, Login, Arrow, AvatarPicker, Notify, Playground },
   created() { this.subscribeData() },
   mounted() {
     const width = document.documentElement.clientWidth
@@ -84,8 +86,9 @@ export default {
     showMyInfo() { return 'MY_INFO' == this.uiMode.account },
     showAnonymous() { return 'ANONYMOUS' == this.uiMode.account },
     showLogin() { return 'LOGIN' == this.uiMode.account },
-    showQuiz() { return !this.uiMode.selectThumbnail && this.uiMode.quiz },
-    showThumbnailPicker() { return this.uiMode.selectThumbnail },
+    showQuiz() { return !this.uiMode.selectAvatar && this.uiMode.quiz },
+    showPlayground() { return !this.showQuiz && !this.showAvatarPicker && this.uiMode.playground },
+    showAvatarPicker() { return this.uiMode.selectAvatar },
     ...mapGetters(['systemInfo', 'uiMode', 'videoUrl'])
   },
   methods: { ...mapActions(['subscribeData']) }

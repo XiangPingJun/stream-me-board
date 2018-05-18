@@ -1,7 +1,7 @@
 <template>
-  <div class="btn-border" :style="containerStyle" @click="changeThumbnail(index)">
+  <div class="btn-border" :style="containerStyle" @click="changeAvatar(index)">
     <div class="btn-content">
-			<Thumbnail :index="index" :large="true" :whoAmI="whoAmI" />
+			<Avatar :index="index" :large="true" :whoAmI="whoAmI" />
 		</div>
     <div class="stroke color-5" style="bottom:2px; right:2px;"></div>    
     <div class="stroke color-5" style="bottom:2px; left:2px;"></div>
@@ -14,18 +14,18 @@
 </template>
 
 <script>
-import Thumbnail from '../Thumbnail'
+import Avatar from '../Avatar'
 import { mapActions } from 'vuex'
 
 export default {
-  components: { Thumbnail },
+  components: { Avatar },
   props: ['whoAmI', 'index', 'click'],
   computed: {
     containerStyle() {
       return { cursor: this.whoAmI ? 'not-allowed' : 'pointer' }
     }
   },
-  methods: { ...mapActions(['changeThumbnail']) }
+  methods: { ...mapActions(['changeAvatar']) }
 }
 </script>
 

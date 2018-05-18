@@ -3,7 +3,7 @@
     <template slot="body" slot-scope="props">
       <div class="notification vue-notification" :class="props.item.type">
         <i class="symbol" v-if="props.item.data.symbol" :class="`fas fa-${props.item.data.symbol}`" />
-        <Thumbnail v-if="undefined!=props.item.data.thumbnail" :index="props.item.data.thumbnail" />
+        <Avatar v-if="undefined!=props.item.data.avatar" :index="props.item.data.avatar" />
         <div class="notification-content" v-html="props.item.text" />
       </div>
     </template>
@@ -11,9 +11,9 @@
 </template>
 
 <script>
-import Thumbnail from '../Thumbnail'
+import Avatar from '../Avatar'
 export default {
-  components: { Thumbnail }
+  components: { Avatar }
 }
 </script>
 

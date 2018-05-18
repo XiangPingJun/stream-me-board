@@ -5,65 +5,65 @@
     <Well>
       <div>&lt;小喬大喬&gt;</div>
       <div style="display:flex;">
-        <Thumbnail index="11" whoAmI="true" />
-        <Thumbnail index="12" />
-        <Thumbnail index="12" />
-        <Thumbnail index="12" whoAmI="true" />
-        <Thumbnail index="12" />
-        <Thumbnail index="12" />
-        <Thumbnail index="12" />
-        <Thumbnail index="12" />
-        <Thumbnail index="12" />
-        <Thumbnail index="12" />
-        <Thumbnail index="12" />
+        <Avatar index="11" whoAmI="true" />
+        <Avatar index="12" />
+        <Avatar index="12" />
+        <Avatar index="12" whoAmI="true" />
+        <Avatar index="12" />
+        <Avatar index="12" />
+        <Avatar index="12" />
+        <Avatar index="12" />
+        <Avatar index="12" />
+        <Avatar index="12" />
+        <Avatar index="12" />
       </div>
     </Well>
     <Well>
       <div>&lt;小喬大喬&gt;</div>
       <div style="display:flex;">
-        <Thumbnail index="11" />
-        <Thumbnail index="12" />
-        <Thumbnail index="12" />
-        <Thumbnail index="12" />
-        <Thumbnail index="12" />
-        <Thumbnail index="12" />
-        <Thumbnail index="12" />
-        <Thumbnail index="12" />
-        <Thumbnail index="12" />
-        <Thumbnail index="12" />
-        <Thumbnail index="12" />
+        <Avatar index="11" />
+        <Avatar index="12" />
+        <Avatar index="12" />
+        <Avatar index="12" />
+        <Avatar index="12" />
+        <Avatar index="12" />
+        <Avatar index="12" />
+        <Avatar index="12" />
+        <Avatar index="12" />
+        <Avatar index="12" />
+        <Avatar index="12" />
       </div>
     </Well>
     <Well>
       <div>&lt;小喬大喬&gt;</div>
       <div style="display:flex;">
-        <Thumbnail index="11" />
-        <Thumbnail index="12" />
-        <Thumbnail index="12" />
-        <Thumbnail index="12" />
-        <Thumbnail index="12" />
-        <Thumbnail index="12" />
-        <Thumbnail index="12" />
-        <Thumbnail index="12" />
-        <Thumbnail index="12" />
-        <Thumbnail index="12" />
-        <Thumbnail index="12" />
+        <Avatar index="11" />
+        <Avatar index="12" />
+        <Avatar index="12" />
+        <Avatar index="12" />
+        <Avatar index="12" />
+        <Avatar index="12" />
+        <Avatar index="12" />
+        <Avatar index="12" />
+        <Avatar index="12" />
+        <Avatar index="12" />
+        <Avatar index="12" />
       </div>
     </Well>
     <Well>
       <div>&lt;小喬大喬&gt;</div>
       <div style="display:flex;">
-        <Thumbnail index="11" />
-        <Thumbnail index="12" />
-        <Thumbnail index="12" />
-        <Thumbnail index="12" />
-        <Thumbnail index="12" />
-        <Thumbnail index="12" />
-        <Thumbnail index="12" />
-        <Thumbnail index="12" />
-        <Thumbnail index="12" />
-        <Thumbnail index="12" />
-        <Thumbnail index="12" />
+        <Avatar index="11" />
+        <Avatar index="12" />
+        <Avatar index="12" />
+        <Avatar index="12" />
+        <Avatar index="12" />
+        <Avatar index="12" />
+        <Avatar index="12" />
+        <Avatar index="12" />
+        <Avatar index="12" />
+        <Avatar index="12" />
+        <Avatar index="12" />
       </div>
     </Well>
   </DialogBox>
@@ -72,11 +72,11 @@
 <script>
 import UnderlineText from '../UnderlineText'
 import Well from '../Well'
-import Thumbnail from '../Thumbnail'
+import Avatar from '../Avatar'
 import DialogBox from '../DialogBox'
 
 export default {
-  components: { UnderlineText, Well, Thumbnail, DialogBox, }
+  components: { UnderlineText, Well, Avatar, DialogBox, }
 }
 </script>
 
@@ -92,8 +92,5 @@ export default {
   display: inline-block;
   padding-top: 9px;
   margin-right: 5px;
-}
-.player-list {
-  display: flex;
 }
 </style>

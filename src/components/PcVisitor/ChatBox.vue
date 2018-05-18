@@ -49,7 +49,7 @@ export default {
     submit(text) {
       this.submitChat({
         name: this.myInfo.name,
-        thumbnail: this.myInfo.thumbnailSelected,
+        avatar: this.myInfo.avatarSelected,
         text: text,
       })
       this.$refs.input.text = ''
