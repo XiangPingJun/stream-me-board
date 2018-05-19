@@ -87,7 +87,7 @@ export default {
     showAnonymous() { return 'ANONYMOUS' == this.uiMode.account },
     showLogin() { return 'LOGIN' == this.uiMode.account },
     showQuiz() { return !this.uiMode.selectAvatar && this.uiMode.quiz },
-    showPlayground() { return !this.showQuiz && !this.showAvatarPicker && this.uiMode.playground },
+    showPlayground() { return !this.uiMode.quiz && !this.uiMode.selectAvatar && this.uiMode.playground },
     showAvatarPicker() { return this.uiMode.selectAvatar },
     ...mapGetters(['systemInfo', 'uiMode', 'videoUrl'])
   },
@@ -119,7 +119,7 @@ export default {
 .right-side .bottom {
   flex-grow: 1;
   flex-shrink: 9999999;
-  min-height: 150px;
+  min-height: 200px;
 }
 .login-arrow {
   top: 60px;

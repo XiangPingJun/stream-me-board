@@ -16,6 +16,7 @@
     -4px -4px #2a2e30, -4px 4px #2a2e30, 4px -4px #2a2e30, 4px 4px #2a2e30;
   box-sizing: border-box;
   transition-duration: 0.25s;
+  min-height: 4px;
 }
 .well-border {
   padding: 4px;
