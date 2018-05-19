@@ -296,9 +296,11 @@ export default new Vuex.Store({
 		},
 		startStream: async ({ state, dispatch }, payload) => {
 			try {
+				console.log(payload)
 				await firestore.doc('system/stream').set({
 					time: new Date().getTime(),
-					videoUrl: convertToEmbeded(payload),
+					videoUrl: convertToEmbeded(payload.videoUrl),
+					greetings: payload.greetings,
 					streaming: true
 				})
 				dispatch('submitChat', {
@@ -313,7 +315,11 @@ export default new Vuex.Store({
 		},
 		stopStream: async ({ dispatch, state }, payload) => {
 			try {
-				await firestore.doc('system/stream').set({ ...state.stream, streaming: false })
+				await firestore.doc('system/stream').set({
+					...state.stream,
+					greetings: '今天來跟大家一起玩...',
+					streaming: false
+				})
 			} catch (error) {
 				dispatch('notify', { type: 'error', text: error.message })
 				throw error

@@ -5,13 +5,12 @@
         <iframe ref="iframe" frameBorder="0" allowFullScreen="true" :src="videoUrl" :style="videoSize" />
       </div>
     </div>
-    <img src="static/thank.png" class="animated flipInY" v-if="null===videoUrl" :style="{height: videoSize.height}" />
+    <img src="static/thank.png" class="animated flipInY" v-if="null===videoUrl && !stream.streaming" :style="{height: videoSize.height}" />
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-// :style="{display:loaded&&videoUrl?'block':'none'}"
 export default {
   props: ['width', 'height'],
   data() { return { loaded: false } },
@@ -22,7 +21,7 @@ export default {
         height: `${this.height || this.width * (9 / 16)}px`,
       }
     },
-    ...mapGetters(['videoUrl'])
+    ...mapGetters(['videoUrl', 'stream'])
   },
   watch: {
     videoUrl(val, oldVal) {

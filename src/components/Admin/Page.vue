@@ -9,8 +9,13 @@
     <h1 v-if="!stream.streaming">沒有直播</h1>
     <div>影片網址:</div>
     <input v-model="videoUrl" :placeholder="videoUrlPlaceholder" />
-    <button @click="startStream(videoUrl)" :disabled="!videoUrl"><i class="fas fa-link" /> 開始</button>
-    <button @click="stopStream" :disabled="!stream.streaming"><i class="fas fa-unlink" /> 結束</button>
+    <br /><br />
+    <div>本日主題:</div>
+    <textarea v-model="greetings" @input="greetingsChanged=true" />
+    <div>
+      <button @click="startStream({videoUrl, greetings})" :disabled="!videoUrl||!greetingsChanged"><i class="fas fa-link" /> 開始</button>
+      <button @click="stopStream" :disabled="!stream.streaming"><i class="fas fa-unlink" /> 結束</button>
+    </div>
     <notifications position="bottom left" />
   </div>
 </template>
@@ -20,7 +25,7 @@ import { mapGetters, mapActions } from 'vuex'
 
 export default {
   data() {
-    return { videoUrl: '', name: '', password: '' }
+    return { videoUrl: '', name: '', password: '', greetingsChanged: false, greetings: '' }
   },
   created() {
     this.subscribeData()
@@ -38,6 +43,10 @@ export default {
       if (null !== val && null !== oldVal && val.version != oldVal.version)
         window.location.reload(true)
     },
+    stream(val, oldVal) {
+      console.log(val)
+      this.greetings = val.greetings
+    }
   },
   mounted() {
     this.unsubscribeAction = this.$store.subscribeAction((action, state) => {
@@ -65,5 +74,10 @@ button {
   font-size: 200%;
   margin: 5px;
   cursor: pointer;
+}
+textarea {
+  height: 150px;
+  width: 100%;
+  font-size: 20px;
 }
 </style>

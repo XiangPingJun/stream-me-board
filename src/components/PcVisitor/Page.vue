@@ -9,7 +9,7 @@
         <AnonymousInfo v-if="showAnonymous" class="top animated flipInX" />
         <Login v-if="showLogin" class="top animated flipInX" />
         <!-- login arrow -->
-        <Arrow ref="arrow" v-if="'LOGIN' == uiMode.account" class="login-arrow" />
+        <Arrow ref="arrow" v-if="showLogin" class="login-arrow" />
 
         <!-- middle section -->
         <Playground v-if="showPlayground" class="middle animated flipInY" />
@@ -87,9 +87,9 @@ export default {
     showAnonymous() { return 'ANONYMOUS' == this.uiMode.account },
     showLogin() { return 'LOGIN' == this.uiMode.account },
     showQuiz() { return !this.uiMode.selectAvatar && this.uiMode.quiz },
-    showPlayground() { return !this.uiMode.quiz && !this.uiMode.selectAvatar && this.uiMode.playground },
+    showPlayground() { return this.stream.streaming && !this.uiMode.quiz && !this.uiMode.selectAvatar && this.uiMode.playground },
     showAvatarPicker() { return this.uiMode.selectAvatar },
-    ...mapGetters(['systemInfo', 'uiMode', 'videoUrl'])
+    ...mapGetters(['systemInfo', 'uiMode', 'videoUrl', 'stream'])
   },
   methods: { ...mapActions(['subscribeData']) }
 }

@@ -1,11 +1,17 @@
 <template>
   <DialogBox overflowY="auto">
+    <div><UnderlineText>本日主題</UnderlineText></div>
+    <i>{{this.stream.greetings}}</i>
+    <div class="padding-line" />
+
     <div><UnderlineText>線上的網友們</UnderlineText></div>
     <Well style="margin-bottom:20px;">
       <div style="display:flex;">
         <UserAvatar v-for="(user, key) in onlineUser" :user="user" :key="key" />
       </div>
     </Well>
+    <div class="padding-line" />
+
     <div><UnderlineText>追蹤我們的實況</UnderlineText></div>
     <div class="subtitle"><i class="fas fa-bookmark" /> 追蹤LINE官方帳號</div>
     <i>搜尋用戶ID『@sgs5099b』追蹤，或掃描條碼加入 "新注音新聞"</i>
@@ -28,7 +34,7 @@ import { mapGetters } from 'vuex'
 
 export default {
   components: { UnderlineText, Well, UserAvatar, DialogBox, },
-  computed: { ...mapGetters(['onlineUser']) }
+  computed: { ...mapGetters(['onlineUser', 'stream']) }
 }
 </script>
 
@@ -40,5 +46,8 @@ export default {
 .subtitle {
   margin-top: 15px;
   margin-bottom: 5px;
+}
+.padding-line {
+  margin-bottom: 20px;
 }
 </style>
