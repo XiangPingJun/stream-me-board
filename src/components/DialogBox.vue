@@ -91,8 +91,10 @@ export default {
 }
 .blue,
 a {
-  color: #639bff;
+  color: #99befd;
+  font-weight: bold;
   text-shadow: 0px 3px #5b6ee1, 3px 3px #86674d;
+  cursor: pointer;
 }
 ::-webkit-scrollbar-track {
   background-color: #aa8c6e;

@@ -1,7 +1,13 @@
 <template>
   <DialogBox overflowY="auto">
     <div><UnderlineText>本日主題</UnderlineText></div>
-    <i>{{this.stream.greetings}}</i>
+    <i>
+      哈囉，今天來跟大家一起玩<br/>
+      <span v-if="!stream.gameUrl">{{stream.gameTitle}}</span>
+      <a v-if="stream.gameUrl" :href="stream.gameUrl" target="_blank">{{stream.gameTitle}}</a>
+      <br/>
+      快點來加入一起聊天吧！<br/>
+    </i>
     <div class="padding-line" />
 
     <div><UnderlineText>線上的網友們</UnderlineText></div>
@@ -12,7 +18,7 @@
     </Well>
     <div class="padding-line" />
 
-    <div><UnderlineText>追蹤我們的實況</UnderlineText></div>
+    <div><UnderlineText>追蹤我們的直播</UnderlineText></div>
     <div class="subtitle"><i class="fas fa-bookmark" /> 追蹤LINE官方帳號</div>
     <i>搜尋用戶ID『@sgs5099b』追蹤，或掃描條碼加入 "新注音新聞"</i>
     <img src="static/line-qr.png" />

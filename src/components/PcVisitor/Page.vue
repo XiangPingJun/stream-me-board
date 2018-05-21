@@ -119,7 +119,7 @@ export default {
 .right-side .bottom {
   flex-grow: 1;
   flex-shrink: 9999999;
-  min-height: 200px;
+  min-height: 250px;
 }
 .login-arrow {
   top: 60px;

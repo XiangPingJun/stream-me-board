@@ -98,7 +98,7 @@ export default new Vuex.Store({
 				newMyInfo.exp -= 100
 				const nextAvatar = getters.randomNextAvatar
 				if (null === nextAvatar) {
-					dispatch('notify', { text: '升滿了?! 你真的有認真在看實況嗎?' })
+					dispatch('notify', { text: '升滿了?! 你真的有認真在看直播嗎?' })
 				} else {
 					newMyInfo.avatarList.push(nextAvatar)
 					dispatch('notify', { data: { avatar: nextAvatar }, text: '升級! 獲得新角色!' })
@@ -294,19 +294,53 @@ export default new Vuex.Store({
 		promptSelectAvatar: ({ commit }) => {
 			commit('setUiMode', { selectAvatar: true })
 		},
-		startStream: async ({ state, dispatch }, payload) => {
+		saveGameTitle: async ({ dispatch, state }, payload) => {
 			try {
-				console.log(payload)
 				await firestore.doc('system/stream').set({
+					...state.stream,
+					gameTitle: payload
+				})
+				dispatch('notify', { text: '已更新直播主題' })
+			} catch (error) {
+				dispatch('notify', { type: 'error', text: error.message })
+				throw error
+			}
+		},
+		saveGameUrl: async ({ dispatch, state }, payload) => {
+			try {
+				await firestore.doc('system/stream').set({
+					...state.stream,
+					gameUrl: payload
+				})
+				dispatch('notify', { text: '已更新直播主題的連結' })
+			} catch (error) {
+				dispatch('notify', { type: 'error', text: error.message })
+				throw error
+			}
+		},
+		saveVideoUrl: async ({ dispatch, state }, payload) => {
+			try {
+				await firestore.doc('system/stream').set({
+					...state.stream,
+					videoUrl: payload
+				})
+				dispatch('notify', { text: '已更新直播影片網址' })
+			} catch (error) {
+				dispatch('notify', { type: 'error', text: error.message })
+				throw error
+			}
+		},
+		startStream: async ({ dispatch, state }, payload) => {
+			try {
+				await firestore.doc('system/stream').set({
+					...state.stream,
 					time: new Date().getTime(),
-					videoUrl: convertToEmbeded(payload.videoUrl),
-					greetings: payload.greetings,
 					streaming: true
 				})
 				dispatch('submitChat', {
 					name: '系統',
 					avatar: -1,
-					text: '實況開始囉！大家坐穩啦！',
+					text: '直播開始囉！大家坐穩啦！',
 				})
 			} catch (error) {
 				dispatch('notify', { type: 'error', text: error.message })
