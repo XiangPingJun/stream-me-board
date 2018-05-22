@@ -20,6 +20,8 @@
       <input :value="stream.gameTitle" @change="e => saveGameTitle(e.target.value.trim())" onfocus="this.select()">
       <div>連結:</div>
       <input :value="stream.gameUrl" @change="e => saveGameUrl(e.target.value.trim())" onfocus="this.select()">
+      <div>簡述:</div>
+      <input :value="stream.gameDescription" @change="e => saveGameDescription(e.target.value.trim())" onfocus="this.select()">
     </p>
     <p>
       <button @click="startStream" :disabled="stream.streaming"><i class="fas fa-link" /> 開始</button>
@@ -39,7 +41,7 @@ export default {
   created() {
     this.subscribeData()
   },
-  methods: { ...mapActions(['subscribeData', 'loginAdmin', 'startStream', 'stopStream', 'saveVideoUrl', 'saveGameTitle', 'saveGameUrl']) },
+  methods: { ...mapActions(['subscribeData', 'loginAdmin', 'startStream', 'stopStream', 'saveVideoUrl', 'saveGameTitle', 'saveGameUrl', 'saveGameDescription']) },
   computed: { ...mapGetters(['stream', 'systemInfo', 'isAdmin']) },
   watch: {
     systemInfo(val, oldVal) {

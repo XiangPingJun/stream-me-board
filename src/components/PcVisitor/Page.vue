@@ -12,7 +12,7 @@
         <Arrow ref="arrow" v-if="showLogin" class="login-arrow" />
 
         <!-- middle section -->
-        <Playground v-if="showPlayground" class="middle animated flipInY" />
+        <Playground v-if="showPlayground" class="middle animated flipInY" style="max-height:300px;" />
         <Quiz v-if="showQuiz" class="middle animated flipInY" />
         <AvatarPicker v-if="showAvatarPicker" class="middle animated flipInY" />
 

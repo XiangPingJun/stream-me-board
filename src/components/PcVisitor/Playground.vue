@@ -6,6 +6,7 @@
       <span v-if="!stream.gameUrl">{{stream.gameTitle}}</span>
       <a v-if="stream.gameUrl" :href="stream.gameUrl" target="_blank">{{stream.gameTitle}}</a>
       <br/>
+      {{stream.gameDescription}}，<br/>
       快點來加入一起聊天吧！<br/>
     </i>
     <div class="padding-line" />

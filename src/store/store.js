@@ -307,6 +307,18 @@ export default new Vuex.Store({
 				throw error
 			}
 		},
+		saveGameDescription: async ({ dispatch, state }, payload) => {
+			try {
+				await firestore.doc('system/stream').set({
+					...state.stream,
+					gameDescription: payload
+				})
+				dispatch('notify', { text: '已更新直播主題的簡述' })
+			} catch (error) {
+				dispatch('notify', { type: 'error', text: error.message })
+				throw error
+			}
+		},
 		saveVideoUrl: async ({ dispatch, state }, payload) => {
 			try {
 				await firestore.doc('system/stream').set({
