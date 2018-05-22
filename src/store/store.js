@@ -123,18 +123,6 @@ export default new Vuex.Store({
 				dispatch('notify', { data: { symbol: 'trophy' }, text: msg })
 			}
 		},
-		subscribeAdminData: ({ state, commit }) => {
-			// remove outdated online user
-			firestore.collection('onlineUser').onSnapshot(snap => {
-				snap.docs.forEach(doc => {
-					if (!doc.data().touched)
-						return
-					if (new Date().getTime() - doc.data().touched.seconds * 1000 > 120000)
-						doc.ref.delete()
-				})
-				commit('setUiMode', { playground: true })
-			})
-		},
 		touchUser: ({ getters }) => {
 			if (getters.myInfo)
 				firestore.collection('onlineUser').doc(getters.myInfo.name).set({
@@ -207,6 +195,7 @@ export default new Vuex.Store({
 						commit('setMyInfo', null)
 						commit('setUiMode', { account: 'ANONYMOUS' })
 					}
+					dispatch('touchUser')
 				} catch (error) {
 					dispatch('notify', { type: 'error', text: error.message })
 					throw error

@@ -38,9 +38,8 @@ export default {
   },
   created() {
     this.subscribeData()
-    this.subscribeAdminData()
   },
-  methods: { ...mapActions(['subscribeData', 'loginAdmin', 'startStream', 'stopStream', 'subscribeAdminData', 'saveVideoUrl', 'saveGameTitle', 'saveGameUrl']) },
+  methods: { ...mapActions(['subscribeData', 'loginAdmin', 'startStream', 'stopStream', 'saveVideoUrl', 'saveGameTitle', 'saveGameUrl']) },
   computed: { ...mapGetters(['stream', 'systemInfo', 'isAdmin']) },
   watch: {
     systemInfo(val, oldVal) {
