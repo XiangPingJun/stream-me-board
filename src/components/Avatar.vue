@@ -7,7 +7,6 @@ export default {
 	props: ['index', 'large', 'whoAmI'],
 	computed: {
 		style() {
-
 			let sideLen, name, size, idx
 			if (this.large) {
 				sideLen = 32
@@ -17,13 +16,12 @@ export default {
 				size = 'small'
 			}
 			if (this.index < 0) {
-				name = 'special'
+				name = 'preserved'
 				idx = -1 * this.index + 1
 			} else {
 				name = 'character'
 				idx = this.index - 1
 			}
-			console.log(sideLen * (idx % 10), sideLen * Math.floor(idx / 10))
 			return {
 				'background-image': `url(static/${name}-${size}.png)`,
 				'background-position-x': -1 * sideLen * (idx % 10) + 'px',

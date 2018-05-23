@@ -22,13 +22,12 @@ exports.schedule = functions.https.onRequest((request, response) => __awaiter(th
             if (new Date().getTime() - doc.data().heartbeat.getTime() > 60000)
                 promises.push(doc.ref.delete());
         });
-        console.log(promises.length);
         return Promise.all(promises);
     });
     // update last executed
     yield firestore.doc('system/schedule').set({
         lastExecuted: new Date()
     });
-    response.send('Done 14');
+    response.send('Done.');
 }));
 //# sourceMappingURL=index.js.map

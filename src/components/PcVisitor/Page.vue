@@ -83,13 +83,13 @@ export default {
     }
   },
   computed: {
-    showMyInfo() { return 'MY_INFO' == this.uiMode.account },
+    showMyInfo() { return this.myInfo.name && 'MY_INFO' == this.uiMode.account },
     showAnonymous() { return 'ANONYMOUS' == this.uiMode.account },
     showLogin() { return 'LOGIN' == this.uiMode.account },
     showQuiz() { return !this.uiMode.selectAvatar && this.uiMode.quiz },
     showPlayground() { return this.stream.streaming && !this.uiMode.quiz && !this.uiMode.selectAvatar && this.uiMode.playground },
     showAvatarPicker() { return this.uiMode.selectAvatar },
-    ...mapGetters(['systemInfo', 'uiMode', 'videoUrl', 'stream'])
+    ...mapGetters(['systemInfo', 'uiMode', 'videoUrl', 'stream', 'myInfo'])
   },
   methods: { ...mapActions(['subscribeData']) }
 }

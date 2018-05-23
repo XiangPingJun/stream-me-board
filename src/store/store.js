@@ -1,20 +1,20 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { FINGERPRINT } from '../common'
-
-const TOTAL_THUMBNAIL = 100
+import shortid from 'shortid'
+import { FINGERPRINT, TOTAL_AVATAR } from '../common'
+import { ENAMETOOLONG } from 'constants';
 
 Vue.use(Vuex)
 const firestore = firebase.firestore()
 firestore.settings({ timestampsInSnapshots: true })
 
-const generateRandomAvatar = () => Math.floor(Math.random() * TOTAL_THUMBNAIL) + 1
-let unsubscribeMyInfo = () => { }
+const generateRandomAvatar = () => Math.floor(Math.random() * TOTAL_AVATAR) + 1
 let unsubscribeChat = () => { }
 
 export default new Vuex.Store({
 	state: {
-		myInfo: null,
+		myUid: null,
+		allUsers: {},
 		isAdmin: null,
 		stream: {},
 		systemInfo: null,
@@ -30,20 +30,20 @@ export default new Vuex.Store({
 		onlineUser: []
 	},
 	getters: {
-		uiMode: state => state.uiMode,
-		myInfo: state => state.myInfo,
+		allUsers: state => state.allUsers,
+		myInfo: state => state.allUsers[state.myUid] || {},
 		isAdmin: state => state.isAdmin,
 		stream: state => state.stream,
 		systemInfo: state => state.systemInfo,
-		totalAvatar: state => TOTAL_THUMBNAIL,
-		randomNextAvatar: state => {
+		uiMode: state => state.uiMode,
+		randomNextAvatar: (state, getters) => {
 			let result = generateRandomAvatar()
-			if (null === state.myInfo)
+			if (null === getters.myInfo)
 				return result
-			else if (state.myInfo.avatarList.length == TOTAL_THUMBNAIL)
+			else if (getters.myInfo.avatarList.length == TOTAL_AVATAR)
 				return null
 			for (; ; result = generateRandomAvatar())
-				if (!state.myInfo.avatarList.find(avatar => avatar == result))
+				if (!getters.myInfo.avatarList.find(avatar => avatar == result))
 					return result
 		},
 		videoUrl: state => state.stream.streaming ? state.stream.videoUrl : state.selectedVideoUrl,
@@ -62,7 +62,8 @@ export default new Vuex.Store({
 	mutations: {
 		setStream: (state, payload) => state.stream = payload,
 		setSystemInfo: (state, payload) => state.systemInfo = payload,
-		setMyInfo: (state, payload) => state.myInfo = payload,
+		setAllUsers: (state, payload) => state.allUsers = payload,
+		setMyUid: (state, payload) => state.myUid = payload,
 		setUiMode: (state, payload) => {
 			state.uiMode = {
 				...state.uiMode,
@@ -78,61 +79,58 @@ export default new Vuex.Store({
 	actions: {
 		notify: ({ }, payload) => { },
 		saveMyInfo: ({ state, dispatch, commit }, payload) => {
-			commit('setMyInfo', payload)
-			firestore.collection('user').doc(state.myInfo.name).set(payload)
+			firestore.collection('user').doc(state.myUid).set(payload)
 				.catch(error => {
 					dispatch('notify', { type: 'error', text: error.message })
 					throw error
 				})
-			dispatch('touchUser')
 		},
-		addExp: ({ state, dispatch, getters }, payload) => {
+		addExp: ({ getters, dispatch }, payload) => {
 			if (payload > 100)
 				dispatch('notify', { type: 'error', text: `unsupport addExp ${payload}` })
-			const newMyInfo = JSON.parse(JSON.stringify(state.myInfo))
-			newMyInfo.exp += payload
-			if (newMyInfo.exp >= 100) {
-				newMyInfo.level++
-				newMyInfo.exp -= 100
+			getters.myInfo.exp += payload
+			if (getters.myInfo.exp >= 100) {
+				getters.myInfo.level++
+				getters.myInfo.exp -= 100
 				const nextAvatar = getters.randomNextAvatar
 				if (null === nextAvatar) {
 					dispatch('notify', { text: '升滿了?! 你真的有認真在看直播嗎?' })
 				} else {
-					newMyInfo.avatarList.push(nextAvatar)
+					getters.myInfo.avatarList.push(nextAvatar)
 					dispatch('notify', { data: { avatar: nextAvatar }, text: '升級! 獲得新角色!' })
 				}
 			}
-			dispatch('saveMyInfo', newMyInfo)
+			dispatch('saveMyInfo', getters.myInfo)
 		},
-		checkTrophy: ({ state, dispatch }) => {
-			if (!state.myInfo)
+		checkTrophy: ({ getters, dispatch }) => {
+			if (!getters.myInfo.name)
 				return
-			if (state.stream.streaming && !state.myInfo.viewedStream.includes(state.stream.time)) {
-				const newMyInfo = JSON.parse(JSON.stringify(state.myInfo))
-				newMyInfo.viewedStream.push(state.stream.time)
-				if (!state.myInfo.trophy.includes('WATCH_FIRST_TIME')) {
-					newMyInfo.trophy.push('WATCH_FIRST_TIME')
+			if (getters.stream.streaming && !getters.myInfo.viewedStream.includes(getters.stream.time)) {
+				getters.myInfo.viewedStream.push(getters.stream.time)
+				if (!getters.myInfo.trophy.includes('WATCH_FIRST_TIME')) {
+					getters.myInfo.trophy.push('WATCH_FIRST_TIME')
 					notify('第一次來看直播！')
 				}
-				dispatch('saveMyInfo', newMyInfo)
+				dispatch('saveMyInfo', getters.myInfo)
 				dispatch('addExp', 100)
 			}
 			function notify(msg) {
 				dispatch('notify', { data: { symbol: 'trophy' }, text: msg })
 			}
 		},
-		touchUser: ({ getters }) => {
-			if (getters.myInfo) {
-				firestore.collection('onlineUser').doc(getters.myInfo.name).set({
-					...getters.myInfo,
+		sendHeartbeat: ({ state, getters }) => {
+			if (state.myUid) {
+				firestore.collection('onlineUser').doc(state.myUid).set({
+					uid: state.myUid,
 					heartbeat: firebase.firestore.FieldValue.serverTimestamp()
 				})
 				firestore.collection('onlineUser').doc(FINGERPRINT).delete()
-			} else
+			} else {
 				firestore.collection('onlineUser').doc(FINGERPRINT).set({
 					avatarSelected: getters.anonymousAvatar,
 					heartbeat: firebase.firestore.FieldValue.serverTimestamp()
 				})
+			}
 		},
 		subscribeData: ({ state, commit, dispatch, getters }) => {
 			// Is me banned?
@@ -142,10 +140,22 @@ export default new Vuex.Store({
 					dispatch('notify', { type: 'error', text: 'You got banned!' })
 				}
 			})
+			// all users
+			firestore.collection('user').onSnapshot(snap => {
+				let allUsers = {}
+				snap.forEach(doc => allUsers[doc.id] = doc.data())
+				commit('setAllUsers', allUsers)
+			})
 			// online user
-			setInterval(() => dispatch('touchUser'), 60000)
+			setInterval(() => dispatch('sendHeartbeat'), 60000)
 			firestore.collection('onlineUser').onSnapshot(snap => {
-				commit('setOnlineUser', snap.docs.map(doc => doc.data()))
+				commit('setOnlineUser', snap.docs.map(doc => {
+					const data = doc.data()
+					if (data.uid)
+						return getters.allUsers[data.uid]
+					else
+						return { avatarSelected: data.avatarSelected }
+				}))
 				commit('setUiMode', { playground: true })
 			})
 			// system info
@@ -161,25 +171,14 @@ export default new Vuex.Store({
 				commit('setStream', stream)
 				dispatch('checkTrophy')
 			})
-			firestore.doc("system/info").onSnapshot(doc => {
-				commit('setSystemInfo', doc.data())
-				dispatch('checkTrophy')
-			})
+			firestore.doc("system/info").onSnapshot(doc => commit('setSystemInfo', doc.data()))
 			// my login info
 			firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
 			firebase.auth().onAuthStateChanged(async user => {
 				try {
 					if (user) {
-						const docRef = firestore.collection('user').where('email', '==', user.email)
-
-						const snap = await docRef.get()
-						commit('setMyInfo', snap.docs[0].data())
+						commit('setMyUid', user.uid)
 						commit('setUiMode', { account: 'MY_INFO' })
-						dispatch('checkTrophy')
-
-						unsubscribeMyInfo = docRef.onSnapshot(snap => {
-							commit('setMyInfo', snap.docs[0].data())
-						})
 						try {
 							await firestore.collection('adminUser').get()
 							commit('setIsAdmin', true)
@@ -190,45 +189,37 @@ export default new Vuex.Store({
 								throw error
 						}
 					} else {
-						commit('setMyInfo', null)
+						commit('setIsAdmin', false)
+						commit('setMyUid', null)
 						commit('setUiMode', { account: 'ANONYMOUS' })
 					}
-					dispatch('touchUser')
+					dispatch('sendHeartbeat')
 				} catch (error) {
 					dispatch('notify', { type: 'error', text: error.message })
 					throw error
 				}
 			})
 		},
-		loginAdmin: async ({ dispatch }, payload) => {
+		loginAdmin: async ({ getters, dispatch }, payload) => {
 			try {
-				const email = `${encodeURI(payload.name)}@mail.net`.toLowerCase()
-				await firebase.auth().signInWithEmailAndPassword(email, payload.password)
+				const me = Object.values(getters.allUsers).find(user => user.name == payload.name)
+				await firebase.auth().signInWithEmailAndPassword(me.email, payload.password)
 			} catch (error) {
 				dispatch('notify', { type: 'error', text: error.message })
 				throw error
 			}
 		},
-		login: async ({ dispatch, getters }, payload) => {
+		loginVisitor: async ({ dispatch, getters }, payload) => {
 			const name = payload
-			const email = `${encodeURI(name)}@mail.net`.toLowerCase()
-			const pw = 'dummy-password'
 			try {
-				await firebase.auth().signInWithEmailAndPassword(email, pw)
-			} catch (error) {
-				if ('auth/user-not-found' == error.code)
-					createUser()
-				else if ('auth/wrong-password' == error.code) {
-					dispatch('notify', { type: 'error', text: '暱稱已被使用!' })
-					dispatch('promptLogin')
+				const me = Object.values(getters.allUsers).find(user => user.name == name)
+				if (me) {
+					await firebase.auth().signInWithEmailAndPassword(me.email, 'dummy-password')
 				} else {
-					dispatch('notify', { type: 'error', text: error.message })
-					throw error
-				}
-			}
-			async function createUser() {
-				try {
-					await firestore.doc(`user/${name}`).set({
+					// create user
+					const email = `${shortid.generate()}@mail.net`
+					const user = await firebase.auth().createUserWithEmailAndPassword(email, 'dummy-password')
+					await firestore.collection('user').doc(user.uid).set({
 						name: name,
 						avatarList: [getters.anonymousAvatar],
 						avatarSelected: getters.anonymousAvatar,
@@ -238,30 +229,34 @@ export default new Vuex.Store({
 						viewedStream: [],
 						trophy: []
 					})
-					await firebase.auth().createUserWithEmailAndPassword(email, pw)
-				} catch (error) {
+					dispatch('checkTrophy')
+				}
+			} catch (error) {
+				if ('auth/wrong-password' == error.code) {
+					dispatch('notify', { type: 'error', text: '暱稱已被使用!' })
+					dispatch('promptLogin')
+				} else {
 					dispatch('notify', { type: 'error', text: error.message })
 					throw error
 				}
 			}
 		},
-		logout: async ({ dispatch, commit }) => {
+		logout: async ({ state, dispatch, commit }) => {
 			try {
-				await firebase.auth().signOut()
 				commit('generateAnonymousAvatar')
+				await firestore.collection('onlineUser').doc(state.myUid).delete()
+				await firebase.auth().signOut()
 				commit('setUiMode', { selectAvatar: false })
-				unsubscribeMyInfo()
 			} catch (error) {
 				dispatch('notify', { type: 'error', text: error.message })
 				throw error
 			}
 		},
-		changeAvatar: ({ dispatch, commit, state }, payload) => {
-			const newMyInfo = JSON.parse(JSON.stringify(state.myInfo))
-			if (!state.myInfo.avatarList.includes(payload))
+		changeAvatar: ({ dispatch, commit, getters }, payload) => {
+			if (!getters.myInfo.avatarList.includes(payload))
 				return
-			newMyInfo.avatarSelected = payload
-			dispatch('saveMyInfo', newMyInfo)
+			getters.myInfo.avatarSelected = payload
+			dispatch('saveMyInfo', getters.myInfo)
 			commit('setUiMode', { selectAvatar: false })
 		},
 		submitChat: async ({ dispatch, commit, state }, payload) => {

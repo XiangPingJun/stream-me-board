@@ -1,6 +1,6 @@
 <template>
   <DialogBox overflowY="auto">
-    <div><UnderlineText>選擇您的角色： (已獲得{{myInfo.avatarList.length}}/{{totalAvatar}})</UnderlineText></div>          
+    <div><UnderlineText>選擇您的角色： (已獲得{{myInfo.avatarList.length}}/{{TOTAL_AVATAR}})</UnderlineText></div>          
     <Well>
 			<div class="grid">
         <AvatarPickerBtn v-for="avatar in avatarList" 
@@ -18,6 +18,7 @@ import Well from '../Well'
 import AvatarPickerBtn from './AvatarPickerBtn'
 import Button from '../Button'
 import DialogBox from '../DialogBox'
+import { TOTAL_AVATAR } from '../../common'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -25,12 +26,13 @@ export default {
   computed: {
     avatarList() {
       const list = [...this.myInfo.avatarList]
-      for (let i = 0; i < this.totalAvatar; i++)
+      for (let i = 0; i < TOTAL_AVATAR; i++)
         if (!this.myInfo.avatarList.includes(i))
           list.push(i)
       return list
     },
-    ...mapGetters(['myInfo', 'totalAvatar'])
+    TOTAL_AVATAR() { return TOTAL_AVATAR },
+    ...mapGetters(['myInfo'])
   }
 }
 </script>

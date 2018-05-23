@@ -40,10 +40,10 @@ export default {
 				if (this.$refs.invisible.getWidth() > 210)
 					return this.notify({ type: 'error', text: '暱稱太長了喲！' })
 				this.loading = true
-				this.login(text)
+				this.loginVisitor(text)
 			})
 		},
-		...mapActions(['login', 'notify'])
+		...mapActions(['loginVisitor', 'notify'])
 	},
 	beforeDestroy() {
 		this.unsubscribeAction()
@@ -52,5 +52,4 @@ export default {
 </script>
 
 <style scoped>
-
 </style>
