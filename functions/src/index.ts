@@ -12,7 +12,7 @@ export const schedule = functions.https.onRequest(async (request, response) => {
 	await firestore.collection('onlineUser').get().then(snap => {
 		const promises = []
 		snap.forEach(doc => {
-			if (new Date().getTime() - doc.data().touched.getTime() > 60000)
+			if (new Date().getTime() - doc.data().heartbeat.getTime() > 60000)
 				promises.push(doc.ref.delete())
 		})
 		return Promise.all(promises)

@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import { FINGERPRINT } from '../common'
 
 const TOTAL_THUMBNAIL = 100
 
@@ -26,7 +27,6 @@ export default new Vuex.Store({
 		anonymousAvatar: generateRandomAvatar(),
 		chatLines: [],
 		youtubePlayer: null,
-		fingerprint: null,
 		onlineUser: []
 	},
 	getters: {
@@ -57,7 +57,6 @@ export default new Vuex.Store({
 		},
 		anonymousAvatar: state => state.anonymousAvatar,
 		chatLines: state => state.chatLines,
-		fingerprint: state => state.fingerprint,
 		onlineUser: state => state.onlineUser,
 	},
 	mutations: {
@@ -74,7 +73,6 @@ export default new Vuex.Store({
 		setIsAdmin: (state, payload) => state.isAdmin = payload,
 		setYoutubePlayer: (state, payload) => state.youtubePlayer = payload,
 		generateAnonymousAvatar: (state, payload) => state.anonymousAvatar = generateRandomAvatar(),
-		setFingerprint: (state, payload) => state.fingerprint = payload,
 		setOnlineUser: (state, payload) => state.onlineUser = payload,
 	},
 	actions: {
@@ -124,22 +122,22 @@ export default new Vuex.Store({
 			}
 		},
 		touchUser: ({ getters }) => {
-			if (getters.myInfo)
+			if (getters.myInfo) {
 				firestore.collection('onlineUser').doc(getters.myInfo.name).set({
 					...getters.myInfo,
-					touched: firebase.firestore.FieldValue.serverTimestamp()
+					heartbeat: firebase.firestore.FieldValue.serverTimestamp()
 				})
-			else
-				firestore.collection('onlineUser').doc(getters.fingerprint).set({
+				firestore.collection('onlineUser').doc(FINGERPRINT).delete()
+			} else
+				firestore.collection('onlineUser').doc(FINGERPRINT).set({
 					avatarSelected: getters.anonymousAvatar,
-					touched: firebase.firestore.FieldValue.serverTimestamp()
+					heartbeat: firebase.firestore.FieldValue.serverTimestamp()
 				})
 		},
 		subscribeData: ({ state, commit, dispatch, getters }) => {
 			// Is me banned?
-			new Fingerprint2().get(result => commit('setFingerprint', result))
 			firestore.doc('system/ban').onSnapshot(doc => {
-				if (doc.data().fingerprint.find(hash => hash == getters.fingerprint)) {
+				if (doc.data().fingerprint.find(hash => hash == FINGERPRINT)) {
 					dispatch('logout')
 					dispatch('notify', { type: 'error', text: 'You got banned!' })
 				}

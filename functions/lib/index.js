@@ -19,7 +19,7 @@ exports.schedule = functions.https.onRequest((request, response) => __awaiter(th
     yield firestore.collection('onlineUser').get().then(snap => {
         const promises = [];
         snap.forEach(doc => {
-            if (new Date().getTime() - doc.data().touched.getTime() > 60000)
+            if (new Date().getTime() - doc.data().heartbeat.getTime() > 60000)
                 promises.push(doc.ref.delete());
         });
         console.log(promises.length);

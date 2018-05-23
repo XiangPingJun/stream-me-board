@@ -96,6 +96,15 @@ a {
   text-shadow: 0px 3px #5b6ee1, 3px 3px #86674d;
   cursor: pointer;
 }
+s {
+  text-decoration: none;
+  background-image: linear-gradient(
+    transparent 7px,
+    #cc1f1f 7px,
+    #cc1f1f 9px,
+    transparent 9px
+  );
+}
 ::-webkit-scrollbar-track {
   background-color: #aa8c6e;
 }
