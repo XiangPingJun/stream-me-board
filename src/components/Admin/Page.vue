@@ -37,9 +37,7 @@ export default {
   data() {
     return { name: '', password: '', sending: null }
   },
-  created() {
-    this.subscribeData()
-  },
+  created() { this.subscribeData() },
   methods: { ...mapActions(['subscribeData', 'loginAdmin', 'startStream', 'stopStream', 'saveVideoUrl', 'saveGameTitle', 'saveGameUrl', 'saveGameDescription']) },
   computed: { ...mapGetters(['stream', 'systemInfo', 'isAdmin']) },
   watch: {

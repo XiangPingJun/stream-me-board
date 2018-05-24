@@ -11,6 +11,8 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { setVideoPlayer } from '../../common'
+
 export default {
   props: ['width', 'height'],
   data() { return { loaded: false } },
@@ -42,10 +44,10 @@ export default {
           onReady: () => {
             player.playVideo()
             player.setPlaybackQuality('hd720')
-            //player.setPlaybackQuality(isMobileDevice() ? 'medium' : 'hd720')
           }
         }
       })
+      setVideoPlayer(player)
     }
   }
 }

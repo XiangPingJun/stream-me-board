@@ -4,10 +4,11 @@
 
 <script>
 export default {
-	props: ['index', 'large', 'whoAmI'],
+	props: ['index', 'large', 'whoAmI', 'preserved'],
 	computed: {
 		style() {
-			let sideLen, name, size, idx
+			let sideLen, size
+			const name = this.preserved ? 'preserved' : 'character'
 			if (this.large) {
 				sideLen = 32
 				size = 'large'
@@ -15,17 +16,10 @@ export default {
 				sideLen = 24
 				size = 'small'
 			}
-			if (this.index < 0) {
-				name = 'preserved'
-				idx = -1 * this.index + 1
-			} else {
-				name = 'character'
-				idx = this.index - 1
-			}
 			return {
 				'background-image': `url(static/${name}-${size}.png)`,
-				'background-position-x': -1 * sideLen * (idx % 10) + 'px',
-				'background-position-y': -1 * sideLen * Math.floor(idx / 10) + 'px',
+				'background-position-x': -1 * sideLen * (this.index % 10) + 'px',
+				'background-position-y': -1 * sideLen * Math.floor(this.index / 10) + 'px',
 				'width': sideLen + 'px',
 				'height': sideLen + 'px',
 				'filter': this.whoAmI ? 'brightness(0%)' : 'initial',

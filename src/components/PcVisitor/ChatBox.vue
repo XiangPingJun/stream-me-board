@@ -1,7 +1,7 @@
 <template>
 	<DialogBox overflowY="auto" ref="chatBox">
     <div class="chat-list">
-      <ChatLine v-for="(line, key) in chatLines" :key="key" :data="line" class="animated flipInX" />
+      <ChatLine v-for="(line, key) in chatLines" :key="key" :user="allUsers[line.uid]" :text="line.text" class="animated flipInX" />
     </div>
     <div class="mask top"></div>
     <div class="mask bottom"></div>
@@ -27,14 +27,14 @@ export default {
     }
   },
   components: { ChatLine, InputBox, DialogBox, DarkButton },
-  computed: { ...mapGetters(['myInfo', 'chatLines']) },
+  computed: { ...mapGetters(['myInfo', 'chatLines', 'allUsers']) },
   mounted() {
     this.scrollContent = this.$refs.chatBox.$refs.content
     this.scrollToButton()
   },
   methods: {
     onInputFocus() {
-      if (null !== this.myInfo)
+      if (this.myInfo.name)
         return
       this.promptLogin()
       this.$refs.input.unfocus()
@@ -48,8 +48,7 @@ export default {
     },
     submit(text) {
       this.submitChat({
-        name: this.myInfo.name,
-        avatar: this.myInfo.avatarSelected,
+        uid: this.myInfo.uid,
         text: text,
       })
       this.$refs.input.text = ''
