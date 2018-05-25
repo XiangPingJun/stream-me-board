@@ -1,12 +1,28 @@
 <template>
-  <div class="cbbl" :class="{ 'cbbl--right': undefined != left, 'cbbl--up': undefined != top }"
-    :style="{ position: 'fixed', top: top, bottom: bottom, left: left, right: right }"
+  <div ref="bubble" class="cbbl" :class="{ 'cbbl--right': x > getWindowWidth/2, 'cbbl--up': y>getWindowHeight/2 }"
+    :style="{ position: 'fixed', left: x+'px', top: y+'px' }"
   ><slot /></div>
 </template>
 
 <script>
+import { getWindowWidth, getWindowHeight } from '../../common'
+
 export default {
-  props: ['top', 'bottom', 'left', 'right']
+  props: ['x', 'y'],
+  computed: {
+    hasPosition() { return undefined != this.x || undefined != this.y },
+    width() { return this.$refs.bubble.clientWidth },
+    height() { return this.$refs.bubble.clientHeight },
+    centerX() {
+      const box = this.$refs.bubble.getBoundingClientRect()
+      return box.x + box.width / 2
+    },
+    centerY() {
+      const box = this.$refs.bubble.getBoundingClientRect()
+      return box.y + box.height / 2
+    },
+    getWindowWidth, getWindowHeight
+  }
 }
 </script>
 

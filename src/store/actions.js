@@ -198,6 +198,7 @@ export default {
 				fingerprint: FINGERPRINT,
 				videoTime: Math.floor(time / 3600) + ':' + Math.floor(time % 3600 / 60) + ':' + Math.floor(time % 3600 % 60),
 				id: shortid.generate(),
+				time: firebase.firestore.FieldValue.serverTimestamp()
 			})
 		} catch (error) {
 			dispatch('notify', { type: 'error', text: error.message })
