@@ -17,7 +17,7 @@ import Vue from 'vue';
 const CHAT_TIMEOUT = 5000
 
 export default {
-	data() { return { chats: [], rmObsoleteHandler: null, a: 0 } },
+	data() { return { chats: [], rmObsoleteHandler: null } },
 	components: { ComicBubble },
 	computed: { ...mapGetters(['chatLines']) },
 	watch: {
@@ -81,7 +81,6 @@ export default {
 				chat.centerX = farestCandidate.centerX
 				chat.centerY = farestCandidate.centerY
 			})
-			this.a = Math.random()
 		}
 	},
 	mounted() {

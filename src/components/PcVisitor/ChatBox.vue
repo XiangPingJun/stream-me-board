@@ -7,7 +7,7 @@
     <div class="mask bottom"></div>
     <InputBox placeholder="說點什麼吧:↵" ref="input" @focus="onInputFocus" @submit="submit" class="input" maxlength="140" />
     <div v-if="showScrollToBottom" class="scroll-to-bottom">
-      <DarkButton v-tooltip.left="{content:'查看新留言', offset:3}" @click="scrollToButton"><i class="fas fa-chevron-down" /></DarkButton>
+      <DarkButton v-tooltip.left="{content:'查看新留言', offset:3}" @click="scrollToBottom"><i class="fas fa-chevron-down" /></DarkButton>
     </div>
 	</DialogBox>
 </template>
@@ -30,7 +30,7 @@ export default {
   computed: { ...mapGetters(['myInfo', 'chatLines', 'allUsers']) },
   mounted() {
     this.scrollContent = this.$refs.chatBox.$refs.content
-    this.scrollToButton()
+    this.scrollToBottom()
   },
   methods: {
     onInputFocus() {
@@ -42,7 +42,7 @@ export default {
     isScrollBottom() {
       return this.scrollContent.offsetHeight + this.scrollContent.scrollTop == this.scrollContent.scrollHeight
     },
-    scrollToButton() {
+    scrollToBottom() {
       this.scrollContent.scrollTo(0, this.scrollContent.scrollHeight)
       this.showScrollToBottom = false
     },
@@ -52,14 +52,14 @@ export default {
         text: text,
       })
       this.$refs.input.text = ''
-      this.scrollToButton()
+      this.scrollToBottom()
     },
     ...mapActions(['promptLogin', 'submitChat'])
   },
   watch: {
     chatLines(newVal, oldVal) {
       if (this.isScrollBottom())
-        setTimeout(() => this.scrollToButton())
+        setTimeout(() => this.scrollToBottom())
       else
         this.showScrollToBottom = !this.isScrollBottom()
     }
