@@ -15,17 +15,15 @@ export default {
   created() { this.subscribeData() },
   methods: { ...mapActions(['subscribeData']) },
   watch: {
-    chatLines() {
-      setTimeout(() => {
-        console.log(document.body.scrollHeight, document.body.scrollTo)
-        document.body.scrollTo(document.body.scrollHeight, document.body.scrollHeight)
-      }, 1000)
-    }
+    chatLines() { setTimeout(() => window.scrollTo(0, document.body.scrollHeight)) }
   }
 }
 </script>
 
 <style>
+.line {
+  margin-left: 20px;
+}
 .avatar {
   transform: scale(3, 3);
   margin-right: 35px;
