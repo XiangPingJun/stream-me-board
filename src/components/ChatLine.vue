@@ -27,6 +27,7 @@ export default {
 <style scoped>
 .line {
   margin-top: 5px;
+  word-break: break-all;
 }
 .avatar {
   vertical-align: middle;
