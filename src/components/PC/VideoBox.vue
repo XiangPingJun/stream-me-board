@@ -29,6 +29,7 @@ export default {
     videoUrl(val, oldVal) {
       if (null === val)
         return
+      this.loaded = false
       this.$refs.iframe.onload = () => {
         this.loaded = true
         this.setupYoutube()

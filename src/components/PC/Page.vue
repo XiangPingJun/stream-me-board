@@ -15,6 +15,7 @@
         <Playground v-if="showPlayground" class="middle animated flipInY" style="max-height:300px;" />
         <Quiz v-if="showQuiz" class="middle animated flipInY" />
         <AvatarPicker v-if="showAvatarPicker" class="middle animated flipInY" />
+        <HistoryVideo v-if="showHistoryVideo" class="middle animated flipInY" />
 
         <!-- bottom section -->
         <ChatBox v-if="uiMode.chat" class="bottom animated flipInX" />
@@ -38,6 +39,7 @@ import Arrow from './Arrow'
 import AvatarPicker from './AvatarPicker'
 import Playground from './Playground'
 import Notify from './Notify'
+import HistoryVideo from './HistoryVideo'
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
@@ -48,7 +50,7 @@ export default {
       unsubscribeAction: () => { },
     }
   },
-  components: { DialogBox, VideoBox, NightSkyBackground, ChatBox, Quiz, MyInfo, AnonymousInfo, Login, Arrow, AvatarPicker, Notify, Playground },
+  components: { DialogBox, VideoBox, NightSkyBackground, ChatBox, Quiz, MyInfo, AnonymousInfo, Login, Arrow, AvatarPicker, Notify, Playground, HistoryVideo },
   created() { this.subscribeData() },
   mounted() {
     const width = document.documentElement.clientWidth
@@ -83,6 +85,7 @@ export default {
     showQuiz() { return !this.uiMode.selectAvatar && this.uiMode.quiz },
     showPlayground() { return this.stream.streaming && !this.uiMode.quiz && !this.uiMode.selectAvatar && this.uiMode.playground },
     showAvatarPicker() { return this.uiMode.selectAvatar },
+    showHistoryVideo() { return !this.stream.streaming },
     ...mapGetters(['uiMode', 'videoUrl', 'stream', 'myInfo'])
   },
   methods: { ...mapActions(['subscribeData']) }

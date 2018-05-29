@@ -133,6 +133,8 @@ export default {
 				throw error
 			}
 		})
+		// history video
+		fetch('https://www.googleapis.com/youtube/v3/search?key=AIzaSyBCYPReX74lujmX9tg8AiM-OFGqmKYMZkU&channelId=UCLeQT6hvBgnq_-aKKlcgj1Q&part=snippet,id&order=date&maxResults=50').then(res => res.json()).then(data => commit('setHistoryVideo', data.items.filter(item => item.id.videoId)))
 	},
 	loginAdmin: async ({ getters, dispatch }, payload) => {
 		try {
@@ -275,7 +277,6 @@ export default {
 			arr = /\/\/www\.youtube\.com\/embed\/([^?]+)/.exec(url)
 			if (arr)
 				return convertToYoutube(arr[1])
-			function convertToYoutube(id) { return '//www.youtube.com/embed/' + id + '?enablejsapi=1' }
 		}
 	},
 	startStream: async ({ dispatch, state }, payload) => {
@@ -306,4 +307,9 @@ export default {
 			throw error
 		}
 	},
+	playHistory: ({ commit }, payload) => {
+		commit('setSelectedVideoUrl', convertToYoutube(payload))
+	}
 }
+
+function convertToYoutube(id) { return '//www.youtube.com/embed/' + id + '?enablejsapi=1' }

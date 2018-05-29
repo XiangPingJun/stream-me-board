@@ -21,7 +21,8 @@ export default new Vuex.Store({
 		},
 		anonymousAvatar: generateRandomAvatar(),
 		chatLines: [],
-		onlineUser: []
+		onlineUser: [],
+		historyVideo: []
 	},
 	getters: {
 		allUsers: state => state.allUsers,
@@ -44,6 +45,7 @@ export default new Vuex.Store({
 		anonymousAvatar: state => state.anonymousAvatar,
 		chatLines: state => state.chatLines,
 		onlineUser: state => state.onlineUser,
+		historyVideo: state => state.historyVideo,
 	},
 	mutations: {
 		setStream: (state, payload) => state.stream = payload,
@@ -60,8 +62,8 @@ export default new Vuex.Store({
 		setIsAdmin: (state, payload) => state.isAdmin = payload,
 		generateAnonymousAvatar: (state, payload) => state.anonymousAvatar = generateRandomAvatar(),
 		setOnlineUser: (state, payload) => state.onlineUser = payload,
+		setHistoryVideo: (state, payload) => state.historyVideo = payload,
+		setSelectedVideoUrl: (state, payload) => state.selectedVideoUrl = payload,
 	},
 	actions: actions
 })
-
-//fetch('https://www.googleapis.com/youtube/v3/search?key=AIzaSyBCYPReX74lujmX9tg8AiM-OFGqmKYMZkU&channelId=UCLeQT6hvBgnq_-aKKlcgj1Q&part=snippet,id&order=date&maxResults=50').then(res => console.log(res))
