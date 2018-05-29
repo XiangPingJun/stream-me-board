@@ -38,10 +38,10 @@ module.exports = {
 
   build: {
     // Template for index.html
-    pcVisitor: path.resolve(__dirname, '../dist/pcVisitor.html'),
-    mobileVisitor: path.resolve(__dirname, '../dist/mobileVisitor.html'),
+    pc: path.resolve(__dirname, '../dist/pc.html'),
+    mobile: path.resolve(__dirname, '../dist/mobile.html'),
     admin: path.resolve(__dirname, '../dist/admin.html'),
-    chatRoom: path.resolve(__dirname, '../dist/chatRoom.html'),
+    chat: path.resolve(__dirname, '../dist/chat.html'),
     streamOverlay: path.resolve(__dirname, '../dist/streamOverlay.html'),
 
     // Paths

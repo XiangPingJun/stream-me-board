@@ -13,10 +13,10 @@ function resolve(dir) {
 module.exports = {
   context: path.resolve(__dirname, '../'),
   entry: {
-    pcVisitor: './src/pcVisitor.js',
-    mobileVisitor: './src/mobileVisitor.js',
+    pc: './src/pc.js',
+    mobile: './src/mobile.js',
     admin: './src/admin.js',
-    chatRoom: './src/chatRoom.js',
+    chat: './src/chat.js',
     streamOverlay: './src/streamOverlay.js',
   },
   output: {

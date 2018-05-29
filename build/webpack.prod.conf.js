@@ -63,8 +63,8 @@ const webpackConfig = merge(baseWebpackConfig, {
     // you can customize output by editing /index.html
     // see https://github.com/ampedandwired/html-webpack-plugin
     new HtmlWebpackPlugin({
-      filename: config.build.pcVisitor,
-      template: 'pcVisitor.html',
+      filename: config.build.pc,
+      template: 'pc.html',
       inject: true,
       minify: {
         removeComments: true,
@@ -72,18 +72,18 @@ const webpackConfig = merge(baseWebpackConfig, {
         removeAttributeQuotes: true
       },
       chunksSortMode: 'dependency',
-      chunks: ['manifest', 'vendor', 'pcVisitor',]
+      chunks: ['manifest', 'vendor', 'pc',]
     }),
     new HtmlWebpackPlugin({
-      filename: config.build.mobileVisitor,
-      template: 'mobileVisitor.html',
+      filename: config.build.mobile,
+      template: 'mobile.html',
       inject: true,
       minify: {
         removeComments: true,
         collapseWhitespace: true,
         removeAttributeQuotes: true
       },
-      chunks: ['manifest', 'vendor', 'app'],
+      chunks: ['manifest', 'vendor', 'mobile'],
       chunksSortMode: 'dependency'
     }),
     new HtmlWebpackPlugin({
@@ -95,19 +95,19 @@ const webpackConfig = merge(baseWebpackConfig, {
         collapseWhitespace: true,
         removeAttributeQuotes: true
       },
-      chunks: ['manifest', 'vendor', 'app'],
+      chunks: ['manifest', 'vendor', 'admin'],
       chunksSortMode: 'dependency'
     }),
     new HtmlWebpackPlugin({
-      filename: config.build.chatRoom,
-      template: 'chatRoom.html',
+      filename: config.build.chat,
+      template: 'chat.html',
       inject: true,
       minify: {
         removeComments: true,
         collapseWhitespace: true,
         removeAttributeQuotes: true
       },
-      chunks: ['manifest', 'vendor', 'app'],
+      chunks: ['manifest', 'vendor', 'chat'],
       chunksSortMode: 'dependency'
     }),
     new HtmlWebpackPlugin({
@@ -119,7 +119,7 @@ const webpackConfig = merge(baseWebpackConfig, {
         collapseWhitespace: true,
         removeAttributeQuotes: true
       },
-      chunks: ['manifest', 'vendor', 'app'],
+      chunks: ['manifest', 'vendor', 'streamOverlay'],
       chunksSortMode: 'dependency'
     }),
     // keep module.id stable when vendor modules does not change

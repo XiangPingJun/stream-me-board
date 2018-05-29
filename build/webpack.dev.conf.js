@@ -53,16 +53,16 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     new webpack.NoEmitOnErrorsPlugin(),
     // https://github.com/ampedandwired/html-webpack-plugin
     new HtmlWebpackPlugin({
-      filename: 'pcVisitor.html',
-      template: 'pcVisitor.html',
+      filename: 'pc.html',
+      template: 'pc.html',
       inject: true,
-      chunks: ['pcVisitor']
+      chunks: ['pc']
     }),
     new HtmlWebpackPlugin({
-      filename: 'mobileVisitor.html',
-      template: 'mobileVisitor.html',
+      filename: 'mobile.html',
+      template: 'mobile.html',
       inject: true,
-      chunks: ['mobileVisitor']
+      chunks: ['mobile']
     }),
     new HtmlWebpackPlugin({
       filename: 'admin.html',
@@ -71,10 +71,10 @@ const devWebpackConfig = merge(baseWebpackConfig, {
       chunks: ['admin']
     }),
     new HtmlWebpackPlugin({
-      filename: 'chatRoom.html',
-      template: 'chatRoom.html',
+      filename: 'chat.html',
+      template: 'chat.html',
       inject: true,
-      chunks: ['chatRoom']
+      chunks: ['chat']
     }),
     new HtmlWebpackPlugin({
       filename: 'streamOverlay.html',
