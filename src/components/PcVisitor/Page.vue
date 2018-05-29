@@ -76,12 +76,6 @@ export default {
   beforeDestroy() {
     this.unsubscribeAction()
   },
-  watch: {
-    systemInfo(val, oldVal) {
-      if (null !== val && null !== oldVal && val.version != oldVal.version)
-        window.location.reload(true)
-    }
-  },
   computed: {
     showMyInfo() { return this.myInfo.name && 'MY_INFO' == this.uiMode.account },
     showAnonymous() { return 'ANONYMOUS' == this.uiMode.account },
@@ -89,7 +83,7 @@ export default {
     showQuiz() { return !this.uiMode.selectAvatar && this.uiMode.quiz },
     showPlayground() { return this.stream.streaming && !this.uiMode.quiz && !this.uiMode.selectAvatar && this.uiMode.playground },
     showAvatarPicker() { return this.uiMode.selectAvatar },
-    ...mapGetters(['systemInfo', 'uiMode', 'videoUrl', 'stream', 'myInfo'])
+    ...mapGetters(['uiMode', 'videoUrl', 'stream', 'myInfo'])
   },
   methods: { ...mapActions(['subscribeData']) }
 }

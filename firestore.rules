@@ -1,11 +1,15 @@
 service cloud.firestore {
   match /databases/{database}/documents {
   	match /adminUser/{anything=**} {
-    	allow read: if exists(/databases/$(database)/documents/adminUser/$(request.auth.uid));
+    	allow read: if isAdmin();
     }
   	match /system/{anything=**} {
       allow read;
-      allow write: if exists(/databases/$(database)/documents/adminUser/$(request.auth.uid));
+      allow write: if isAdmin();
+    }
+    match /onlineUser/{anything=**} {
+      allow read;
+      allow write;
     }
     match /user/{anything=**} {
       allow read, write;

@@ -39,13 +39,7 @@ export default {
   },
   created() { this.subscribeData() },
   methods: { ...mapActions(['subscribeData', 'loginAdmin', 'startStream', 'stopStream', 'saveVideoUrl', 'saveGameTitle', 'saveGameUrl', 'saveGameDescription']) },
-  computed: { ...mapGetters(['stream', 'systemInfo', 'isAdmin']) },
-  watch: {
-    systemInfo(val, oldVal) {
-      if (null !== val && null !== oldVal && val.version != oldVal.version)
-        window.location.reload(true)
-    }
-  },
+  computed: { ...mapGetters(['stream', 'isAdmin']) },
   mounted() {
     this.unsubscribeAction = this.$store.subscribeAction((action, state) => {
       switch (action.type) {

@@ -99,7 +99,13 @@ export default {
 			commit('setStream', stream)
 			dispatch('checkTrophy')
 		})
-		firestore.doc("system/info").onSnapshot(doc => commit('setSystemInfo', doc.data()))
+		firestore.doc("system/info").onSnapshot(doc => {
+			if (doc.data().emergency)
+				location.replace('//live-2-0-131ee.firebaseapp.com/watch.html')
+			if (null != doc.data().version && getters.systemInfo && getters.systemInfo.version != doc.data().version)
+				window.location.reload(true)
+			commit('setSystemInfo', doc.data())
+		})
 		// my login info
 		firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
 		firebase.auth().onAuthStateChanged(async user => {
