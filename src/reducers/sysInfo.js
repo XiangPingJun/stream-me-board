@@ -6,6 +6,8 @@ export default function sysInfo(state = {}, action) {
         location.reload()
       }
       localStorage.version = action.payload.info.version
+      if (!action.payload.info.emergency) 
+        location.replace('https://xiang-ping-jun.firebaseapp.com/')
       // if (state.streamId && state.streamId != action.payload.info.streamId)
       //   location.reload()
       return action.payload.info
