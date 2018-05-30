@@ -7,8 +7,8 @@
 </template>
 
 <script>
-import Avatar from './Avatar'
-import { AVATAR_COLORS, PRESERVED_AVATAR_COLORS } from '../common'
+import Avatar from '../Avatar'
+import { AVATAR_COLORS, PRESERVED_AVATAR_COLORS } from '../../common'
 
 export default {
   props: ['text', 'user'],
@@ -25,15 +25,20 @@ export default {
 </script>
 
 <style scoped>
+* {
+  font-size: 50px;
+  color: white;
+}
 .line {
-  margin-top: 5px;
   word-break: break-all;
+  margin-top: 15px;
 }
 .avatar {
+  transform: scale(3, 3);
   vertical-align: middle;
 }
 .name {
-  margin-left: -3px;
+  margin-left: 13px;
   border-radius: 5px;
   color: white;
   padding: 5px;

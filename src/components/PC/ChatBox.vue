@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import ChatLine from '../ChatLine'
+import ChatLine from './ChatLine'
 import InputBox from '../InputBox'
 import DialogBox from '../DialogBox'
 import DarkButton from '../DarkButton'

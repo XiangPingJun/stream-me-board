@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import ChatLine from '../ChatLine'
+import ChatLine from './ChatLine'
 import MicWarningBar from './MicWarningBar'
 import { mapGetters, mapActions } from 'vuex'
 import { setTimeout } from 'timers';
@@ -21,18 +21,3 @@ export default {
   }
 }
 </script>
-
-<style>
-.line {
-  margin-left: 20px;
-}
-.avatar {
-  transform: scale(3, 3);
-  margin-right: 35px;
-}
-span {
-  font-size: 50px;
-  margin-top: 50px;
-  color: white;
-}
-</style>
