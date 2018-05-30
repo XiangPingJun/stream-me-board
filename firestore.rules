@@ -17,9 +17,10 @@ service cloud.firestore {
     match /allChat/{anything=**} {
       allow read, write;
     }
+    
+    function isAdmin() { 
+      return exists(/databases/$(database)/documents/adminUser/$(request.auth.uid))
+    }
   }
 }
 
-function isAdmin() { 
-	return exists(/databases/$(database)/documents/adminUser/$(request.auth.uid))
-}

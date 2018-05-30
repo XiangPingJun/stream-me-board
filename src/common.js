@@ -7,7 +7,7 @@ export const AVATAR_COLORS = [
 ]
 export const TOTAL_AVATAR = AVATAR_COLORS.length
 export const PRESERVED_AVATAR_COLORS = [
-	'B1F946'
+	'6ACAAD'
 ]
 export let FINGERPRINT = (new Fingerprint2()).getSync().fprint
 let videoPlayer

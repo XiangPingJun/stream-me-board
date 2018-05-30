@@ -85,7 +85,7 @@ export default {
     0px 8px #2a2e30, 4px 0px #927964, -4px -4px #264e4a, -4px 4px #264e4a,
     4px -4px #57332d, 4px 4px #57332d;
   box-sizing: border-box;
-  line-height: 130%;
+  line-height: 20px;
   transition-property: width, height;
   transition-duration: 0.25s;
 }

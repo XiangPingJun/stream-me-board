@@ -17,17 +17,6 @@
         <UserAvatar v-for="(user, key) in onlineUser" :user="user" :key="key" />
       </div>
     </Well>
-    <div class="padding-line" />
-
-    <div><UnderlineText>追蹤我們的直播</UnderlineText></div>
-    <div class="subtitle"><i class="fas fa-bookmark" /> 追蹤LINE官方帳號</div>
-    <i>搜尋用戶ID『@sgs5099b』追蹤，或掃描條碼加入 "新注音新聞"</i>
-    <img src="static/line-qr.png" />
-    <div class="subtitle"><i class="fas fa-bookmark" /> 追蹤臉書粉絲團</div>
-    <i>請至 <a href="https://www.facebook.com/255223767942122/" target="_blank">新注音新聞粉絲團</a> 按讚追蹤，擔心訊息被其他貼文洗掉的朋友可設定搶先看喲！</i>
-    <div class="subtitle"><i class="fas fa-bookmark" /> 追蹤祥平君的噗浪</div>
-    <i>也歡迎來 <a href="https://www.plurk.com/shouhei" target="_blank">祥平君的噗浪</a>～ヽ( ﾟ▽ﾟ)ノ</i>
-    
   </DialogBox>
 </template>
 

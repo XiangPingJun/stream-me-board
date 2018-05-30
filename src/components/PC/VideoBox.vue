@@ -1,11 +1,11 @@
 <template>
-  <div :style="videoSize" style="display:flex; justify-content:center;">
+  <div style="display:flex; justify-content:center;" :style="{width:videoSize.width}">
     <div class="video-box animated" :class="{flipInX: loaded}" v-show="loaded && videoUrl">
       <div class="video-container">
         <iframe ref="iframe" frameBorder="0" allowFullScreen="true" :src="videoUrl" :style="videoSize" />
       </div>
     </div>
-    <img src="static/thank.png" class="animated flipInY" v-if="null===videoUrl && false===stream.streaming" :style="{height: videoSize.height}" />
+    <img src="static/thank.png" class="animated flipInY" v-if="null===videoUrl && false===stream.streaming" style="height: 65vh" />
   </div>
 </template>
 

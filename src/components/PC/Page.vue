@@ -5,17 +5,17 @@
       <VideoBox ref="video" :height="videoHeight" :width="videoWidth" />
       <div class="right-side">
         <!-- top section -->
-        <MyInfo v-if="showMyInfo" class="top animated flipInX" />
-        <AnonymousInfo v-if="showAnonymous" class="top animated flipInX" />
-        <Login v-if="showLogin" class="top animated flipInX" />
-        <!-- login arrow -->
-        <Arrow ref="arrow" v-if="showLogin" class="login-arrow" />
+        <MyInfo v-if="'MY_INFO'==topDialog" class="top animated flipInX" />
+        <AnonymousInfo v-if="'ANONYMOUS'==topDialog" class="top animated flipInX" />
+        <Login v-if="'LOGIN'==topDialog" class="top animated flipInX" />
+        <Arrow ref="loginArrow" v-if="'LOGIN'==topDialog" class="login-arrow" />
 
         <!-- middle section -->
-        <Playground v-if="showPlayground" class="middle animated flipInY" style="max-height:300px;" />
-        <Quiz v-if="showQuiz" class="middle animated flipInY" />
-        <AvatarPicker v-if="showAvatarPicker" class="middle animated flipInY" />
-        <HistoryVideo v-if="showHistoryVideo" class="middle animated flipInY" />
+        <Quiz v-if="'QUIZ'==middleDialog" class="middle animated flipInY" />
+        <Playground v-if="'PLAYGROUND'==middleDialog" class="middle animated flipInY" />
+        <AvatarPicker v-if="'AVATAR_PICKER'==middleDialog" class="middle animated flipInY" />
+        <FollowUs v-if="'FOLLOW_US'==middleDialog" class="middle animated flipInY" />
+        <HistoryVideo v-if="'HISTORY_VIDEO'==middleDialog" class="middle animated flipInY" />
 
         <!-- bottom section -->
         <ChatBox v-if="uiMode.chat" class="bottom animated flipInX" />
@@ -40,6 +40,7 @@ import AvatarPicker from './AvatarPicker'
 import Playground from './Playground'
 import Notify from './Notify'
 import HistoryVideo from './HistoryVideo'
+import FollowUs from './FollowUs'
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
@@ -50,12 +51,12 @@ export default {
       unsubscribeAction: () => { },
     }
   },
-  components: { DialogBox, VideoBox, NightSkyBackground, ChatBox, Quiz, MyInfo, AnonymousInfo, Login, Arrow, AvatarPicker, Notify, Playground, HistoryVideo },
+  components: { DialogBox, VideoBox, NightSkyBackground, ChatBox, Quiz, MyInfo, AnonymousInfo, Login, Arrow, AvatarPicker, Notify, Playground, HistoryVideo, FollowUs },
   created() { this.subscribeData() },
   mounted() {
     const width = document.documentElement.clientWidth
     const height = document.documentElement.clientHeight
-    this.videoWidth = width - 420
+    this.videoWidth = width - 390
     setTimeout(() => {
       if (this.$refs.video.$refs.iframe.clientHeight > document.documentElement.clientHeight) {
         this.videoWidth = undefined
@@ -65,7 +66,7 @@ export default {
     this.unsubscribeAction = this.$store.subscribeAction((action, state) => {
       switch (action.type) {
         case 'promptLogin':
-          return setTimeout(() => this.$refs.arrow.animate())
+          return setTimeout(() => this.$refs.loginArrow.animate())
         case 'notify':
           return this.$notify({
             group: 'notify',
@@ -79,14 +80,27 @@ export default {
     this.unsubscribeAction()
   },
   computed: {
-    showMyInfo() { return this.myInfo.name && 'MY_INFO' == this.uiMode.account },
-    showAnonymous() { return 'ANONYMOUS' == this.uiMode.account },
-    showLogin() { return 'LOGIN' == this.uiMode.account },
-    showQuiz() { return !this.uiMode.selectAvatar && this.uiMode.quiz },
-    showPlayground() { return this.stream.streaming && !this.uiMode.quiz && !this.uiMode.selectAvatar && this.uiMode.playground },
-    showAvatarPicker() { return this.uiMode.selectAvatar },
-    showHistoryVideo() { return !this.stream.streaming },
-    ...mapGetters(['uiMode', 'videoUrl', 'stream', 'myInfo'])
+    topDialog() {
+      if (this.myInfo.name && 'MY_INFO' == this.uiMode.account)
+        return 'MY_INFO'
+      else if ('LOGIN' == this.uiMode.account)
+        return 'LOGIN'
+      else if ('ANONYMOUS' == this.uiMode.account)
+        return 'ANONYMOUS'
+    },
+    middleDialog() {
+      if (this.uiMode.quiz)
+        return 'QUIZ'
+      else if (this.uiMode.selectAvatar)
+        return 'AVATAR_PICKER'
+      else if (this.uiMode.followUs)
+        return 'FOLLOW_US'
+      else if (false == this.stream.streaming && this.historyVideo)
+        return 'HISTORY_VIDEO'
+      else if (this.stream.streaming && this.uiMode.playground)
+        return 'PLAYGROUND'
+    },
+    ...mapGetters(['uiMode', 'videoUrl', 'stream', 'myInfo', 'historyVideo'])
   },
   methods: { ...mapActions(['subscribeData']) }
 }

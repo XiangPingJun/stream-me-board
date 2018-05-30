@@ -117,6 +117,7 @@ export default {
 						await firestore.collection('adminUser').get()
 						commit('setIsAdmin', true)
 					} catch (error) {
+						console.log(error.code)
 						if ("permission-denied" == error.code)
 							commit('setIsAdmin', false)
 						else
