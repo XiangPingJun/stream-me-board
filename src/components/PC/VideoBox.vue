@@ -5,7 +5,7 @@
         <iframe ref="iframe" frameBorder="0" allowFullScreen="true" :src="videoUrl" :style="videoSize" />
       </div>
     </div>
-    <img src="static/thank.png" class="animated flipInY" v-if="null===videoUrl && false===stream.streaming" style="height: 65vh" />
+    <img src="static/thank.png" class="animated flipInY" v-if="null===videoUrl && false===stream.streaming" style="height: 80vh" />
   </div>
 </template>
 

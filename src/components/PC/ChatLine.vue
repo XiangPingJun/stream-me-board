@@ -26,7 +26,7 @@ export default {
 
 <style scoped>
 .line {
-  margin-top: 5px;
+  margin-top: 2px;
   word-break: break-all;
 }
 .name {
