@@ -5,15 +5,15 @@ firestore.settings({ timestampsInSnapshots: true })
 let unsubscribeChat = () => { }
 
 export default {
-	notify: ({ }, payload) => { },
-	saveMyInfo: ({ state, dispatch, commit }, payload) => {
+	notify({ }, payload) { },
+	saveMyInfo({ state, dispatch, commit }, payload) {
 		firestore.collection('user').doc(state.myUid).set(payload)
 			.catch(error => {
 				dispatch('notify', { type: 'error', text: error.message })
 				throw error
 			})
 	},
-	addExp: ({ getters, dispatch }, payload) => {
+	addExp({ getters, dispatch }, payload) {
 		if (payload > 100)
 			dispatch('notify', { type: 'error', text: `unsupport addExp ${payload}` })
 		getters.myInfo.exp += payload
@@ -30,7 +30,7 @@ export default {
 		}
 		dispatch('saveMyInfo', getters.myInfo)
 	},
-	checkTrophy: ({ getters, dispatch }) => {
+	checkTrophy({ getters, dispatch }) {
 		if (!getters.myInfo.name)
 			return
 		if (getters.stream.streaming && !getters.myInfo.viewedStream.includes(getters.stream.time)) {
@@ -46,7 +46,7 @@ export default {
 			dispatch('notify', { data: { symbol: 'trophy' }, text: msg })
 		}
 	},
-	sendHeartbeat: ({ state, getters }) => {
+	sendHeartbeat({ state, getters }) {
 		if (state.myUid) {
 			firestore.collection('onlineUser').doc(state.myUid).set({
 				uid: state.myUid,
@@ -60,7 +60,7 @@ export default {
 			})
 		}
 	},
-	subscribeData: ({ state, commit, dispatch, getters }) => {
+	subscribeData({ state, commit, dispatch, getters }) {
 		// Is me banned?
 		firestore.doc('system/ban').onSnapshot(doc => {
 			if (doc.data().fingerprint.find(hash => hash == FINGERPRINT)) {
@@ -140,7 +140,7 @@ export default {
 		// font loaded
 		document.fonts.ready.then(() => commit('setFontLoaded', true));
 	},
-	loginAdmin: async ({ getters, dispatch }, payload) => {
+	async loginAdmin({ getters, dispatch }, payload) {
 		try {
 			const me = Object.values(getters.allUsers).find(user => user.name == payload.name)
 			await firebase.auth().signInWithEmailAndPassword(me.email, payload.password)
@@ -149,7 +149,7 @@ export default {
 			throw error
 		}
 	},
-	loginVisitor: async ({ dispatch, getters }, payload) => {
+	async loginVisitor({ dispatch, getters }, payload) {
 		const name = payload
 		try {
 			const me = Object.values(getters.allUsers).find(user => user.name == name)
@@ -182,7 +182,7 @@ export default {
 			}
 		}
 	},
-	logout: async ({ state, dispatch, commit }) => {
+	async logout({ state, dispatch, commit }) {
 		try {
 			commit('generateAnonymousAvatar')
 			await firestore.collection('onlineUser').doc(state.myUid).delete()
@@ -193,14 +193,14 @@ export default {
 			throw error
 		}
 	},
-	changeAvatar: ({ dispatch, commit, getters }, payload) => {
+	changeAvatar({ dispatch, commit, getters }, payload) {
 		if (!getters.myInfo.avatarList.includes(payload))
 			return
 		getters.myInfo.avatarSelected = payload
 		dispatch('saveMyInfo', getters.myInfo)
 		commit('setUiMode', { selectAvatar: false })
 	},
-	submitChat: async ({ dispatch, commit, getters }, payload) => {
+	async submitChat({ dispatch, commit, getters }, payload) {
 		try {
 			let index = (parseInt('zzz', 36) - getters.chatLines.length).toString(36)
 			index += payload.text.substr(0, 10)
@@ -217,14 +217,14 @@ export default {
 			throw error
 		}
 	},
-	promptLogin: ({ commit, dispatch }) => {
+	promptLogin({ commit, dispatch }) {
 		commit('setUiMode', { account: 'LOGIN' })
 		dispatch('notify', { type: 'warn', text: '要先輸入暱稱才能繼續喲！', data: { symbol: 'exclamation-triangle' } })
 	},
-	promptSelectAvatar: ({ commit }) => {
+	promptSelectAvatar({ commit }) {
 		commit('setUiMode', { selectAvatar: true })
 	},
-	saveGameTitle: async ({ dispatch, state }, payload) => {
+	async saveGameTitle({ dispatch, state }, payload) {
 		try {
 			await firestore.doc('system/stream').set({
 				...state.stream,
@@ -236,7 +236,7 @@ export default {
 			throw error
 		}
 	},
-	saveGameUrl: async ({ dispatch, state }, payload) => {
+	async saveGameUrl({ dispatch, state }, payload) {
 		try {
 			await firestore.doc('system/stream').set({
 				...state.stream,
@@ -248,7 +248,7 @@ export default {
 			throw error
 		}
 	},
-	saveGameDescription: async ({ dispatch, state }, payload) => {
+	async saveGameDescription({ dispatch, state }, payload) {
 		try {
 			await firestore.doc('system/stream').set({
 				...state.stream,
@@ -260,7 +260,7 @@ export default {
 			throw error
 		}
 	},
-	saveVideoUrl: async ({ dispatch, state }, payload) => {
+	async saveVideoUrl({ dispatch, state }, payload) {
 		try {
 			await firestore.doc('system/stream').set({
 				...state.stream,
@@ -283,7 +283,7 @@ export default {
 				return convertToYoutube(arr[1])
 		}
 	},
-	startStream: async ({ dispatch, state }, payload) => {
+	async startStream({ dispatch, state }, payload) {
 		try {
 			await firestore.doc('system/stream').set({
 				...state.stream,
@@ -299,7 +299,7 @@ export default {
 			throw error
 		}
 	},
-	stopStream: async ({ dispatch, state }, payload) => {
+	async stopStream({ dispatch, state }, payload) {
 		try {
 			await firestore.doc('system/stream').set({
 				...state.stream,
@@ -311,17 +311,18 @@ export default {
 			throw error
 		}
 	},
-	startVote: async ({ dispatch }, payload) => {
+	async startVote({ dispatch }, payload) {
 		try {
 			await firestore.doc('system/vote').set({
-				time: firebase.firestore.FieldValue.serverTimestamp()
+				time: firebase.firestore.FieldValue.serverTimestamp(),
+				optionCount: payload,
 			})
 		} catch (error) {
 			dispatch('notify', { type: 'error', text: error.message })
 			throw error
 		}
 	},
-	playHistory: ({ commit }, payload) => {
+	playHistory({ commit }, payload) {
 		commit('setSelectedVideoUrl', convertToYoutube(payload))
 	}
 }

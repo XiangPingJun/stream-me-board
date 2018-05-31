@@ -28,10 +28,10 @@
       <p/>
 
       <label>選項數:</label>
-      <label v-for="(item, i) in new Array(4)">
-        <input type="radio" v-model="voteOptionNum" :value="i+2" name="vote-option-num"/> {{i+2}}個 
+      <label v-for="(item, i) in new Array(4)" :key="i">
+        <input type="radio" v-model="voteOptionCount" :value="i+2" name="vote-option-num"/> {{i+2}}個 
       </label>
-      <button @click="startVote(voteOptionNum)" :disabled="voting"><i class="fa fa-chart-bar"/> 投票</button>
+      <button @click="startVote(voteOptionCount)" :disabled="voting"><i class="fa fa-chart-bar"/> 投票</button>
     </div>
     <notifications position="bottom left"/>
   </div>
@@ -42,7 +42,7 @@ import { mapGetters, mapActions } from 'vuex'
 
 export default {
   data() {
-    return { name: '', password: '', sending: null, voteOptionNum: 2 }
+    return { name: '', password: '', sending: null, voteOptionCount: 2 }
   },
   created() { this.subscribeData() },
   methods: { ...mapActions(['subscribeData', 'loginAdmin', 'startStream', 'stopStream', 'saveVideoUrl', 'saveGameTitle', 'saveGameUrl', 'saveGameDescription', 'startVote']) },
