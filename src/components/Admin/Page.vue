@@ -2,18 +2,18 @@
   <div>
     <div v-if="false==isAdmin">
       <form @submit.prevent="loginAdmin({name,password}); sending=true;">
-        <h2>無管理權限，登入暱稱:<input v-model="name" />密碼<input type="password" v-model="password" /></h2>
-        <input type="submit" :value="sending ? 'sending...' : ''" />
+        <h2>無管理權限，登入暱稱:<input v-model="name"/>密碼<input type="password" v-model="password"/></h2>
+        <input type="submit" :value="sending ? 'sending...' : ''"/>
       </form>
     </div>
     <div v-if="isAdmin">
       <h1 v-if="stream.streaming">直播中</h1>
       <h1 v-if="!stream.streaming">沒有直播</h1>
-      <p />
+      <p/>
       
       <div>影片網址:</div>
       <input :value="stream.videoUrl" @change="e => saveVideoUrl(e.target.value.trim())" onfocus="this.select()">
-      <p />
+      <p/>
 
       <div>今天跟大家一起玩的是:</div>
       <input :value="stream.gameTitle" @change="e => saveGameTitle(e.target.value.trim())" onfocus="this.select()">
@@ -21,12 +21,19 @@
       <input :value="stream.gameUrl" @change="e => saveGameUrl(e.target.value.trim())" onfocus="this.select()">
       <div>簡述:</div>
       <input :value="stream.gameDescription" @change="e => saveGameDescription(e.target.value.trim())" onfocus="this.select()">
-      <p />
+      <p/>
 
-      <button @click="startStream" :disabled="stream.streaming"><i class="fas fa-link" /> 開始</button>
-      <button @click="stopStream" :disabled="!stream.streaming"><i class="fas fa-unlink" /> 結束</button>
+      <button @click="startStream" :disabled="stream.streaming"><i class="fas fa-link"/> 開始</button>
+      <button @click="stopStream" :disabled="!stream.streaming"><i class="fas fa-unlink"/> 結束</button>
+      <p/>
+
+      <label>選項數:</label>
+      <label v-for="(item, i) in new Array(4)">
+        <input type="radio" v-model="voteOptionNum" :value="i+2" name="vote-option-num"/> {{i+2}}個 
+      </label>
+      <button @click="startVote(voteOptionNum)" :disabled="voting"><i class="fa fa-chart-bar"/> 投票</button>
     </div>
-    <notifications position="bottom left" />
+    <notifications position="bottom left"/>
   </div>
 </template>
 
@@ -35,11 +42,11 @@ import { mapGetters, mapActions } from 'vuex'
 
 export default {
   data() {
-    return { name: '', password: '', sending: null }
+    return { name: '', password: '', sending: null, voteOptionNum: 2 }
   },
   created() { this.subscribeData() },
-  methods: { ...mapActions(['subscribeData', 'loginAdmin', 'startStream', 'stopStream', 'saveVideoUrl', 'saveGameTitle', 'saveGameUrl', 'saveGameDescription']) },
-  computed: { ...mapGetters(['stream', 'isAdmin']) },
+  methods: { ...mapActions(['subscribeData', 'loginAdmin', 'startStream', 'stopStream', 'saveVideoUrl', 'saveGameTitle', 'saveGameUrl', 'saveGameDescription', 'startVote']) },
+  computed: { ...mapGetters(['stream', 'isAdmin', 'voting']) },
   mounted() {
     this.unsubscribeAction = this.$store.subscribeAction((action, state) => {
       switch (action.type) {
@@ -61,6 +68,15 @@ h5 {
 input {
   width: 100%;
   font-size: 200%;
+}
+label {
+  font-size: 40px;
+  cursor: pointer;
+}
+input[type="radio"] {
+  width: auto;
+  transform: scale(2);
+  vertical-align: middle;
 }
 button {
   font-size: 200%;

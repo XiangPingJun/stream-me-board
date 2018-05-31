@@ -2,7 +2,7 @@
   <DialogBox>
     <div class="container">
       <div v-tooltip.left="{content:'更換角色', offset:3}" class="avatar-box" @click="promptSelectAvatar" :style="{'background-image': 'url(static/avatar-border.png)'}">
-        <Avatar :index="myInfo.avatarSelected" :large="true" />
+        <Avatar :index="myInfo.avatarSelected" :large="true"/>
       </div>
       <div class="info">
         <UnderlineText>{{myInfo.name}}</UnderlineText>
@@ -10,7 +10,7 @@
           style="cursor:default">Lv {{myInfo.level}}. ({{myInfo.exp}}%){{levelMsg}}</div>
       </div>
       <div class="logout">
-        <DarkButton @click="logout" v-tooltip.left="{content:'登出', offset:3}"><i class="fa fa-sign-out-alt" /></DarkButton>
+        <DarkButton @click="logout" v-tooltip.left="{content:'登出', offset:3}"><i class="fa fa-sign-out-alt"/></DarkButton>
       </div>
     </div>
   </DialogBox>

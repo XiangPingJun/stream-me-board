@@ -1,28 +1,28 @@
 <template>
   <div>
-    <NightSkyBackground />
+    <NightSkyBackground/>
     <div class="page">
-      <VideoBox ref="video" :height="videoHeight" :width="videoWidth" />
+      <VideoBox ref="video" :height="videoHeight" :width="videoWidth"/>
       <div class="right-side">
         <!-- top section -->
-        <MyInfo v-if="'MY_INFO'==topDialog" class="top animated flipInX" />
-        <AnonymousInfo v-if="'ANONYMOUS'==topDialog" class="top animated flipInX" />
-        <Login v-if="'LOGIN'==topDialog" class="top animated flipInX" />
-        <Arrow ref="loginArrow" v-if="'LOGIN'==topDialog" class="login-arrow" />
+        <MyInfo v-if="'MY_INFO'==topDialog" class="top animated flipInX"/>
+        <AnonymousInfo v-if="'ANONYMOUS'==topDialog" class="top animated flipInX"/>
+        <Login v-if="'LOGIN'==topDialog" class="top animated flipInX"/>
+        <Arrow ref="loginArrow" v-if="'LOGIN'==topDialog" class="login-arrow"/>
 
         <!-- middle section -->
-        <Quiz v-if="'QUIZ'==middleDialog" class="middle animated flipInY" />
-        <Playground v-if="'PLAYGROUND'==middleDialog" class="middle animated flipInY" />
-        <AvatarPicker v-if="'AVATAR_PICKER'==middleDialog" class="middle animated flipInY" />
-        <FollowUs v-if="'FOLLOW_US'==middleDialog" class="middle animated flipInY" />
-        <HistoryVideo v-if="'HISTORY_VIDEO'==middleDialog" class="middle animated flipInY" />
+        <Quiz v-if="'QUIZ'==middleDialog" class="middle animated flipInY"/>
+        <Playground v-if="'PLAYGROUND'==middleDialog" class="middle animated flipInY"/>
+        <AvatarPicker v-if="'AVATAR_PICKER'==middleDialog" class="middle animated flipInY"/>
+        <FollowUs v-if="'FOLLOW_US'==middleDialog" class="middle animated flipInY"/>
+        <HistoryVideo v-if="'HISTORY_VIDEO'==middleDialog" class="middle animated flipInY"/>
 
         <!-- bottom section -->
-        <ChatBox v-if="uiMode.chat && fontLoaded" class="bottom animated flipInX" />
+        <ChatBox v-if="uiMode.chat && fontLoaded" class="bottom animated flipInX"/>
       </div>
     </div>
-    <notifications position="bottom center" />
-    <Notify />
+    <notifications position="bottom center"/>
+    <Notify/>
   </div>
 </template>
 

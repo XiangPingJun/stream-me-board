@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import actions from './actions'
-import { TOTAL_AVATAR } from '../common'
+import { TOTAL_AVATAR, VOTE_TIMEOUT } from '../common'
 
 Vue.use(Vuex)
 const generateRandomAvatar = () => Math.floor(Math.random() * TOTAL_AVATAR)
@@ -20,6 +20,7 @@ export default new Vuex.Store({
 		onlineUser: [],
 		historyVideo: [],
 		fontLoaded: false,
+		vote: null,
 	},
 	getters: {
 		allUsers: state => state.allUsers,
@@ -44,6 +45,8 @@ export default new Vuex.Store({
 		onlineUser: state => state.onlineUser,
 		historyVideo: state => state.historyVideo,
 		fontLoaded: state => state.fontLoaded,
+		vote: state => state.vote,
+		voting: state => state.vote && state.vote.time && new Date().getTime() - state.vote.time.seconds * 1000 < VOTE_TIMEOUT
 	},
 	mutations: {
 		setStream: (state, payload) => state.stream = payload,
@@ -63,6 +66,7 @@ export default new Vuex.Store({
 		setHistoryVideo: (state, payload) => state.historyVideo = payload,
 		setSelectedVideoUrl: (state, payload) => state.selectedVideoUrl = payload,
 		setFontLoaded: (state, payload) => state.fontLoaded = payload,
+		setVote: (state, payload) => state.vote = payload,
 	},
 	actions: actions
 })

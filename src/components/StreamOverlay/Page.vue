@@ -1,6 +1,6 @@
 <template>
   <div>
-    <BubbleContainer style="opacity: 0.75" />
+    <BubbleContainer style="opacity: 0.75"/>
   </div>
 </template>
 

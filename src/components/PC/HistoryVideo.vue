@@ -2,13 +2,13 @@
   <DialogBox overflowY="auto">
     <div><UnderlineText>直播已經結束，來看看過去的直播吧！</UnderlineText></div>
     <a @click.stop.prevent="setUiMode({followUs:true})">
-      <i class="far fa-hand-point-right"/> 按此追蹤我們的頻道 <i class="far fa-hand-point-left" />
+      <i class="far fa-hand-point-right"/> 按此追蹤我們的頻道 <i class="far fa-hand-point-left"/>
     </a>
     <Well>
 			<div class="grid">
 				<WhiteBorder v-for="(video, i) in historyVideo" :key="i" style="margin: 0 5px 10px 0;">
 					<div class="thumbnail" @click="playHistory(video.id.videoId)" v-tooltip.bottom="{content:video.snippet.title, offset:3}">
-						<img :src="video.snippet.thumbnails.default.url" />
+						<img :src="video.snippet.thumbnails.default.url"/>
 					</div>
 				</WhiteBorder>
 			</div>

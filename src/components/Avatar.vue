@@ -1,5 +1,5 @@
 <template>
-	<div class="avatar" :style="style" />
+	<div class="avatar" :style="style"/>
 </template>
 
 <script>

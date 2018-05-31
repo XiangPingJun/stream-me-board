@@ -1,5 +1,5 @@
 <template>
-	<img :class="cssClass" src="static/arrow.png" />
+	<img :class="cssClass" src="static/arrow.png"/>
 </template>
 
 <script>

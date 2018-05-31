@@ -1,5 +1,5 @@
 <template>
-	<Avatar index="12" />
+	<Avatar index="12"/>
 </template>
 
 <script>

@@ -1,7 +1,7 @@
 <template>
   <div class="btn-border" :style="containerStyle" @click="changeAvatar(index)">
     <div class="btn-content">
-			<Avatar :index="index" :large="true" :whoAmI="whoAmI" />
+			<Avatar :index="index" :large="true" :whoAmI="whoAmI"/>
 		</div>
     <div class="stroke color-5" style="bottom:2px; right:2px;"></div>    
     <div class="stroke color-5" style="bottom:2px; left:2px;"></div>

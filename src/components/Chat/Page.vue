@@ -1,7 +1,7 @@
 <template>
   <div>
-    <MicWarningBar />
-    <ChatLine v-for="(line, key) in chatLines" :key="key" :user="allUsers[line.uid]" :text="line.text" class="animated flipInX" />    
+    <MicWarningBar/>
+    <ChatLine v-for="(line, key) in chatLines" :key="key" :user="allUsers[line.uid]" :text="line.text" class="animated flipInX"/>    
   </div>
 </template>
 

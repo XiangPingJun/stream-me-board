@@ -5,65 +5,65 @@
     <Well>
       <div>&lt;小喬大喬&gt;</div>
       <div style="display:flex;">
-        <Avatar index="11" whoAmI="true" />
-        <Avatar index="12" />
-        <Avatar index="12" />
-        <Avatar index="12" whoAmI="true" />
-        <Avatar index="12" />
-        <Avatar index="12" />
-        <Avatar index="12" />
-        <Avatar index="12" />
-        <Avatar index="12" />
-        <Avatar index="12" />
-        <Avatar index="12" />
+        <Avatar index="11" whoAmI="true"/>
+        <Avatar index="12"/>
+        <Avatar index="12"/>
+        <Avatar index="12" whoAmI="true"/>
+        <Avatar index="12"/>
+        <Avatar index="12"/>
+        <Avatar index="12"/>
+        <Avatar index="12"/>
+        <Avatar index="12"/>
+        <Avatar index="12"/>
+        <Avatar index="12"/>
       </div>
     </Well>
     <Well>
       <div>&lt;小喬大喬&gt;</div>
       <div style="display:flex;">
-        <Avatar index="11" />
-        <Avatar index="12" />
-        <Avatar index="12" />
-        <Avatar index="12" />
-        <Avatar index="12" />
-        <Avatar index="12" />
-        <Avatar index="12" />
-        <Avatar index="12" />
-        <Avatar index="12" />
-        <Avatar index="12" />
-        <Avatar index="12" />
+        <Avatar index="11"/>
+        <Avatar index="12"/>
+        <Avatar index="12"/>
+        <Avatar index="12"/>
+        <Avatar index="12"/>
+        <Avatar index="12"/>
+        <Avatar index="12"/>
+        <Avatar index="12"/>
+        <Avatar index="12"/>
+        <Avatar index="12"/>
+        <Avatar index="12"/>
       </div>
     </Well>
     <Well>
       <div>&lt;小喬大喬&gt;</div>
       <div style="display:flex;">
-        <Avatar index="11" />
-        <Avatar index="12" />
-        <Avatar index="12" />
-        <Avatar index="12" />
-        <Avatar index="12" />
-        <Avatar index="12" />
-        <Avatar index="12" />
-        <Avatar index="12" />
-        <Avatar index="12" />
-        <Avatar index="12" />
-        <Avatar index="12" />
+        <Avatar index="11"/>
+        <Avatar index="12"/>
+        <Avatar index="12"/>
+        <Avatar index="12"/>
+        <Avatar index="12"/>
+        <Avatar index="12"/>
+        <Avatar index="12"/>
+        <Avatar index="12"/>
+        <Avatar index="12"/>
+        <Avatar index="12"/>
+        <Avatar index="12"/>
       </div>
     </Well>
     <Well>
       <div>&lt;小喬大喬&gt;</div>
       <div style="display:flex;">
-        <Avatar index="11" />
-        <Avatar index="12" />
-        <Avatar index="12" />
-        <Avatar index="12" />
-        <Avatar index="12" />
-        <Avatar index="12" />
-        <Avatar index="12" />
-        <Avatar index="12" />
-        <Avatar index="12" />
-        <Avatar index="12" />
-        <Avatar index="12" />
+        <Avatar index="11"/>
+        <Avatar index="12"/>
+        <Avatar index="12"/>
+        <Avatar index="12"/>
+        <Avatar index="12"/>
+        <Avatar index="12"/>
+        <Avatar index="12"/>
+        <Avatar index="12"/>
+        <Avatar index="12"/>
+        <Avatar index="12"/>
+        <Avatar index="12"/>
       </div>
     </Well>
   </DialogBox>

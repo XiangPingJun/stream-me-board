@@ -9,12 +9,12 @@
       {{stream.gameDescription}}，<br/>
       快點來加入一起聊天吧！<br/>
     </i>
-    <div class="padding-line" />
+    <div class="padding-line"/>
 
     <div><UnderlineText>線上的網友們</UnderlineText></div>
     <Well style="margin-bottom:20px;">
       <div style="display:flex;">
-        <UserAvatar v-for="(user, key) in onlineUser" :user="user" :key="key" />
+        <UserAvatar v-for="(user, key) in onlineUser" :user="user" :key="key"/>
       </div>
     </Well>
   </DialogBox>

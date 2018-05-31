@@ -2,7 +2,7 @@
   <DialogBox>
     <div class="container" @click="promptLogin">
       <div class="avatar-box" :style="{'background-image': 'url(static/avatar-border.png)'}">
-        <Avatar :index="anonymousAvatar" :whoAmI="true" :large="true" />
+        <Avatar :index="anonymousAvatar" :whoAmI="true" :large="true"/>
       </div>
       <div class="info">
         <UnderlineText>不知名的訪客</UnderlineText>

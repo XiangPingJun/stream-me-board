@@ -1,13 +1,13 @@
 <template>
 	<DialogBox overflowY="auto" ref="chatBox">
     <div class="chat-list">
-      <ChatLine v-for="(line, key) in chatLines" :key="key" :user="allUsers[line.uid]" :text="line.text" class="animated flipInX" />
+      <ChatLine v-for="(line, key) in chatLines" :key="key" :user="allUsers[line.uid]" :text="line.text" class="animated flipInX"/>
     </div>
     <div class="mask top"></div>
     <div class="mask bottom"></div>
-    <InputBox placeholder="說點什麼吧:↵" ref="input" @focus="onInputFocus" @submit="submit" class="input" maxlength="140" />
+    <InputBox placeholder="說點什麼吧:↵" ref="input" @focus="onInputFocus" @submit="submit" class="input" maxlength="140"/>
     <div v-if="showScrollToBottom" class="scroll-to-bottom">
-      <DarkButton v-tooltip.left="{content:'查看新留言', offset:3}" @click="scrollToBottom"><i class="fas fa-chevron-down" /></DarkButton>
+      <DarkButton v-tooltip.left="{content:'查看新留言', offset:3}" @click="scrollToBottom"><i class="fas fa-chevron-down"/></DarkButton>
     </div>
 	</DialogBox>
 </template>

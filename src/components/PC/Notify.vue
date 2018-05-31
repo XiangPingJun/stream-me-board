@@ -2,9 +2,9 @@
   <notifications group="notify" position="top left" width="auto" style="margin-top: 5px;">
     <template slot="body" slot-scope="props">
       <div class="notification vue-notification" :class="props.item.type">
-        <i class="symbol" v-if="props.item.data.symbol" :class="`fas fa-${props.item.data.symbol}`" />
-        <Avatar v-if="undefined!=props.item.data.avatar" :index="props.item.data.avatar" />
-        <div class="notification-content" v-html="props.item.text" />
+        <i class="symbol" v-if="props.item.data.symbol" :class="`fas fa-${props.item.data.symbol}`"/>
+        <Avatar v-if="undefined!=props.item.data.avatar" :index="props.item.data.avatar"/>
+        <div class="notification-content" v-html="props.item.text"/>
       </div>
     </template>
   </notifications>

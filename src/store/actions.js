@@ -133,6 +133,8 @@ export default {
 				throw error
 			}
 		})
+		// vote
+		firestore.doc("system/vote").onSnapshot(doc => commit('setVote', doc.data()))
 		// history video
 		fetch('https://www.googleapis.com/youtube/v3/search?key=AIzaSyBCYPReX74lujmX9tg8AiM-OFGqmKYMZkU&channelId=UCLeQT6hvBgnq_-aKKlcgj1Q&part=snippet,id&order=date&maxResults=50').then(res => res.json()).then(data => commit('setHistoryVideo', data.items.filter(item => item.id.videoId)))
 		// font loaded
@@ -303,6 +305,16 @@ export default {
 				...state.stream,
 				greetings: '今天來跟大家一起玩...',
 				streaming: false
+			})
+		} catch (error) {
+			dispatch('notify', { type: 'error', text: error.message })
+			throw error
+		}
+	},
+	startVote: async ({ dispatch }, payload) => {
+		try {
+			await firestore.doc('system/vote').set({
+				time: firebase.firestore.FieldValue.serverTimestamp()
 			})
 		} catch (error) {
 			dispatch('notify', { type: 'error', text: error.message })

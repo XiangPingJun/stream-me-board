@@ -1,7 +1,7 @@
 <template>
   <form @submit.prevent="onSubmit">
     <input v-model="text" :placeholder="placeholder" @focus="$emit('focus')" :maxlength="maxlength" 
-      :disabled="disabled || loading" ref="input"  :style="inputStyle" />
+      :disabled="disabled || loading" ref="input"  :style="inputStyle"/>
   </form>
 </template>
 

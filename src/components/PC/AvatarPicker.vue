@@ -6,7 +6,7 @@
         <AvatarPickerBtn v-for="avatar in avatarList" 
           :index="avatar" :key="avatar" 
           :whoAmI="!myInfo.avatarList.includes(avatar)" 
-        />
+       />
 			</div>
     </Well>
   </DialogBox>

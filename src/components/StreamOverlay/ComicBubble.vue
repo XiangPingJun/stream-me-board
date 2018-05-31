@@ -1,7 +1,7 @@
 <template>
   <div ref="bubble" class="cbbl" :class="{ 'cbbl--right': x < getWindowWidth/2, 'cbbl--up': y < getWindowHeight/2 }"
     :style="{ position: 'fixed', left: x+'px', top: y+'px' }"
-  ><slot /></div>
+  ><slot/></div>
 </template>
 
 <script>
