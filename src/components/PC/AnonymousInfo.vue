@@ -20,12 +20,8 @@ import { mapGetters, mapActions } from 'vuex'
 
 export default {
   components: { UnderlineText, DialogBox, Avatar, },
-  methods: {
-    ...mapActions(['promptLogin'])
-  },
-  computed: {
-    ...mapGetters(['anonymousAvatar'])
-  }
+  methods: { ...mapActions(['promptLogin']) },
+  computed: { ...mapGetters(['anonymousAvatar']) }
 }
 </script>
 

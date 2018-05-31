@@ -11,6 +11,7 @@
         <Arrow ref="loginArrow" v-if="'LOGIN'==topDialog" class="login-arrow"/>
 
         <!-- middle section -->
+        <Vote v-if="'VOTE'==middleDialog" class="middle animated flipInY"/>
         <Quiz v-if="'QUIZ'==middleDialog" class="middle animated flipInY"/>
         <Playground v-if="'PLAYGROUND'==middleDialog" class="middle animated flipInY"/>
         <AvatarPicker v-if="'AVATAR_PICKER'==middleDialog" class="middle animated flipInY"/>
@@ -27,7 +28,6 @@
 </template>
 
 <script>
-import DialogBox from '../DialogBox'
 import VideoBox from './VideoBox'
 import NightSkyBackground from './NightSkyBackground'
 import ChatBox from './ChatBox'
@@ -41,6 +41,7 @@ import Playground from './Playground'
 import Notify from './Notify'
 import HistoryVideo from './HistoryVideo'
 import FollowUs from './FollowUs'
+import Vote from './Vote/Vote'
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
@@ -51,7 +52,7 @@ export default {
       unsubscribeAction: () => { },
     }
   },
-  components: { DialogBox, VideoBox, NightSkyBackground, ChatBox, Quiz, MyInfo, AnonymousInfo, Login, Arrow, AvatarPicker, Notify, Playground, HistoryVideo, FollowUs },
+  components: { VideoBox, NightSkyBackground, ChatBox, Quiz, MyInfo, AnonymousInfo, Login, Arrow, AvatarPicker, Notify, Playground, HistoryVideo, FollowUs, Vote },
   created() { this.subscribeData() },
   mounted() {
     const width = document.documentElement.clientWidth
@@ -93,6 +94,8 @@ export default {
     middleDialog() {
       if (!this.fontLoaded)
         return null
+      if (this.voting)
+        return 'VOTE'
       if (this.uiMode.quiz)
         return 'QUIZ'
       if (this.uiMode.selectAvatar)
@@ -104,7 +107,7 @@ export default {
       if (this.stream.streaming && this.onlineUser)
         return 'PLAYGROUND'
     },
-    ...mapGetters(['uiMode', 'videoUrl', 'stream', 'myInfo', 'historyVideo', 'onlineUser', 'fontLoaded'])
+    ...mapGetters(['uiMode', 'videoUrl', 'stream', 'myInfo', 'historyVideo', 'onlineUser', 'fontLoaded', 'voting'])
   },
   methods: { ...mapActions(['subscribeData']) }
 }

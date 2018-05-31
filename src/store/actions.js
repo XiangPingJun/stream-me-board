@@ -1,4 +1,4 @@
-import { getVideoTime, FINGERPRINT } from '../common'
+import { getVideoTime, FINGERPRINT, VOTE_TIMEOUT } from '../common'
 import shortid from 'shortid'
 const firestore = firebase.firestore()
 firestore.settings({ timestampsInSnapshots: true })
@@ -6,12 +6,13 @@ let unsubscribeChat = () => { }
 
 export default {
 	notify({ }, payload) { },
-	saveMyInfo({ state, dispatch, commit }, payload) {
-		firestore.collection('user').doc(state.myUid).set(payload)
-			.catch(error => {
-				dispatch('notify', { type: 'error', text: error.message })
-				throw error
-			})
+	async saveMyInfo({ state, dispatch, commit }, payload) {
+		try {
+			await firestore.collection('user').doc(state.myUid).set(payload)
+		} catch (error) {
+			dispatch('notify', { type: 'error', text: error.message })
+			throw error
+		}
 	},
 	addExp({ getters, dispatch }, payload) {
 		if (payload > 100)
@@ -116,7 +117,6 @@ export default {
 						await firestore.collection('adminUser').get()
 						commit('setIsAdmin', true)
 					} catch (error) {
-						console.log(error.code)
 						if ("permission-denied" == error.code)
 							commit('setIsAdmin', false)
 						else
@@ -134,7 +134,11 @@ export default {
 			}
 		})
 		// vote
-		firestore.doc("system/vote").onSnapshot(doc => commit('setVote', doc.data()))
+		firestore.doc("system/vote").onSnapshot(doc => {
+			commit('setVoteInfo', doc.data())
+			setTimeout(() => commit('setVoteInfo', { ...state.voteInfo }), VOTE_TIMEOUT + 500)
+		})
+		firestore.doc("activity/vote").onSnapshot(doc => commit('setVoteCount', doc.data()))
 		// history video
 		fetch('https://www.googleapis.com/youtube/v3/search?key=AIzaSyBCYPReX74lujmX9tg8AiM-OFGqmKYMZkU&channelId=UCLeQT6hvBgnq_-aKKlcgj1Q&part=snippet,id&order=date&maxResults=50').then(res => res.json()).then(data => commit('setHistoryVideo', data.items.filter(item => item.id.videoId)))
 		// font loaded
@@ -313,6 +317,7 @@ export default {
 	},
 	async startVote({ dispatch }, payload) {
 		try {
+			await firestore.doc('activity/vote').set({})
 			await firestore.doc('system/vote').set({
 				time: firebase.firestore.FieldValue.serverTimestamp(),
 				optionCount: payload,

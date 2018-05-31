@@ -29,9 +29,10 @@
 
       <label>選項數:</label>
       <label v-for="(item, i) in new Array(4)" :key="i">
-        <input type="radio" v-model="voteOptionCount" :value="i+2" name="vote-option-num"/> {{i+2}}個 
+        <input type="radio" v-model="voteOptionCount" :value="i+2" :disabled="voting" name="vote-option-count"/> {{i+2}}個 
       </label>
-      <button @click="startVote(voteOptionCount)" :disabled="voting"><i class="fa fa-chart-bar"/> 投票</button>
+      <button v-if="!voting" @click="startVote(voteOptionCount)"><i class="fa fa-chart-bar"/> 投票</button>
+      <button v-if="voting" :disabled="true"><i class="fas fa-spinner fa-pulse"/> 投票進行中</button>
     </div>
     <notifications position="bottom left"/>
   </div>
@@ -49,10 +50,8 @@ export default {
   computed: { ...mapGetters(['stream', 'isAdmin', 'voting']) },
   mounted() {
     this.unsubscribeAction = this.$store.subscribeAction((action, state) => {
-      switch (action.type) {
-        case 'notify':
-          return this.$notify(action.payload)
-      }
+      if ('notify' == action.type)
+        return this.$notify(action.payload)
     })
   }
 }
