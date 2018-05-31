@@ -135,6 +135,8 @@ export default {
 		})
 		// history video
 		fetch('https://www.googleapis.com/youtube/v3/search?key=AIzaSyBCYPReX74lujmX9tg8AiM-OFGqmKYMZkU&channelId=UCLeQT6hvBgnq_-aKKlcgj1Q&part=snippet,id&order=date&maxResults=50').then(res => res.json()).then(data => commit('setHistoryVideo', data.items.filter(item => item.id.videoId)))
+		// font loaded
+		document.fonts.ready.then(() => commit('setFontLoaded', true));
 	},
 	loginAdmin: async ({ getters, dispatch }, payload) => {
 		try {
@@ -196,12 +198,12 @@ export default {
 		dispatch('saveMyInfo', getters.myInfo)
 		commit('setUiMode', { selectAvatar: false })
 	},
-	submitChat: async ({ dispatch, commit, state }, payload) => {
+	submitChat: async ({ dispatch, commit, getters }, payload) => {
 		try {
-			let index = (parseInt('zzz', 36) - state.chatLines.length).toString(36)
+			let index = (parseInt('zzz', 36) - getters.chatLines.length).toString(36)
 			index += payload.text.substr(0, 10)
 			const time = getVideoTime()
-			await firestore.collection(`allChat/${state.stream.time}/chat-line`).doc(index).set({
+			await firestore.collection(`allChat/${getters.stream.time}/chat-line`).doc(index).set({
 				...payload,
 				fingerprint: FINGERPRINT,
 				videoTime: Math.floor(time / 3600) + ':' + Math.floor(time % 3600 / 60) + ':' + Math.floor(time % 3600 % 60),

@@ -82,7 +82,7 @@ export default {
   computed: {
     topDialog() {
       if (!this.fontLoaded)
-        return false
+        return null
       if (this.myInfo.name && 'MY_INFO' == this.uiMode.account)
         return 'MY_INFO'
       if ('LOGIN' == this.uiMode.account)
@@ -92,7 +92,7 @@ export default {
     },
     middleDialog() {
       if (!this.fontLoaded)
-        return false
+        return null
       if (this.uiMode.quiz)
         return 'QUIZ'
       if (this.uiMode.selectAvatar)

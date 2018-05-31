@@ -24,7 +24,6 @@ export default {
 			})
 			this.rmObsolete()
 			setTimeout(() => this.placeChat())
-			setTimeout(() => this.placeChat())
 		}
 	},
 	methods: {
@@ -36,13 +35,27 @@ export default {
 				chat.width = this.$refs.bubbles[i].width
 				chat.height = this.$refs.bubbles[i].height
 			})
-			const chatHasPosition = this.chats.filter(chat => chat.x)
 			this.chats.forEach(chat => {
 				if (undefined != chat.x)
 					return
+				const chatHasPosition = this.chats.filter(chat => chat.x)
 				let farest = -1
-				let farestCandidate = null
-				Array.apply(null, new Array(20)).map(() => {
+				const degrees = [
+					toDegree(0, getWindowHeight()), toDegree(getWindowWidth(), getWindowHeight())
+					, ...chatHasPosition.map(chat => toDegree(chat.centerX, chat.centerY))
+				].sort((a, b) => a > b)
+				let freeSpaceDegree
+				let largest = -1
+				for (let i = 0; i < degrees.length - 1; i++) {
+					const diff = degrees[i + 1] - degrees[i]
+					if (diff > largest) {
+						freeSpaceDegree = (degrees[i] + degrees[i + 1]) / 2
+						largest = diff
+					}
+				}
+				let closestDistance = Infinity
+				let closestCandidate = null
+				Array.apply(null, new Array(30)).map(() => {
 					const randX = Math.random() * (getWindowWidth() - chat.width - 20)
 					const randY = Math.random() * (getWindowHeight() - chat.height - 20)
 					let x = 1, y = 1
@@ -60,23 +73,25 @@ export default {
 						centerY: y + chat.height / 2,
 					}
 				}).forEach(candidate => {
-					farestCandidate = farestCandidate || candidate
-					let totalDistance = 0
-					chatHasPosition.forEach(item => {
-						const xDiff = candidate.centerX - item.centerX
-						const yDiff = candidate.centerY - item.centerY
-						totalDistance += Math.sqrt(xDiff * xDiff + yDiff * yDiff)
-					})
-					if (totalDistance > farest) {
-						farestCandidate = candidate
-						farest = totalDistance
+					closestCandidate = closestCandidate || candidate
+					const degree = toDegree(candidate.centerX, candidate.centerY)
+					const distance = Math.abs(freeSpaceDegree - degree)
+					if (distance < closestDistance) {
+						closestCandidate = candidate
+						closestDistance = distance
 					}
 				})
-				chat.x = farestCandidate.x
-				chat.y = farestCandidate.y
-				chat.centerX = farestCandidate.centerX
-				chat.centerY = farestCandidate.centerY
+				chat.x = closestCandidate.x
+				chat.y = closestCandidate.y
+				chat.centerX = closestCandidate.centerX
+				chat.centerY = closestCandidate.centerY
 			})
+
+			function toDegree(x, y) {
+				const [xx, yy] = [x - getWindowWidth() / 2, getWindowHeight() / 2 - y]
+				let degree = Math.atan2(yy, xx) * 180 / Math.PI
+				return Math.floor((degree + 360 + 90) % 360)
+			}
 			this.dummy = Math.random()
 		}
 	},
@@ -88,21 +103,3 @@ export default {
 	}
 }
 </script>
-
-<style>
-.name {
-  margin-left: -3px;
-  border-radius: 5px;
-  color: white;
-  padding: 5px;
-  text-shadow: 1px 1px 0 #705749, -1px 1px 0 #705749, 1px -1px 0 #705749,
-    -1px -1px 0 #705749, 0px 1px 0 #705749, 0px -1px 0 #705749,
-    -1px 0px 0 #705749, 1px 0px 0 #705749, 1px 1px 0 #705749, -1px 1px 0 #705749,
-    1px -1px 0 #705749, -1px -1px 0 #705749, 0px 1px 0 #705749,
-    0px -1px 0 #705749, -1px 0px 0 #705749, 1px 0px 0 #705749, 1px 1px 0 #705749,
-    -1px 1px 0 #705749, 1px -1px 0 #705749, -1px -1px 0 #705749,
-    1px 1px 0 #705749, -1px 1px 0 #705749, 1px -1px 0 #705749,
-    -1px -1px 0 #705749;
-  box-shadow: 2px 2px #86674d;
-}
-</style>

@@ -43,7 +43,7 @@ export default new Vuex.Store({
 		chatLines: state => state.chatLines,
 		onlineUser: state => state.onlineUser,
 		historyVideo: state => state.historyVideo,
-		fontLoaded: state => state.historyVideo,
+		fontLoaded: state => state.fontLoaded,
 	},
 	mutations: {
 		setStream: (state, payload) => state.stream = payload,
@@ -62,7 +62,7 @@ export default new Vuex.Store({
 		setOnlineUser: (state, payload) => state.onlineUser = payload,
 		setHistoryVideo: (state, payload) => state.historyVideo = payload,
 		setSelectedVideoUrl: (state, payload) => state.selectedVideoUrl = payload,
-		setFontLoaded: (state, payload) => state.onlineUser = payload,
+		setFontLoaded: (state, payload) => state.fontLoaded = payload,
 	},
 	actions: actions
 })

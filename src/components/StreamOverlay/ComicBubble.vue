@@ -19,12 +19,14 @@ export default {
 
 <style>
 .cbbl {
+  font-size: 22px;
+  line-height: 29px;
   position: relative;
   display: inline-block;
   margin: 10px 9px 29px 6px;
   background-color: #fff;
   color: #000;
-  padding: 5px;
+  padding: 7px 5px;
   box-shadow: 0 -3px #fff, 0 -6px #000, 3px 0 #fff, 3px -3px #000, 6px 0 #000,
     0 3px #fff, 0 6px #000, -3px 0 #fff, -3px 3px #000, -6px 0 #000,
     -3px -3px #000, 3px 3px #000, 3px 9px #aaa, 6px 6px #aaa, 9px 3px #aaa;
