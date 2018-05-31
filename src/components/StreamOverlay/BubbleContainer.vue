@@ -1,24 +1,20 @@
 <template>
 	<div>
-  	<ComicBubble v-for="chat in chats" :key="chat.id" ref="bubbles" :x="chat.x" :y="chat.y" style="opacity:0.75"
-			:style="{visibility:chat.x?'visible':'hidden'}" :class="{jello:chat.x, animated:chat.x}">
-			{{chat.text}}
-		</ComicBubble>
+  	<ChatBubble v-for="chat in chats" :key="chat.id" ref="bubbles" :chat="chat" :dummy="dummy"/>
 	</div>
 </template>
 
 <script>
 import { getWindowWidth, getWindowHeight } from '../../common'
-import ComicBubble from './ComicBubble'
+import ChatBubble from './ChatBubble'
 import { mapGetters, mapActions } from 'vuex'
 import { clearInterval, setTimeout, setInterval } from 'timers';
-import Vue from 'vue';
 
 const CHAT_TIMEOUT = 5000
 
 export default {
-	data() { return { chats: [], rmObsoleteHandler: null } },
-	components: { ComicBubble },
+	data() { return { chats: [], rmObsoleteHandler: null, dummy: null } },
+	components: { ChatBubble },
 	computed: { ...mapGetters(['chatLines']) },
 	watch: {
 		chatLines(val, oldVal) {
@@ -81,6 +77,7 @@ export default {
 				chat.centerX = farestCandidate.centerX
 				chat.centerY = farestCandidate.centerY
 			})
+			this.dummy = Math.random()
 		}
 	},
 	mounted() {
@@ -91,3 +88,21 @@ export default {
 	}
 }
 </script>
+
+<style>
+.name {
+  margin-left: -3px;
+  border-radius: 5px;
+  color: white;
+  padding: 5px;
+  text-shadow: 1px 1px 0 #705749, -1px 1px 0 #705749, 1px -1px 0 #705749,
+    -1px -1px 0 #705749, 0px 1px 0 #705749, 0px -1px 0 #705749,
+    -1px 0px 0 #705749, 1px 0px 0 #705749, 1px 1px 0 #705749, -1px 1px 0 #705749,
+    1px -1px 0 #705749, -1px -1px 0 #705749, 0px 1px 0 #705749,
+    0px -1px 0 #705749, -1px 0px 0 #705749, 1px 0px 0 #705749, 1px 1px 0 #705749,
+    -1px 1px 0 #705749, 1px -1px 0 #705749, -1px -1px 0 #705749,
+    1px 1px 0 #705749, -1px 1px 0 #705749, 1px -1px 0 #705749,
+    -1px -1px 0 #705749;
+  box-shadow: 2px 2px #86674d;
+}
+</style>

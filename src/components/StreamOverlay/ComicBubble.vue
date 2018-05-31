@@ -10,7 +10,6 @@ import { getWindowWidth, getWindowHeight } from '../../common'
 export default {
   props: ['x', 'y'],
   computed: {
-    hasPosition() { return undefined != this.x && undefined != this.y },
     width() { return this.$refs.bubble.clientWidth },
     height() { return this.$refs.bubble.clientHeight },
     getWindowWidth, getWindowHeight

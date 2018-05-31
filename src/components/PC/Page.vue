@@ -18,7 +18,7 @@
         <HistoryVideo v-if="'HISTORY_VIDEO'==middleDialog" class="middle animated flipInY" />
 
         <!-- bottom section -->
-        <ChatBox v-if="uiMode.chat" class="bottom animated flipInX" />
+        <ChatBox v-if="uiMode.chat && fontLoaded" class="bottom animated flipInX" />
       </div>
     </div>
     <notifications position="bottom center" />
@@ -81,26 +81,30 @@ export default {
   },
   computed: {
     topDialog() {
+      if (!this.fontLoaded)
+        return false
       if (this.myInfo.name && 'MY_INFO' == this.uiMode.account)
         return 'MY_INFO'
-      else if ('LOGIN' == this.uiMode.account)
+      if ('LOGIN' == this.uiMode.account)
         return 'LOGIN'
-      else if ('ANONYMOUS' == this.uiMode.account)
+      if ('ANONYMOUS' == this.uiMode.account)
         return 'ANONYMOUS'
     },
     middleDialog() {
+      if (!this.fontLoaded)
+        return false
       if (this.uiMode.quiz)
         return 'QUIZ'
-      else if (this.uiMode.selectAvatar)
+      if (this.uiMode.selectAvatar)
         return 'AVATAR_PICKER'
-      else if (this.uiMode.followUs)
+      if (this.uiMode.followUs)
         return 'FOLLOW_US'
-      else if (false == this.stream.streaming && this.historyVideo)
+      if (false == this.stream.streaming && this.historyVideo)
         return 'HISTORY_VIDEO'
-      else if (this.stream.streaming && this.uiMode.playground)
+      if (this.stream.streaming && this.onlineUser)
         return 'PLAYGROUND'
     },
-    ...mapGetters(['uiMode', 'videoUrl', 'stream', 'myInfo', 'historyVideo'])
+    ...mapGetters(['uiMode', 'videoUrl', 'stream', 'myInfo', 'historyVideo', 'onlineUser', 'fontLoaded'])
   },
   methods: { ...mapActions(['subscribeData']) }
 }

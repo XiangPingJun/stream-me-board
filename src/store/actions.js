@@ -84,7 +84,6 @@ export default {
 				else
 					return { avatarSelected: data.avatarSelected }
 			}))
-			commit('setUiMode', { playground: true })
 		})
 		// system info
 		firestore.doc('system/stream').onSnapshot(doc => {

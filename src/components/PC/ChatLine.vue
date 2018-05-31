@@ -1,26 +1,18 @@
 <template>
 	<div class="line">
-    <UserAvatar :user="user" style="vertical-align: middle;" />
-    <span class="name" :style="nameStyle">{{user.name}}</span>
+    <UserAvatar :user="user" style="vertical-align: middle;"/>
+    <NameBadge :user="user"/>
     <span>{{text}}</span>
 	</div>
 </template>
 
 <script>
 import UserAvatar from './UserAvatar'
-import { AVATAR_COLORS, PRESERVED_AVATAR_COLORS } from '../../common'
+import NameBadge from '../NameBadge'
 
 export default {
   props: ['text', 'user'],
-  components: { UserAvatar },
-  computed: {
-    nameStyle() {
-      let colors = this.user.preserved ? PRESERVED_AVATAR_COLORS : AVATAR_COLORS
-      return {
-        'background-color': `#${colors[this.user.avatarSelected]}`
-      }
-    }
-  }
+  components: { UserAvatar, NameBadge },
 }
 </script>
 
@@ -28,20 +20,5 @@ export default {
 .line {
   margin-top: 2px;
   word-break: break-all;
-}
-.name {
-  margin-left: -3px;
-  border-radius: 5px;
-  color: white;
-  padding: 5px;
-  text-shadow: 1px 1px 0 #705749, -1px 1px 0 #705749, 1px -1px 0 #705749,
-    -1px -1px 0 #705749, 0px 1px 0 #705749, 0px -1px 0 #705749,
-    -1px 0px 0 #705749, 1px 0px 0 #705749, 1px 1px 0 #705749, -1px 1px 0 #705749,
-    1px -1px 0 #705749, -1px -1px 0 #705749, 0px 1px 0 #705749,
-    0px -1px 0 #705749, -1px 0px 0 #705749, 1px 0px 0 #705749, 1px 1px 0 #705749,
-    -1px 1px 0 #705749, 1px -1px 0 #705749, -1px -1px 0 #705749,
-    1px 1px 0 #705749, -1px 1px 0 #705749, 1px -1px 0 #705749,
-    -1px -1px 0 #705749;
-  box-shadow: 2px 2px #86674d;
 }
 </style>

@@ -14,15 +14,12 @@ export default new Vuex.Store({
 		stream: {},
 		systemInfo: null,
 		selectedVideoUrl: null,
-		uiMode: {
-			account: null,
-			quiz: null,
-			playground: null,
-		},
+		uiMode: {},
 		anonymousAvatar: generateRandomAvatar(),
 		chatLines: [],
 		onlineUser: [],
-		historyVideo: []
+		historyVideo: [],
+		fontLoaded: false,
 	},
 	getters: {
 		allUsers: state => state.allUsers,
@@ -46,6 +43,7 @@ export default new Vuex.Store({
 		chatLines: state => state.chatLines,
 		onlineUser: state => state.onlineUser,
 		historyVideo: state => state.historyVideo,
+		fontLoaded: state => state.historyVideo,
 	},
 	mutations: {
 		setStream: (state, payload) => state.stream = payload,
@@ -64,6 +62,7 @@ export default new Vuex.Store({
 		setOnlineUser: (state, payload) => state.onlineUser = payload,
 		setHistoryVideo: (state, payload) => state.historyVideo = payload,
 		setSelectedVideoUrl: (state, payload) => state.selectedVideoUrl = payload,
+		setFontLoaded: (state, payload) => state.onlineUser = payload,
 	},
 	actions: actions
 })
