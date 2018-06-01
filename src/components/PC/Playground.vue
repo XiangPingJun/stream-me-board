@@ -4,9 +4,8 @@
     <i>
       哈囉，今天來跟大家一起玩<br/>
       <span v-if="!stream.gameUrl">{{stream.gameTitle}}</span>
-      <a v-if="stream.gameUrl" :href="stream.gameUrl" target="_blank">{{stream.gameTitle}}</a>
-      <br/>
-      {{stream.gameDescription}}，<br/>
+      <div style="margin:2px 0px"><a v-if="stream.gameUrl" :href="stream.gameUrl" target="_blank">{{stream.gameTitle}}</a></div>
+      <div>{{stream.gameDescription}}，</div>
       快點來加入一起聊天吧！<br/>
     </i>
     <div class="padding-line"/>
@@ -14,7 +13,7 @@
     <div><UnderlineText>線上的網友們</UnderlineText></div>
     <Well style="margin-bottom:20px;">
       <div style="display:flex;">
-        <UserAvatar v-for="(user, key) in onlineUser" :user="user" :key="key"/>
+        <UserAvatar v-for="(user, i) in onlineUser" :user="user" :key="i"/>
       </div>
     </Well>
   </DialogBox>

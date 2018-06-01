@@ -59,9 +59,6 @@ export default {
   height: 0px;
   transition-duration: 0.25s;
 }
-.color-red {
-  box-shadow: 0 0 0 2px red;
-}
 .color-bg {
   box-shadow: 0 0 0 2px #927964;
 }
@@ -88,13 +85,6 @@ export default {
   line-height: 20px;
   transition-property: width, height;
   transition-duration: 0.25s;
-}
-.blue,
-a {
-  color: #99befd;
-  font-weight: bold;
-  text-shadow: 0px 3px #5b6ee1, 3px 3px #86674d;
-  cursor: pointer;
 }
 s {
   text-decoration: none;

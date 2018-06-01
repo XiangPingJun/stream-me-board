@@ -41,7 +41,7 @@ import Playground from './Playground'
 import Notify from './Notify'
 import HistoryVideo from './HistoryVideo'
 import FollowUs from './FollowUs'
-import Vote from './Vote/Vote'
+import Vote from './Vote'
 import { mapGetters, mapActions } from 'vuex'
 
 export default {

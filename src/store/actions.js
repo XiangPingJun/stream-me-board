@@ -138,7 +138,21 @@ export default {
 			commit('setVoteInfo', doc.data())
 			setTimeout(() => commit('setVoteInfo', { ...state.voteInfo }), VOTE_TIMEOUT + 500)
 		})
-		firestore.doc("activity/vote").onSnapshot(doc => commit('setVoteCount', doc.data()))
+		firestore.doc("activity/vote").onSnapshot(doc => {
+			const voteRoster = Array.apply(null, new Array(state.voteInfo.optionCount)).map((item, i) => ({
+				option: String.fromCharCode(65 + i),
+				users: [],
+				total: 0
+			}))
+			const data = doc.data()
+			for (const uid in data) {
+				data[uid].forEach((count, i) => {
+					voteRoster[i].users.push(state.allUsers[uid])
+					voteRoster[i].total += count
+				})
+			}
+			commit('setVoteRoster', voteRoster)
+		})
 		// history video
 		fetch('https://www.googleapis.com/youtube/v3/search?key=AIzaSyBCYPReX74lujmX9tg8AiM-OFGqmKYMZkU&channelId=UCLeQT6hvBgnq_-aKKlcgj1Q&part=snippet,id&order=date&maxResults=50').then(res => res.json()).then(data => commit('setHistoryVideo', data.items.filter(item => item.id.videoId)))
 		// font loaded
@@ -230,8 +244,7 @@ export default {
 	},
 	async saveGameTitle({ dispatch, state }, payload) {
 		try {
-			await firestore.doc('system/stream').set({
-				...state.stream,
+			await firestore.doc('system/stream').update({
 				gameTitle: payload
 			})
 			dispatch('notify', { text: '已更新直播主題' })
@@ -242,8 +255,7 @@ export default {
 	},
 	async saveGameUrl({ dispatch, state }, payload) {
 		try {
-			await firestore.doc('system/stream').set({
-				...state.stream,
+			await firestore.doc('system/stream').update({
 				gameUrl: payload
 			})
 			dispatch('notify', { text: '已更新直播主題的連結' })
@@ -254,8 +266,7 @@ export default {
 	},
 	async saveGameDescription({ dispatch, state }, payload) {
 		try {
-			await firestore.doc('system/stream').set({
-				...state.stream,
+			await firestore.doc('system/stream').update({
 				gameDescription: payload
 			})
 			dispatch('notify', { text: '已更新直播主題的簡述' })
@@ -289,8 +300,7 @@ export default {
 	},
 	async startStream({ dispatch, state }, payload) {
 		try {
-			await firestore.doc('system/stream').set({
-				...state.stream,
+			await firestore.doc('system/stream').update({
 				time: new Date().toLocaleString().replace(/\//g, '-'),
 				streaming: true
 			})
@@ -305,10 +315,12 @@ export default {
 	},
 	async stopStream({ dispatch, state }, payload) {
 		try {
-			await firestore.doc('system/stream').set({
-				...state.stream,
-				greetings: '今天來跟大家一起玩...',
+			await firestore.doc('system/stream').update({
 				streaming: false
+			})
+			dispatch('submitChat', {
+				uid: 'system',
+				text: '直播開始囉！大家坐穩啦！',
 			})
 		} catch (error) {
 			dispatch('notify', { type: 'error', text: error.message })

@@ -24,9 +24,6 @@
   width: 0px;
   height: 0px;
 }
-.color-red {
-  box-shadow: 0 0 0 2px red;
-}
 .color-bg {
   box-shadow: 0 0 0 2px #927964;
 }

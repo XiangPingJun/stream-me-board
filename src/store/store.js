@@ -21,7 +21,7 @@ export default new Vuex.Store({
 		historyVideo: [],
 		fontLoaded: false,
 		voteInfo: null,
-		voteCount: null,
+		voteRoster: null,
 	},
 	getters: {
 		allUsers(state) { return state.allUsers },
@@ -47,7 +47,7 @@ export default new Vuex.Store({
 		historyVideo(state) { return state.historyVideo },
 		fontLoaded(state) { return state.fontLoaded },
 		voting(state) { return state.voteInfo && state.voteInfo.time && new Date().getTime() - state.voteInfo.time.seconds * 1000 < VOTE_TIMEOUT },
-		voted(state) { return state.voteCount && !!state.voteCount[state.myUid] }
+		voteRoster(state) { return state.voteRoster },
 	},
 	mutations: {
 		setStream(state, payload) { state.stream = payload },
@@ -63,7 +63,7 @@ export default new Vuex.Store({
 		setSelectedVideoUrl(state, payload) { state.selectedVideoUrl = payload },
 		setFontLoaded(state, payload) { state.fontLoaded = payload },
 		setVoteInfo(state, payload) { state.voteInfo = payload },
-		setVoteCount(state, payload) { state.voteCount = payload },
+		setVoteRoster(state, payload) { state.voteRoster = payload },
 	},
 	actions: actions
 })
