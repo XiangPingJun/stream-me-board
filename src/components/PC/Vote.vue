@@ -1,7 +1,7 @@
 <template>
-  <DialogBox>
-    <UnderlineText>暴力投票系統</UnderlineText>
-    <div vi-if="!voted" class="caption yellow">一人有多票! 狂點滑鼠! 按幾下就幾票!</div>
+  <DialogBox overflowY="auto">
+    <UnderlineText><i class="fas fa-dice"/> 暴力投票系統</UnderlineText>
+    <div vi-if="!voted" class="caption yellow">一人有多票！滑鼠點幾下就投幾票！</div>
     <Well v-for="(roster, i) in voteRoster" :key="i">
       {{roster.option}}: {{roster.total}}票
       <div style="display:flex;">

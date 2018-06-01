@@ -1,9 +1,9 @@
-.fas, .far {
+.fas, .far, .fa {
 	vertical-align: middle;
 }
 @font-face {
 	font-family: 'Zpix';
-	src: url('static/zpix.ttf') format('truetype');
+	src: url('zpix.ttf') format('truetype');
 	text-rendering: optimizeSpeed;
 }
 * {

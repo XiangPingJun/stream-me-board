@@ -59,7 +59,8 @@ export default {
     const height = document.documentElement.clientHeight
     this.videoWidth = width - 390
     setTimeout(() => {
-      if (this.$refs.video.$refs.iframe.clientHeight > document.documentElement.clientHeight) {
+      const videoHeight = parseInt(this.$refs.video.videoSize.height)
+      if (videoHeight > height - 50) {
         this.videoWidth = undefined
         this.videoHeight = height - 50
       }
@@ -137,7 +138,7 @@ export default {
 .right-side .bottom {
   flex-grow: 1;
   flex-shrink: 9999999;
-  min-height: 250px;
+  min-height: 220px;
 }
 .login-arrow {
   top: 60px;
