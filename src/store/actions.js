@@ -147,6 +147,8 @@ export default {
 			const data = doc.data()
 			for (const uid in data) {
 				data[uid].forEach((count, i) => {
+					if (0 == count)
+						return
 					voteRoster[i].users.push(state.allUsers[uid])
 					voteRoster[i].total += count
 				})
@@ -338,6 +340,11 @@ export default {
 			dispatch('notify', { type: 'error', text: error.message })
 			throw error
 		}
+	},
+	async sendVote({ state }, payload) {
+		await firestore.doc('activity/vote').update({
+			[state.myUid]: payload
+		})
 	},
 	playHistory({ commit }, payload) {
 		commit('setSelectedVideoUrl', convertToYoutube(payload))

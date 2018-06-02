@@ -17,11 +17,12 @@
 }
 a {
   color: #99befd !important;
-  font-weight: bold !important;
-  text-shadow: 0px 3px #5b6ee1, 3px 3px #86674d !important;
-	cursor: pointer;
+	text-shadow: 0px 2px #5B6EE1, 3px 3px #86674d !important;
+	cursor: pointer !important;
 }
 .yellow {
-	color: #FBF236;
-	font-weight: bold !important;
+	color: #FBF236 !important;
+}
+.green {
+	color: #6abe30 !important;;
 }
