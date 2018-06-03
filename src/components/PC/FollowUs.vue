@@ -3,7 +3,7 @@
 		<div style="display:flex; width:100%;">
       <UnderlineText>追蹤我們的直播</UnderlineText>
       <div class="close">
-        <DarkButton @click="setUiMode({followUs:false})" v-tooltip.left="{content:'關閉', offset:3}"><i class="fas fa-times" style="margin:0 2px;"/></DarkButton>
+        <DarkButton @click="updateUiMode({followUs:false})" v-tooltip.left="{content:'關閉', offset:3}"><i class="fas fa-times" style="margin:0 2px;"/></DarkButton>
       </div>
     </div>
     <div class="subtitle"><i class="fas fa-bookmark"/> 追蹤LINE官方帳號</div>
@@ -28,7 +28,7 @@ import { mapMutations } from 'vuex'
 
 export default {
   components: { UnderlineText, Well, UserAvatar, DialogBox, DarkButton },
-  methods: { ...mapMutations(['setUiMode']) }
+  methods: { ...mapMutations(['updateUiMode']) }
 }
 </script>
 

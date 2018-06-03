@@ -26,3 +26,7 @@ a {
 .green {
 	color: #6abe30 !important;;
 }
+.red {
+  color: #d95763;
+  text-shadow: 0px 2px #ac3232, 3px 3px #86674d !important;
+}

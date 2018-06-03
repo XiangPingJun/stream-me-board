@@ -1,7 +1,7 @@
 <template>
   <DialogBox overflowY="auto">
     <div><UnderlineText>直播已經結束，來看看過去的直播吧！</UnderlineText></div>
-    <a @click.stop.prevent="setUiMode({followUs:true})">
+    <a @click.stop.prevent="updateUiMode({followUs:true})">
       <i class="far fa-hand-point-right"/> 按此追蹤我們的頻道 <i class="far fa-hand-point-left"/>
     </a>
     <Well>
@@ -27,7 +27,7 @@ import { mapGetters, mapActions, mapMutations } from 'vuex'
 export default {
   components: { UnderlineText, Well, Button, DialogBox, WhiteBorder },
   computed: { ...mapGetters(['historyVideo']) },
-  methods: { ...mapActions(['playHistory']), ...mapMutations(['setUiMode']) }
+  methods: { ...mapActions(['playHistory']), ...mapMutations(['updateUiMode']) }
 }
 </script>
 

@@ -54,7 +54,7 @@ export default new Vuex.Store({
 		setSystemInfo(state, payload) { state.systemInfo = payload },
 		setAllUsers(state, payload) { state.allUsers = payload },
 		setMyUid(state, payload) { state.myUid = payload },
-		setUiMode(state, payload) { state.uiMode = { ...state.uiMode, ...payload, } },
+		updateUiMode(state, payload) { state.uiMode = { ...state.uiMode, ...payload, } },
 		setChatLines(state, payload) { state.chatLines = payload },
 		setIsAdmin(state, payload) { state.isAdmin = payload },
 		generateAnonymousAvatar(state, payload) { state.anonymousAvatar = generateRandomAvatar() },

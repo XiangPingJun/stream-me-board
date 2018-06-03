@@ -93,7 +93,7 @@ export default {
 				unsubscribeChat()
 				unsubscribeChat = firestore.collection(`allChat/${stream.time}/chat-line`).onSnapshot(snap => {
 					commit('setChatLines', snap.docs.map(doc => doc.data()).reverse())
-					commit('setUiMode', { chat: true })
+					commit('updateUiMode', { chat: true })
 				})
 			}
 			commit('setStream', stream)
@@ -112,7 +112,7 @@ export default {
 			try {
 				if (user) {
 					commit('setMyUid', user.uid)
-					commit('setUiMode', { account: 'MY_INFO' })
+					commit('updateUiMode', { account: 'MY_INFO' })
 					try {
 						await firestore.collection('adminUser').get()
 						commit('setIsAdmin', true)
@@ -125,7 +125,7 @@ export default {
 				} else {
 					commit('setIsAdmin', false)
 					commit('setMyUid', null)
-					commit('setUiMode', { account: 'ANONYMOUS' })
+					commit('updateUiMode', { account: 'ANONYMOUS' })
 				}
 				dispatch('sendHeartbeat')
 			} catch (error) {
@@ -207,7 +207,7 @@ export default {
 			commit('generateAnonymousAvatar')
 			await firestore.collection('onlineUser').doc(state.myUid).delete()
 			await firebase.auth().signOut()
-			commit('setUiMode', { selectAvatar: false })
+			commit('updateUiMode', { selectAvatar: false })
 		} catch (error) {
 			dispatch('notify', { type: 'error', text: error.message })
 			throw error
@@ -218,9 +218,9 @@ export default {
 			return
 		getters.myInfo.avatarSelected = payload
 		dispatch('saveMyInfo', getters.myInfo)
-		commit('setUiMode', { selectAvatar: false })
+		commit('updateUiMode', { selectAvatar: false })
 	},
-	async submitChat({ dispatch, commit, getters }, payload) {
+	async sendChat({ dispatch, commit, getters }, payload) {
 		try {
 			let index = (parseInt('zzz', 36) - getters.chatLines.length).toString(36)
 			index += payload.text.substr(0, 10)
@@ -238,11 +238,11 @@ export default {
 		}
 	},
 	promptLogin({ commit, dispatch }) {
-		commit('setUiMode', { account: 'LOGIN' })
+		commit('updateUiMode', { account: 'LOGIN' })
 		dispatch('notify', { type: 'warn', text: '要先輸入暱稱才能繼續喲！', data: { symbol: 'exclamation-triangle' } })
 	},
 	promptSelectAvatar({ commit }) {
-		commit('setUiMode', { selectAvatar: true })
+		commit('updateUiMode', { selectAvatar: true })
 	},
 	async saveGameTitle({ dispatch, state }, payload) {
 		try {
@@ -306,7 +306,7 @@ export default {
 				time: new Date().toLocaleString().replace(/\//g, '-'),
 				streaming: true
 			})
-			dispatch('submitChat', {
+			dispatch('sendChat', {
 				uid: 'system',
 				text: '直播開始囉！大家坐穩啦！',
 			})
@@ -320,7 +320,7 @@ export default {
 			await firestore.doc('system/stream').update({
 				streaming: false
 			})
-			dispatch('submitChat', {
+			dispatch('sendChat', {
 				uid: 'system',
 				text: '直播開始囉！大家坐穩啦！',
 			})
@@ -341,9 +341,13 @@ export default {
 			throw error
 		}
 	},
-	async sendVote({ state }, payload) {
+	async sendVote({ state, dispatch }, payload) {
 		await firestore.doc('activity/vote').update({
 			[state.myUid]: payload
+		})
+		dispatch('sendChat', {
+			uid: state.myUid,
+			text: payload.reduce((acc, val) => acc + val) + '票！',
 		})
 	},
 	playHistory({ commit }, payload) {

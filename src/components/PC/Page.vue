@@ -8,10 +8,11 @@
         <MyInfo v-if="'MY_INFO'==topDialog" class="top animated flipInX"/>
         <AnonymousInfo v-if="'ANONYMOUS'==topDialog" class="top animated flipInX"/>
         <Login v-if="'LOGIN'==topDialog" class="top animated flipInX"/>
-        <Arrow ref="loginArrow" v-if="'LOGIN'==topDialog" class="login-arrow"/>
+        <Arrow ref="loginArrow" v-if="'LOGIN'==arrow" class="login-arrow"/>
 
         <!-- middle section -->
-        <Vote v-if="'VOTE'==middleDialog" class="middle animated flipInY"/>
+        <Vote v-if="'VOTE'==middleDialog" class="middle"/>
+        <Arrow v-if="'VOTE'==arrow" class="vote-arrow"/>
         <Quiz v-if="'QUIZ'==middleDialog" class="middle animated flipInY"/>
         <Playground v-if="'PLAYGROUND'==middleDialog" class="middle animated flipInY"/>
         <AvatarPicker v-if="'AVATAR_PICKER'==middleDialog" class="middle animated flipInY"/>
@@ -93,6 +94,7 @@ export default {
         return 'ANONYMOUS'
     },
     middleDialog() {
+      console.log(this.voting)
       if (!this.fontLoaded)
         return null
       if (this.voting)
@@ -107,6 +109,12 @@ export default {
         return 'HISTORY_VIDEO'
       if (this.stream.streaming && this.onlineUser)
         return 'PLAYGROUND'
+    },
+    arrow() {
+      if ('LOGIN' == this.topDialog)
+        return 'LOGIN'
+      if ('VOTE' == this.middleDialog)
+        return 'VOTE'
     },
     ...mapGetters(['uiMode', 'videoUrl', 'stream', 'myInfo', 'historyVideo', 'onlineUser', 'fontLoaded', 'voting'])
   },
@@ -142,6 +150,10 @@ export default {
 }
 .login-arrow {
   top: 60px;
+  right: 380px;
+}
+.vote-arrow {
+  top: 160px;
   right: 380px;
 }
 </style>

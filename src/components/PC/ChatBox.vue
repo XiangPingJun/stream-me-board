@@ -47,14 +47,14 @@ export default {
       this.showScrollToBottom = false
     },
     submit(text) {
-      this.submitChat({
+      this.sendChat({
         uid: this.myInfo.uid,
         text: text,
       })
       this.$refs.input.text = ''
       this.scrollToBottom()
     },
-    ...mapActions(['promptLogin', 'submitChat'])
+    ...mapActions(['promptLogin', 'sendChat'])
   },
   watch: {
     chatLines(newVal, oldVal) {
