@@ -31,11 +31,11 @@ export default {
 		}
 		dispatch('saveMyInfo', getters.myInfo)
 	},
-	checkTrophy({ getters, dispatch }) {
+	checkTrophy({ getters, state, dispatch }) {
 		if (!getters.myInfo.name)
 			return
-		if (getters.stream.streaming && !getters.myInfo.viewedStream.includes(getters.stream.time)) {
-			getters.myInfo.viewedStream.push(getters.stream.time)
+		if (state.stream.streaming && !getters.myInfo.viewedStream.includes(state.stream.time)) {
+			getters.myInfo.viewedStream.push(state.stream.time)
 			if (!getters.myInfo.trophy.includes('WATCH_FIRST_TIME')) {
 				getters.myInfo.trophy.push('WATCH_FIRST_TIME')
 				notify('第一次來看直播！')
@@ -47,7 +47,7 @@ export default {
 			dispatch('notify', { data: { symbol: 'trophy' }, text: msg })
 		}
 	},
-	sendHeartbeat({ state, getters }) {
+	sendHeartbeat({ state }) {
 		if (state.myUid) {
 			firestore.collection('onlineUser').doc(state.myUid).set({
 				uid: state.myUid,
@@ -56,12 +56,12 @@ export default {
 			firestore.collection('onlineUser').doc(FINGERPRINT).delete()
 		} else {
 			firestore.collection('onlineUser').doc(FINGERPRINT).set({
-				avatarSelected: getters.anonymousAvatar,
+				avatarSelected: state.anonymousAvatar,
 				heartbeat: firebase.firestore.FieldValue.serverTimestamp()
 			})
 		}
 	},
-	subscribeData({ state, commit, dispatch, getters }) {
+	subscribeData({ state, commit, dispatch }) {
 		// Is me banned?
 		firestore.doc('system/ban').onSnapshot(doc => {
 			if (doc.data().fingerprint.find(hash => hash == FINGERPRINT)) {
@@ -81,7 +81,7 @@ export default {
 			commit('setOnlineUser', snap.docs.map(doc => {
 				const data = doc.data()
 				if (data.uid)
-					return getters.allUsers[data.uid]
+					return state.allUsers[data.uid]
 				else
 					return { avatarSelected: data.avatarSelected }
 			}))
@@ -102,7 +102,7 @@ export default {
 		firestore.doc("system/info").onSnapshot(doc => {
 			if (doc.data().emergency)
 				location.replace('//live-2-0-131ee.firebaseapp.com/watch.html')
-			if (null != doc.data().version && getters.systemInfo && getters.systemInfo.version != doc.data().version)
+			if (null != doc.data().version && state.systemInfo && state.systemInfo.version != doc.data().version)
 				window.location.reload(true)
 			commit('setSystemInfo', doc.data())
 		})
@@ -155,19 +155,19 @@ export default {
 		// font loaded
 		document.fonts.ready.then(() => commit('setFontLoaded', true));
 	},
-	async loginAdmin({ getters, dispatch }, payload) {
+	async loginAdmin({ state, dispatch }, payload) {
 		try {
-			const me = Object.values(getters.allUsers).find(user => user.name == payload.name)
+			const me = Object.values(state.allUsers).find(user => user.name == payload.name)
 			await firebase.auth().signInWithEmailAndPassword(me.email, payload.password)
 		} catch (error) {
 			dispatch('notify', { type: 'error', text: error.message })
 			throw error
 		}
 	},
-	async loginVisitor({ dispatch, getters }, payload) {
+	async loginVisitor({ dispatch, state }, payload) {
 		const name = payload
 		try {
-			const me = Object.values(getters.allUsers).find(user => user.name == name)
+			const me = Object.values(state.allUsers).find(user => user.name == name)
 			if (me) {
 				await firebase.auth().signInWithEmailAndPassword(me.email, 'dummy-password')
 			} else {
@@ -177,8 +177,8 @@ export default {
 				await firestore.collection('user').doc(user.uid).set({
 					name: name,
 					uid: user.uid,
-					avatarList: [getters.anonymousAvatar],
-					avatarSelected: getters.anonymousAvatar,
+					avatarList: [state.anonymousAvatar],
+					avatarSelected: state.anonymousAvatar,
 					level: 1,
 					exp: 0,
 					email: email,
@@ -215,12 +215,12 @@ export default {
 		dispatch('saveMyInfo', getters.myInfo)
 		commit('updateUiMode', { selectAvatar: false })
 	},
-	async sendChat({ dispatch, commit, getters }, payload) {
+	async sendChat({ dispatch, commit, state }, payload) {
 		try {
-			let index = (parseInt('zzz', 36) - getters.chatLines.length).toString(36)
+			let index = (parseInt('zzz', 36) - state.chatLines.length).toString(36)
 			index += payload.text.substr(0, 10)
 			const time = getVideoTime()
-			await firestore.collection(`allChat/${getters.stream.time}/chat-line`).doc(index).set({
+			await firestore.collection(`allChat/${state.stream.time}/chat-line`).doc(index).set({
 				...payload,
 				fingerprint: FINGERPRINT,
 				videoTime: Math.floor(time / 3600) + ':' + Math.floor(time % 3600 / 60) + ':' + Math.floor(time % 3600 % 60),

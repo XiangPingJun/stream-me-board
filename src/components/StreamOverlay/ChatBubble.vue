@@ -13,7 +13,7 @@
 import ComicBubble from './ComicBubble'
 import Avatar from '../Avatar'
 import NameBadge from '../NameBadge'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 
 export default {
 	props: ['chat', 'dummy'],
@@ -22,7 +22,7 @@ export default {
 		user() { return this.allUsers[this.chat.uid] },
 		width() { return this.$refs.bubble.width },
 		height() { return this.$refs.bubble.height },
-		...mapGetters(['allUsers']),
+		...mapState(['allUsers']),
 	},
 }
 </script>

@@ -16,12 +16,12 @@
 import UnderlineText from '../UnderlineText'
 import DialogBox from '../DialogBox'
 import Avatar from '../Avatar'
-import { mapGetters, mapActions } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 
 export default {
   components: { UnderlineText, DialogBox, Avatar, },
   methods: { ...mapActions(['promptLogin']) },
-  computed: { ...mapGetters(['anonymousAvatar']) }
+  computed: { ...mapState(['anonymousAvatar']) }
 }
 </script>
 

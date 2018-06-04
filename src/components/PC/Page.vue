@@ -112,7 +112,7 @@ export default {
       if ('VOTE' == this.middleDialog && !this.voted)
         return 'VOTE'
     },
-    ...mapState(['voting']), ...mapGetters(['uiMode', 'videoUrl', 'stream', 'myInfo', 'historyVideo', 'onlineUser', 'fontLoaded', 'voted'])
+    ...mapState(['voting', 'stream', 'uiMode', 'onlineUser', 'historyVideo', 'fontLoaded']), ...mapGetters(['videoUrl', 'myInfo', 'voted'])
   },
   methods: { ...mapActions(['subscribeData']) }
 }

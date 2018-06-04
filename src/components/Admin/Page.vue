@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions, mapState } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 import { VOTE_TIMEOUT } from '../../common'
 
 export default {
@@ -48,9 +48,7 @@ export default {
   },
   created() { this.subscribeData() },
   methods: { ...mapActions(['subscribeData', 'loginAdmin', 'startStream', 'stopStream', 'saveVideoUrl', 'saveGameTitle', 'saveGameUrl', 'saveGameDescription', 'startVote', 'sendChat']) },
-  computed: {
-    ...mapState(['voting']), ...mapGetters(['stream', 'isAdmin'])
-  },
+  computed: { ...mapState(['voting', 'isAdmin', 'stream']) },
   mounted() {
     this.unsubscribeAction = this.$store.subscribeAction((action, state) => {
       if ('notify' == action.type)

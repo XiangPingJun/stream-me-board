@@ -25,11 +25,11 @@ import Well from '../Well'
 import UserAvatar from './UserAvatar'
 import DialogBox from '../DialogBox'
 import WhiteBorder from '../WhiteBorder'
-import { mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 
 export default {
   components: { UnderlineText, Well, UserAvatar, DialogBox, },
-  computed: { ...mapGetters(['onlineUser', 'stream']) }
+  computed: { ...mapState(['stream', 'onlineUser']) }
 }
 </script>
 

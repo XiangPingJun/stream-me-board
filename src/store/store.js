@@ -25,12 +25,7 @@ export default new Vuex.Store({
 		voting: false,
 	},
 	getters: {
-		allUsers(state) { return state.allUsers },
 		myInfo(state) { return state.allUsers[state.myUid] || {} },
-		isAdmin(state) { return state.isAdmin },
-		stream(state) { return state.stream },
-		systemInfo(state) { return state.systemInfo },
-		uiMode(state) { return state.uiMode },
 		randomNextAvatar(state, getters) {
 			let result = generateRandomAvatar()
 			if (null === getters.myInfo)
@@ -42,12 +37,6 @@ export default new Vuex.Store({
 					return result
 		},
 		videoUrl(state) { return state.stream.streaming ? state.stream.videoUrl : state.selectedVideoUrl },
-		anonymousAvatar(state) { return state.anonymousAvatar },
-		chatLines(state) { return state.chatLines },
-		onlineUser(state) { return state.onlineUser },
-		historyVideo(state) { return state.historyVideo },
-		fontLoaded(state) { return state.fontLoaded },
-		voteRoster(state) { return state.voteRoster },
 		voteStatTime(state) { return (!state.voteInfo || !state.voteInfo.time) ? 0 : state.voteInfo.time.seconds * 1000 },
 		voted(state) { return state.voteRoster.find((roster, i) => roster.users.find(user => user.uid == state.myUid)) }
 	},

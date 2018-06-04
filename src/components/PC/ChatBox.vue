@@ -17,7 +17,7 @@ import ChatLine from './ChatLine'
 import InputBox from '../InputBox'
 import DialogBox from '../DialogBox'
 import DarkButton from '../DarkButton'
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters, mapActions, mapState } from 'vuex'
 
 export default {
   data() {
@@ -27,7 +27,7 @@ export default {
     }
   },
   components: { ChatLine, InputBox, DialogBox, DarkButton },
-  computed: { ...mapGetters(['myInfo', 'chatLines', 'allUsers']) },
+  computed: { ...mapState(['allUsers', 'chatLines']), ...mapGetters(['myInfo']) },
   mounted() {
     this.scrollContent = this.$refs.chatBox.$refs.content
     this.scrollContent.addEventListener('scroll', () => {

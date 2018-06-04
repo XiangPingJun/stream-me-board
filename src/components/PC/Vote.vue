@@ -21,7 +21,7 @@ import UserAvatar from './UserAvatar'
 import Well from '../Well'
 import PieChart from '../PieChart'
 import { VOTE_TIMEOUT } from '../../common'
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters, mapActions, mapState } from 'vuex'
 
 export default {
   data() { return { fliper: [], clickCount: [], clickable: true, flipInterval: null, timeout: null, dialogClass: 'animated flipInY', timerRate: 1 } },
@@ -42,7 +42,7 @@ export default {
     }, 100)
   },
   beforeDestroy() { clearInterval(this.flipInterval) },
-  computed: { ...mapGetters(['voteRoster', 'voteStatTime', 'myInfo', 'voted']) },
+  computed: { ...mapState(['voteRoster']), ...mapGetters(['voteStatTime', 'myInfo', 'voted']) },
   methods: {
     optionStyle(i) {
       return {

@@ -7,7 +7,7 @@
 <script>
 import { getWindowWidth, getWindowHeight } from '../../common'
 import ChatBubble from './ChatBubble'
-import { mapGetters, mapActions } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 import { clearInterval, setTimeout, setInterval } from 'timers';
 
 const CHAT_TIMEOUT = 5000
@@ -15,7 +15,7 @@ const CHAT_TIMEOUT = 5000
 export default {
 	data() { return { chats: [], rmObsoleteHandler: null, dummy: null } },
 	components: { ChatBubble },
-	computed: { ...mapGetters(['chatLines']) },
+	computed: { ...mapState(['chatLines']) },
 	watch: {
 		chatLines(val, oldVal) {
 			val.forEach(chatLine => {

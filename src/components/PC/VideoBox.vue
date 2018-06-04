@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 import { setVideoPlayer } from '../../common'
 
 export default {
@@ -23,7 +23,7 @@ export default {
         height: `${this.height || this.width * (9 / 16)}px`,
       }
     },
-    ...mapGetters(['videoUrl', 'stream'])
+    ...mapState(['stream']), ...mapGetters(['videoUrl'])
   },
   watch: {
     videoUrl(val, oldVal) {

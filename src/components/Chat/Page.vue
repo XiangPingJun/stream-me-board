@@ -8,12 +8,12 @@
 <script>
 import ChatLine from './ChatLine'
 import MicWarningBar from './MicWarningBar'
-import { mapGetters, mapActions } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 import { setTimeout } from 'timers';
 
 export default {
   components: { ChatLine, MicWarningBar },
-  computed: { ...mapGetters(['chatLines', 'allUsers']) },
+  computed: { ...mapState(['allUsers', 'chatLines']) },
   created() { this.subscribeData() },
   methods: { ...mapActions(['subscribeData']) },
   watch: {

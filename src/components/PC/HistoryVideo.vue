@@ -22,11 +22,11 @@ import Well from '../Well'
 import Button from '../Button'
 import DialogBox from '../DialogBox'
 import WhiteBorder from '../WhiteBorder'
-import { mapGetters, mapActions, mapMutations } from 'vuex'
+import { mapState, mapActions, mapMutations } from 'vuex'
 
 export default {
   components: { UnderlineText, Well, Button, DialogBox, WhiteBorder },
-  computed: { ...mapGetters(['historyVideo']) },
+  computed: { ...mapState(['historyVideo']) },
   methods: { ...mapActions(['playHistory']), ...mapMutations(['updateUiMode']) }
 }
 </script>
