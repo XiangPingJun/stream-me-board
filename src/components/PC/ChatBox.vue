@@ -30,6 +30,12 @@ export default {
   computed: { ...mapGetters(['myInfo', 'chatLines', 'allUsers']) },
   mounted() {
     this.scrollContent = this.$refs.chatBox.$refs.content
+    this.scrollContent.addEventListener('scroll', () => {
+      if (!this.showScrollToBottom)
+        return
+      if (this.isScrollBottom())
+        this.showScrollToBottom = false
+    })
     this.scrollToBottom()
   },
   methods: {
@@ -57,10 +63,8 @@ export default {
   },
   watch: {
     chatLines(newVal, oldVal) {
-      if (this.isScrollBottom())
+      if (!this.showScrollToBottom)
         setTimeout(() => this.scrollToBottom())
-      else
-        this.showScrollToBottom = !this.isScrollBottom()
     }
   }
 }

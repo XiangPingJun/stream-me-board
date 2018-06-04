@@ -78,8 +78,8 @@ export default new Vuex.Store({
 		},
 		updateVoteRoster(state, payload) {
 			for (const i in payload) {
-				state.voteRoster[i].users = [...state.voteRoster[i].users, ...payload[i].users]
-				state.voteRoster[i].total += payload[i].total
+				state.voteRoster[i].users = payload[i].users
+				state.voteRoster[i].total = payload[i].total
 			}
 		},
 	},

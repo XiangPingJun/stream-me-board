@@ -141,6 +141,8 @@ export default {
 				doc.data()[uid].forEach((count, i) => {
 					if (!roster[i])
 						roster[i] = { users: [], total: 0 }
+					if (0 == count)
+						return
 					roster[i].users.push(state.allUsers[uid])
 					roster[i].total += count
 				})

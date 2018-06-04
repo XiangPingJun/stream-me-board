@@ -28,6 +28,7 @@ export default {
   components: { DialogBox, UnderlineText, Well, UserAvatar, PieChart },
   mounted() {
     this.$el.addEventListener("animationend", () => this.dialogClass = '')
+    this.clickCount = this.voteRoster.map(() => 0)
     this.flipInterval = setInterval(() => {
       this.voteRoster.forEach((roster, i) => {
         if (undefined == this.fliper[i])
@@ -67,16 +68,17 @@ export default {
     ...mapActions(['sendVote', 'promptLogin'])
   },
   watch: {
-    voteRoster(val) {
-      val.forEach((roster, i) => {
-        if (roster.users.find(user => user.uid == this.myInfo.uid)) {
-          this.submitted = true
-          this.clickable = false
-        }
-        console.log(this.clickCount[i])
-        if (undefined == this.clickCount[i])
-          this.$set(this.clickCount, i, 0)
-      })
+    voteRoster: {
+      immediate: true,
+      deep: true,
+      handler(val) {
+        val.forEach((roster, i) => {
+          if (roster.users.find(user => user.uid == this.myInfo.uid)) {
+            this.submitted = true
+            this.clickable = false
+          }
+        })
+      }
     }
   }
 }
