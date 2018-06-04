@@ -16,14 +16,13 @@ const firestore = admin.firestore();
 // https://firebase.google.com/docs/functions/write-firebase-functions
 exports.schedule = functions.https.onRequest((request, response) => __awaiter(this, void 0, void 0, function* () {
     // Remove inactive user
-    yield firestore.collection('onlineUser').get().then(snap => {
-        const promises = [];
-        snap.forEach(doc => {
-            if (new Date().getTime() - doc.data().heartbeat.getTime() > 60000)
-                promises.push(doc.ref.delete());
-        });
-        return Promise.all(promises);
-    });
+    const doc = yield firestore.doc('activity/onlineUsers').get();
+    const idsToRemove = {};
+    for (const i in doc.data())
+        if (new Date().getTime() - doc.data()[i].seconds * 1000 > 60000)
+            idsToRemove[i] = admin.firestore.FieldValue.delete();
+    console.log(idsToRemove);
+    yield firestore.doc('activity/onlineUsers').update(idsToRemove);
     // update last executed
     yield firestore.doc('system/schedule').set({
         lastExecuted: new Date()
