@@ -301,10 +301,6 @@ export default {
 				time: new Date().toLocaleString().replace(/\//g, '-'),
 				streaming: true
 			})
-			dispatch('sendChat', {
-				uid: 'system',
-				text: '直播開始囉！大家坐穩啦！',
-			})
 		} catch (error) {
 			dispatch('notify', { type: 'error', text: error.message })
 			throw error
@@ -314,10 +310,6 @@ export default {
 		try {
 			await firestore.doc('system/stream').update({
 				streaming: false
-			})
-			dispatch('sendChat', {
-				uid: 'system',
-				text: '直播結束囉！大家下次再見~',
 			})
 		} catch (error) {
 			dispatch('notify', { type: 'error', text: error.message })

@@ -47,7 +47,7 @@ export default {
     return { name: '', password: '', sending: null, voteOptionCount: 2 }
   },
   created() { this.subscribeData() },
-  methods: { ...mapActions(['subscribeData', 'loginAdmin', 'startStream', 'stopStream', 'saveVideoUrl', 'saveGameTitle', 'saveGameUrl', 'saveGameDescription', 'startVote']) },
+  methods: { ...mapActions(['subscribeData', 'loginAdmin', 'startStream', 'stopStream', 'saveVideoUrl', 'saveGameTitle', 'saveGameUrl', 'saveGameDescription', 'startVote', 'sendChat']) },
   computed: {
     ...mapState(['voting']), ...mapGetters(['stream', 'isAdmin'])
   },
@@ -56,6 +56,25 @@ export default {
       if ('notify' == action.type)
         return this.$notify(action.payload)
     })
+  },
+  beforeDestroy() {
+    this.unsubscribeAction()
+  },
+  watch: {
+    stream(val, oldVal) {
+      if (val.streaming == oldVal.streaming)
+        return
+      if (val.streaming)
+        setTimeout(() => this.sendChat({
+          uid: 'system',
+          text: '直播開始囉！大家坐穩啦！',
+        }), 3000)
+      else
+        this.sendChat({
+          uid: 'system',
+          text: '直播結束囉！期待下次與大家相會！',
+        })
+    }
   }
 }
 </script>

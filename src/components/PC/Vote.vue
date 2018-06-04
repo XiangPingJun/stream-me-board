@@ -1,11 +1,11 @@
 <template>
   <DialogBox ref="dialog" overflowY="auto" :class="dialogClass">
     <UnderlineText><i class="fas fa-dice"/> 暴力投票系統<PieChart :rate="timerRate" style="margin:0 3px"/></UnderlineText>
-    <div v-if="!submitted" class="caption yellow">一人有多票!滑鼠點越快投越多票!</div>
-    <div v-if="submitted" class="caption">已經投過票囉！</div>
+    <div v-if="!voted" class="caption yellow">一人有多票!滑鼠點越快投越多票!</div>
+    <div v-if="voted" class="caption">已經投過票囉！</div>
     <Well v-for="(roster, i) in voteRoster" @click.native="addClick(i)" :style="optionStyle(i)" class="option" :key="i">
       <i class="fas fa-angle-right"/> {{roster.option}} ({{fliper[i]}}票)
-      <span v-if="!submitted&&clickCount[i]" class="green">+{{clickCount[i]}}</span>
+      <span v-if="!voted && clickCount[i]" class="green">+{{clickCount[i]}}</span>
       <span v-if="clickable" class="click red"><i class="fas fa-arrow-left"/> Click!!</span>
       <div style="display:flex;">
         <UserAvatar v-for="(user, i) in roster.users" :user="user" :key="i"/>
@@ -24,7 +24,7 @@ import { VOTE_TIMEOUT } from '../../common'
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
-  data() { return { fliper: [], clickCount: [], submitted: null, clickable: true, flipInterval: null, timeout: null, dialogClass: 'animated flipInY', timerRate: 1 } },
+  data() { return { fliper: [], clickCount: [], clickable: true, flipInterval: null, timeout: null, dialogClass: 'animated flipInY', timerRate: 1 } },
   components: { DialogBox, UnderlineText, Well, UserAvatar, PieChart },
   mounted() {
     this.$el.addEventListener("animationend", () => this.dialogClass = '')
@@ -42,7 +42,7 @@ export default {
     }, 100)
   },
   beforeDestroy() { clearInterval(this.flipInterval) },
-  computed: { ...mapGetters(['voteRoster', 'voteStatTime', 'myInfo']) },
+  computed: { ...mapGetters(['voteRoster', 'voteStatTime', 'myInfo', 'voted']) },
   methods: {
     optionStyle(i) {
       return {
@@ -66,20 +66,6 @@ export default {
       }
     },
     ...mapActions(['sendVote', 'promptLogin'])
-  },
-  watch: {
-    voteRoster: {
-      immediate: true,
-      deep: true,
-      handler(val) {
-        val.forEach((roster, i) => {
-          if (roster.users.find(user => user.uid == this.myInfo.uid)) {
-            this.submitted = true
-            this.clickable = false
-          }
-        })
-      }
-    }
   }
 }
 </script>

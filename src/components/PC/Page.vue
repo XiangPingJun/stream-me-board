@@ -109,10 +109,10 @@ export default {
     arrow() {
       if ('LOGIN' == this.topDialog)
         return 'LOGIN'
-      if ('VOTE' == this.middleDialog)
+      if ('VOTE' == this.middleDialog && !this.voted)
         return 'VOTE'
     },
-    ...mapState(['voting']), ...mapGetters(['uiMode', 'videoUrl', 'stream', 'myInfo', 'historyVideo', 'onlineUser', 'fontLoaded'])
+    ...mapState(['voting']), ...mapGetters(['uiMode', 'videoUrl', 'stream', 'myInfo', 'historyVideo', 'onlineUser', 'fontLoaded', 'voted'])
   },
   methods: { ...mapActions(['subscribeData']) }
 }

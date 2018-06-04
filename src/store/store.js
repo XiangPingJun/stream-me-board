@@ -49,6 +49,7 @@ export default new Vuex.Store({
 		fontLoaded(state) { return state.fontLoaded },
 		voteRoster(state) { return state.voteRoster },
 		voteStatTime(state) { return (!state.voteInfo || !state.voteInfo.time) ? 0 : state.voteInfo.time.seconds * 1000 },
+		voted(state) { return state.voteRoster.find((roster, i) => roster.users.find(user => user.uid == state.myUid)) }
 	},
 	mutations: {
 		setStream(state, payload) { state.stream = payload },
