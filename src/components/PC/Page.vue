@@ -43,7 +43,8 @@ import Notify from './Notify'
 import HistoryVideo from './HistoryVideo'
 import FollowUs from './FollowUs'
 import Vote from './Vote'
-import { mapGetters, mapActions } from 'vuex'
+import { VOTE_TIMEOUT } from '../../common'
+import { mapGetters, mapActions, mapState } from 'vuex'
 
 export default {
   data() {
@@ -67,16 +68,12 @@ export default {
       }
     })
     this.unsubscribeAction = this.$store.subscribeAction((action, state) => {
-      switch (action.type) {
-        case 'promptLogin':
-          return setTimeout(() => this.$refs.loginArrow.animate())
-        case 'notify':
-          return this.$notify({
-            group: 'notify',
-            data: { ...action.payload.data },
-            ...action.payload
-          })
-      }
+      if ('notify' == action.type)
+        return this.$notify({
+          group: 'notify',
+          data: { ...action.payload.data },
+          ...action.payload
+        })
     })
   },
   beforeDestroy() {
@@ -94,7 +91,6 @@ export default {
         return 'ANONYMOUS'
     },
     middleDialog() {
-      console.log(this.voting)
       if (!this.fontLoaded)
         return null
       if (this.voting)
@@ -116,7 +112,7 @@ export default {
       if ('VOTE' == this.middleDialog)
         return 'VOTE'
     },
-    ...mapGetters(['uiMode', 'videoUrl', 'stream', 'myInfo', 'historyVideo', 'onlineUser', 'fontLoaded', 'voting'])
+    ...mapState(['voting']), ...mapGetters(['uiMode', 'videoUrl', 'stream', 'myInfo', 'historyVideo', 'onlineUser', 'fontLoaded'])
   },
   methods: { ...mapActions(['subscribeData']) }
 }

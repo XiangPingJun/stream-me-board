@@ -37,7 +37,6 @@ export default {
       if (this.myInfo.name)
         return
       this.promptLogin()
-      this.$refs.input.unfocus()
     },
     isScrollBottom() {
       return this.scrollContent.offsetHeight + this.scrollContent.scrollTop == this.scrollContent.scrollHeight

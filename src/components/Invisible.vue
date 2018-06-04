@@ -8,8 +8,8 @@
 <script>
 export default {
   methods: {
-    getWidth() { return this.$refs.container.clientWidth },
-    getHeight() { return this.$refs.container.clientHeight },
+    getWidth() { return this.$el.clientWidth },
+    getHeight() { return this.$el.clientHeight },
   }
 }
 </script>

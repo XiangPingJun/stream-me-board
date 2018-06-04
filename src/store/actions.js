@@ -134,27 +134,20 @@ export default {
 			}
 		})
 		// vote
-		firestore.doc("system/vote").onSnapshot(doc => {
-			commit('setVoteInfo', doc.data())
-			setTimeout(() => commit('setVoteInfo', { ...state.voteInfo }), VOTE_TIMEOUT + 500)
-		})
+		firestore.doc("system/vote").onSnapshot(doc => commit('setVoteInfo', doc.data()))
 		firestore.doc("activity/vote").onSnapshot(doc => {
-			const voteRoster = Array.apply(null, new Array(state.voteInfo.optionCount)).map((item, i) => ({
-				option: String.fromCharCode(65 + i),
-				users: [],
-				total: 0
-			}))
-			const data = doc.data()
-			for (const uid in data) {
-				data[uid].forEach((count, i) => {
-					if (0 == count)
-						return
-					voteRoster[i].users.push(state.allUsers[uid])
-					voteRoster[i].total += count
+			const roster = []
+			for (const uid in doc.data()) {
+				doc.data()[uid].forEach((count, i) => {
+					if (!roster[i])
+						roster[i] = { users: [], total: 0 }
+					roster[i].users.push(state.allUsers[uid])
+					roster[i].total += count
 				})
 			}
-			commit('setVoteRoster', voteRoster)
+			commit('updateVoteRoster', roster)
 		})
+		setInterval(() => commit('updateVoting'), 1000)
 		// history video
 		fetch('https://www.googleapis.com/youtube/v3/search?key=AIzaSyBCYPReX74lujmX9tg8AiM-OFGqmKYMZkU&channelId=UCLeQT6hvBgnq_-aKKlcgj1Q&part=snippet,id&order=date&maxResults=50').then(res => res.json()).then(data => commit('setHistoryVideo', data.items.filter(item => item.id.videoId)))
 		// font loaded
@@ -322,7 +315,7 @@ export default {
 			})
 			dispatch('sendChat', {
 				uid: 'system',
-				text: '直播開始囉！大家坐穩啦！',
+				text: '直播結束囉！大家下次再見~',
 			})
 		} catch (error) {
 			dispatch('notify', { type: 'error', text: error.message })

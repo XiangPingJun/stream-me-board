@@ -1,5 +1,5 @@
 <template>
-  <div ref="bubble" class="cbbl" :class="{ 'cbbl--right': x < getWindowWidth/2, 'cbbl--up': y < getWindowHeight/2 }"
+  <div class="cbbl" :class="{ 'cbbl--right': x < getWindowWidth/2, 'cbbl--up': y < getWindowHeight/2 }"
     :style="{ position: 'fixed', left: x+'px', top: y+'px' }"
   ><slot/></div>
 </template>
@@ -10,8 +10,8 @@ import { getWindowWidth, getWindowHeight } from '../../common'
 export default {
   props: ['x', 'y'],
   computed: {
-    width() { return this.$refs.bubble.clientWidth },
-    height() { return this.$refs.bubble.clientHeight },
+    width() { return this.$el.clientWidth },
+    height() { return this.$el.clientHeight },
     getWindowWidth, getWindowHeight
   }
 }

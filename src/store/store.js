@@ -22,6 +22,7 @@ export default new Vuex.Store({
 		fontLoaded: false,
 		voteInfo: null,
 		voteRoster: null,
+		voting: false,
 	},
 	getters: {
 		allUsers(state) { return state.allUsers },
@@ -46,8 +47,8 @@ export default new Vuex.Store({
 		onlineUser(state) { return state.onlineUser },
 		historyVideo(state) { return state.historyVideo },
 		fontLoaded(state) { return state.fontLoaded },
-		voting(state) { return state.voteInfo && state.voteInfo.time && new Date().getTime() - state.voteInfo.time.seconds * 1000 < VOTE_TIMEOUT },
 		voteRoster(state) { return state.voteRoster },
+		voteStatTime(state) { return (!state.voteInfo || !state.voteInfo.time) ? 0 : state.voteInfo.time.seconds * 1000 },
 	},
 	mutations: {
 		setStream(state, payload) { state.stream = payload },
@@ -62,8 +63,25 @@ export default new Vuex.Store({
 		setHistoryVideo(state, payload) { state.historyVideo = payload },
 		setSelectedVideoUrl(state, payload) { state.selectedVideoUrl = payload },
 		setFontLoaded(state, payload) { state.fontLoaded = payload },
-		setVoteInfo(state, payload) { state.voteInfo = payload },
-		setVoteRoster(state, payload) { state.voteRoster = payload },
+		setVoteInfo(state, payload) {
+			state.voteInfo = payload
+			state.voteRoster = Array.apply(null, new Array(payload.optionCount)).map((item, i) => ({
+				option: String.fromCharCode(65 + i),
+				users: [],
+				total: 0
+			}))
+		},
+		updateVoting(state, payload) {
+			if (!state.voteInfo || !state.voteInfo.time)
+				return false
+			state.voting = new Date().getTime() - state.voteInfo.time.seconds * 1000 < VOTE_TIMEOUT
+		},
+		updateVoteRoster(state, payload) {
+			for (const i in payload) {
+				state.voteRoster[i].users = [...state.voteRoster[i].users, ...payload[i].users]
+				state.voteRoster[i].total += payload[i].total
+			}
+		},
 	},
 	actions: actions
 })

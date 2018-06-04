@@ -11,14 +11,6 @@ export default {
 	},
 	mounted() {
 		this.cssClass = 'animated jello'
-	},
-	methods: {
-		animate() {
-			this.cssClass = ''
-			setTimeout(() => {
-				this.cssClass = 'animated jello'
-			}, 100)
-		}
 	}
 }
 </script>

@@ -9,9 +9,6 @@
 * {
 	font-family: 'Zpix';
 }
-.fas, .far {
-	vertical-align: middle;
-}
 [v-cloak] {
 	display: none;
 }
