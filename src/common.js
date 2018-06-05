@@ -16,3 +16,11 @@ export const getVideoTime = () => videoPlayer && videoPlayer.getCurrentTime ? vi
 export const getWindowWidth = () => window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth
 export const getWindowHeight = () => window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight
 export const VOTE_TIMEOUT = 3000
+export const preservedUser = {
+	system: {
+		avatarSelected: 0,
+		level: 1,
+		name: '系統',
+		preserved: true
+	}
+}

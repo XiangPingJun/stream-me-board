@@ -63,25 +63,18 @@ export default {
       if (undefined == val.streaming || undefined == oldVal.streaming || val.streaming == oldVal.streaming)
         return
       if (val.streaming)
-        setTimeout(() => this.sendChat({
-          uid: 'system',
-          text: '直播開始囉！大家坐穩啦！',
-        }), 3000)
+        setTimeout(() => this.sendChat({ uid: 'system', text: '直播開始囉！大家坐穩啦！', }), 3000)
       else
-        this.sendChat({
-          uid: 'system',
-          text: '直播結束囉！期待下次與大家相會！',
-        })
+        this.sendChat({ uid: 'system', text: '直播結束囉！期待下次與大家相會！', })
     },
     voting(val, oldVal) {
       if (val || undefined == val || undefined == oldVal)
         return
-      let text = '投票結果:'
-      this.voteRoster.forEach(item => text += ` ${item.option}: ${item.total}票`)
-      this.sendChat({
-        uid: 'system',
-        text: text,
-      })
+      setTimeout(() => {
+        let text = ''
+        this.voteRoster.forEach(item => text += ` ${item.option}(${item.total}票)`)
+        this.sendChat({ uid: 'system', text: text, })
+      }, 2000)
     }
   }
 }

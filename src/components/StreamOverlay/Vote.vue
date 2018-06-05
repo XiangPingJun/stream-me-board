@@ -6,7 +6,7 @@
 				<div v-for="(roster, i) in voteRoster" class="option" :key="i">
 					<div class="code animated flipInY">{{roster.option}}</div>
 					<div class="count animated flipInX">({{fliper[i]}}票)</div>
-					<div class="arrow animated flipInY"><i class="fas fa-arrow-up"/></div>
+					<div class="arrow animated flipInY" v-if="roster.users.length"><i class="fas fa-arrow-up"/></div>
 					<div style="text-align:center">
 						<Avatar v-for="(user, i) in roster.users" :index="user.avatarSelected" :large="true" class="animated flipInY" :key="i"/>
 					</div>

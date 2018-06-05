@@ -1,10 +1,10 @@
 <template>
   <div class="pie-wrapper">
-    <div class="pie" :class="{'over-half': rate > 0.5}">
+    <div class="pie" :class="{'over-half': degree > 180}">
       <div :style="leftStyle" class="half-circle shadow"></div>
       <div :style="leftStyle" class="half-circle"></div>
-      <div v-if="rate > 0.5" class="half-circle right-side shadow"></div>			
-      <div v-if="rate > 0.5" class="half-circle right-side"></div>
+      <div v-if="degree > 180" class="half-circle right-side shadow"></div>			
+      <div v-if="degree > 180" class="half-circle right-side"></div>
     </div>
   </div>
 </template>
@@ -13,7 +13,14 @@
 export default {
   props: ['rate'],
   computed: {
-    leftStyle() { return { transform: `rotate(${360 * this.rate}deg)` } }
+    degree() {
+      if (isNaN(this.rate) || this.rate <= 0)
+        return 0
+      if (this.rate >= 1)
+        return 359
+      return 360 * this.rate
+    },
+    leftStyle() { return { transform: `rotate(${this.degree}deg)` } }
   }
 }
 </script>

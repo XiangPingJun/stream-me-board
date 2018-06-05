@@ -2,7 +2,7 @@
 	<div>
   	<ComicBubble ref="bubble" :x="chat.x" :y="chat.y" style="opacity:0.75" :dummy="dummy"
 			:style="{visibility:chat.x?'visible':'hidden'}" :class="{jello:chat.x, animated:chat.x}">
-			<Avatar :index="user.selectedAvatar" style="vertical-align: middle;"/>
+			<Avatar :index="user.selectedAvatar" :preserved="user.preserved" style="vertical-align: middle;"/>
 			<NameBadge :user="user"/>
 			<span class="text">{{chat.text}}</span>
 		</ComicBubble>

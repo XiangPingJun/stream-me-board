@@ -1,4 +1,4 @@
-import { getVideoTime, FINGERPRINT, VOTE_TIMEOUT } from '../common'
+import { getVideoTime, FINGERPRINT, VOTE_TIMEOUT, preservedUser } from '../common'
 import shortid from 'shortid'
 const firestore = firebase.firestore()
 firestore.settings({ timestampsInSnapshots: true })
@@ -77,7 +77,7 @@ export default {
 		})
 		// all users
 		firestore.collection('user').onSnapshot(snap => {
-			let allUsers = {}
+			let allUsers = { ...preservedUser }
 			snap.forEach(doc => allUsers[doc.id] = doc.data())
 			commit('setAllUsers', allUsers)
 		})
@@ -163,9 +163,12 @@ export default {
 		}
 	},
 	async loginVisitor({ dispatch, state }, payload) {
-		const name = payload
 		try {
-			const me = Object.values(state.allUsers).find(user => user.name == name)
+			if (preservedUser[payload]) {
+				dispatch('notify', { type: 'error', text: '暱稱已被使用!' })
+				dispatch('promptLogin')
+			}
+			const me = Object.values(state.allUsers).find(user => user.name == payload)
 			if (me) {
 				await firebase.auth().signInWithEmailAndPassword(me.email, 'dummy-password')
 			} else {
@@ -173,7 +176,7 @@ export default {
 				const email = `${shortid.generate()}@mail.net`
 				const user = await firebase.auth().createUserWithEmailAndPassword(email, 'dummy-password')
 				await firestore.collection('user').doc(user.uid).set({
-					name: name,
+					name: payload,
 					uid: user.uid,
 					avatarList: [state.anonymousAvatar],
 					avatarSelected: state.anonymousAvatar,
@@ -186,13 +189,8 @@ export default {
 				dispatch('checkTrophy')
 			}
 		} catch (error) {
-			if ('auth/wrong-password' == error.code) {
-				dispatch('notify', { type: 'error', text: '暱稱已被使用!' })
-				dispatch('promptLogin')
-			} else {
-				dispatch('notify', { type: 'error', text: error.message })
-				throw error
-			}
+			dispatch('notify', { type: 'error', text: error.message })
+			throw error
 		}
 	},
 	async logout({ state, dispatch, commit }) {

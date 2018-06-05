@@ -11,13 +11,11 @@ export const schedule = functions.https.onRequest(async (request, response) => {
 	// Remove inactive user
 	const doc = await firestore.doc('activity/onlineUsers').get()
 	const idsToRemove = {}
-	for (const i in doc.data()) {
-		console.log(doc.data()[i].getTime())
+	for (const i in doc.data())
 		if (new Date().getTime() - doc.data()[i].getTime() > 60000)
 			idsToRemove[i] = admin.firestore.FieldValue.delete()
-	}
-	console.log(idsToRemove)
-	await firestore.doc('activity/onlineUsers').update(idsToRemove)
+	if (Object.keys(idsToRemove).length > 0)
+		await firestore.doc('activity/onlineUsers').update(idsToRemove)
 
 	// update last executed
 	await firestore.doc('system/schedule').set({
