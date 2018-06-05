@@ -103,7 +103,7 @@ export default {
         return 'FOLLOW_US'
       if (false == this.stream.streaming && this.historyVideo)
         return 'HISTORY_VIDEO'
-      if (this.stream.streaming && this.onlineUser)
+      if (this.stream.streaming && this.onlineUsers)
         return 'PLAYGROUND'
     },
     arrow() {
@@ -112,7 +112,7 @@ export default {
       if ('VOTE' == this.middleDialog && !this.voted)
         return 'VOTE'
     },
-    ...mapState(['voting', 'stream', 'uiMode', 'onlineUser', 'historyVideo', 'fontLoaded']), ...mapGetters(['videoUrl', 'myInfo', 'voted'])
+    ...mapState(['voting', 'stream', 'uiMode', 'historyVideo', 'fontLoaded']), ...mapGetters(['videoUrl', 'myInfo', 'voted', 'onlineUsers'])
   },
   methods: { ...mapActions(['subscribeData']) }
 }

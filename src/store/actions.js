@@ -47,18 +47,24 @@ export default {
 			dispatch('notify', { data: { symbol: 'trophy' }, text: msg })
 		}
 	},
-	sendHeartbeat({ state }) {
-		if (state.myUid) {
-			firestore.collection('onlineUser').doc(state.myUid).set({
-				uid: state.myUid,
-				heartbeat: firebase.firestore.FieldValue.serverTimestamp()
-			})
-			firestore.collection('onlineUser').doc(FINGERPRINT).delete()
-		} else {
-			firestore.collection('onlineUser').doc(FINGERPRINT).set({
-				avatarSelected: state.anonymousAvatar,
-				heartbeat: firebase.firestore.FieldValue.serverTimestamp()
-			})
+	async sendHeartbeat({ state }) {
+		try {
+			const anonymousUid = `${FINGERPRINT} ${state.anonymousAvatar}`
+			if (state.myUid) {
+				firestore.doc('activity/onlineUsers').update({
+					[state.myUid]: firebase.firestore.FieldValue.serverTimestamp()
+				})
+				firestore.doc('activity/onlineUsers').update({
+					[anonymousUid]: firebase.firestore.FieldValue.delete()
+				})
+			} else {
+				firestore.doc('activity/onlineUsers').update({
+					[anonymousUid]: firebase.firestore.FieldValue.serverTimestamp()
+				})
+			}
+		} catch (error) {
+			dispatch('notify', { type: 'error', text: error.message })
+			throw error
 		}
 	},
 	subscribeData({ state, commit, dispatch }) {
@@ -77,15 +83,7 @@ export default {
 		})
 		// online user
 		setInterval(() => dispatch('sendHeartbeat'), 60000)
-		firestore.collection('onlineUser').onSnapshot(snap => {
-			commit('setOnlineUser', snap.docs.map(doc => {
-				const data = doc.data()
-				if (data.uid)
-					return state.allUsers[data.uid]
-				else
-					return { avatarSelected: data.avatarSelected }
-			}))
-		})
+		firestore.doc('activity/onlineUsers').onSnapshot(doc => commit('setOnlineUids', Object.keys(doc.data())))
 		// system info
 		firestore.doc('system/stream').onSnapshot(doc => {
 			const stream = doc.data()
@@ -200,7 +198,9 @@ export default {
 	async logout({ state, dispatch, commit }) {
 		try {
 			commit('generateAnonymousAvatar')
-			await firestore.collection('onlineUser').doc(state.myUid).delete()
+			await firestore.doc('activity/onlineUsers').update({
+				[state.myUid]: firestore.FieldValue.delete()
+			})
 			await firebase.auth().signOut()
 			commit('updateUiMode', { selectAvatar: false })
 		} catch (error) {

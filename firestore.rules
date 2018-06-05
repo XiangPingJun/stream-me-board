@@ -7,10 +7,6 @@ service cloud.firestore {
       allow read;
       allow write: if isAdmin();
     }
-    match /onlineUser/{anything=**} {
-      allow read;
-      allow write;
-    }
     match /user/{anything=**} {
       allow read, write;
     }
@@ -21,6 +17,11 @@ service cloud.firestore {
       allow read;
       allow update;
       allow write: if isAdmin();
+    }
+    match /activity/onlineUsers {
+      allow read;
+      allow update;
+      allow write;
     }
     
     function isAdmin() { 

@@ -13,7 +13,7 @@
     <div><UnderlineText>線上的網友們</UnderlineText></div>
     <Well style="margin-bottom:20px;">
       <div style="display:flex;">
-        <UserAvatar v-for="(user, i) in onlineUser" :user="user" :key="i"/>
+        <UserAvatar v-for="(user, i) in onlineUsers" :user="user" :key="i"/>
       </div>
     </Well>
   </DialogBox>
@@ -25,11 +25,11 @@ import Well from '../Well'
 import UserAvatar from './UserAvatar'
 import DialogBox from '../DialogBox'
 import WhiteBorder from '../WhiteBorder'
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 
 export default {
   components: { UnderlineText, Well, UserAvatar, DialogBox, },
-  computed: { ...mapState(['stream', 'onlineUser']) }
+  computed: { ...mapState(['stream']), ...mapGetters(['onlineUsers']) }
 }
 </script>
 

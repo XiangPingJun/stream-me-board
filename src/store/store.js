@@ -17,7 +17,7 @@ export default new Vuex.Store({
 		uiMode: {},
 		anonymousAvatar: generateRandomAvatar(),
 		chatLines: [],
-		onlineUser: [],
+		onlineUids: [],
 		historyVideo: [],
 		fontLoaded: false,
 		voteInfo: null,
@@ -36,6 +36,15 @@ export default new Vuex.Store({
 				if (!getters.myInfo.avatarList.find(avatar => avatar == result))
 					return result
 		},
+		onlineUsers(state) {
+			return state.onlineUids.map(uid => {
+				const arr = uid.split(' ')
+				if (1 == arr.length)
+					return state.allUsers[uid]
+				else
+					return { avatarSelected: arr[1] }
+			})
+		},
 		videoUrl(state) { return state.stream.streaming ? state.stream.videoUrl : state.selectedVideoUrl },
 		voteStatTime(state) { return (!state.voteInfo || !state.voteInfo.time) ? 0 : state.voteInfo.time.seconds * 1000 },
 		voted(state) { return state.voteRoster.find((roster, i) => roster.users.find(user => user.uid == state.myUid)) }
@@ -49,7 +58,7 @@ export default new Vuex.Store({
 		setChatLines(state, payload) { state.chatLines = payload },
 		setIsAdmin(state, payload) { state.isAdmin = payload },
 		generateAnonymousAvatar(state, payload) { state.anonymousAvatar = generateRandomAvatar() },
-		setOnlineUser(state, payload) { state.onlineUser = payload },
+		setOnlineUids(state, payload) { state.onlineUids = payload },
 		setHistoryVideo(state, payload) { state.historyVideo = payload },
 		setSelectedVideoUrl(state, payload) { state.selectedVideoUrl = payload },
 		setFontLoaded(state, payload) { state.fontLoaded = payload },
