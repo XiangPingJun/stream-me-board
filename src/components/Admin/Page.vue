@@ -48,7 +48,7 @@ export default {
   },
   created() { this.subscribeData() },
   methods: { ...mapActions(['subscribeData', 'loginAdmin', 'startStream', 'stopStream', 'saveVideoUrl', 'saveGameTitle', 'saveGameUrl', 'saveGameDescription', 'startVote', 'sendChat']) },
-  computed: { ...mapState(['voting', 'isAdmin', 'stream']) },
+  computed: { ...mapState(['voting', 'isAdmin', 'stream', 'voteRoster']) },
   mounted() {
     this.unsubscribeAction = this.$store.subscribeAction((action, state) => {
       if ('notify' == action.type)
@@ -60,7 +60,7 @@ export default {
   },
   watch: {
     stream(val, oldVal) {
-      if (val.streaming == oldVal.streaming)
+      if (undefined == val.streaming || undefined == oldVal.streaming || val.streaming == oldVal.streaming)
         return
       if (val.streaming)
         setTimeout(() => this.sendChat({
@@ -72,6 +72,16 @@ export default {
           uid: 'system',
           text: '直播結束囉！期待下次與大家相會！',
         })
+    },
+    voting(val, oldVal) {
+      if (val || undefined == val || undefined == oldVal)
+        return
+      let text = '投票結果:'
+      this.voteRoster.forEach(item => text += ` ${item.option}: ${item.total}票`)
+      this.sendChat({
+        uid: 'system',
+        text: text,
+      })
     }
   }
 }

@@ -23,7 +23,8 @@ export default {
 }
 .line {
   word-break: break-all;
-  margin-top: 15px;
+  margin-left: 15px;
+  line-height: 125%;
 }
 .avatar {
   transform: scale(2.5, 2.5);

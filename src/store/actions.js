@@ -329,12 +329,14 @@ export default {
 		}
 	},
 	async sendVote({ state, dispatch }, payload) {
+		const max = Math.random() * 3 + 28
+		const arr = payload.map(count => count > max ? max : count)
 		await firestore.doc('activity/vote').update({
-			[state.myUid]: payload
+			[state.myUid]: arr
 		})
 		dispatch('sendChat', {
 			uid: state.myUid,
-			text: payload.reduce((acc, val) => acc + val) + '票！',
+			text: arr.reduce((acc, val) => acc + val) + '票！',
 		})
 	},
 	playHistory({ commit }, payload) {

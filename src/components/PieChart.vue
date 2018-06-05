@@ -11,10 +11,10 @@
 
 <script>
 export default {
-	props: ['rate'],
-	computed: {
-		leftStyle() { return { transform: `rotate(${360 * this.rate}deg)` } }
-	}
+  props: ['rate'],
+  computed: {
+    leftStyle() { return { transform: `rotate(${360 * this.rate}deg)` } }
+  }
 }
 </script>
 
@@ -44,7 +44,7 @@ export default {
   top: 0;
 }
 .pie-wrapper .pie.over-half {
-  clip: rect(auto, auto, auto, auto);
+  clip: rect(0, 1.1em, 1.1em, 0em);
 }
 .pie-wrapper .pie .half-circle {
   height: 100%;

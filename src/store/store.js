@@ -21,7 +21,7 @@ export default new Vuex.Store({
 		historyVideo: [],
 		fontLoaded: false,
 		voteInfo: null,
-		voteRoster: null,
+		voteRoster: [],
 		voting: false,
 	},
 	getters: {
@@ -72,8 +72,9 @@ export default new Vuex.Store({
 		},
 		updateVoting(state, payload) {
 			if (!state.voteInfo || !state.voteInfo.time)
-				return false
-			state.voting = new Date().getTime() - state.voteInfo.time.seconds * 1000 < VOTE_TIMEOUT
+				state.voting = false
+			else
+				state.voting = new Date().getTime() - state.voteInfo.time.seconds * 1000 < VOTE_TIMEOUT
 		},
 		updateVoteRoster(state, payload) {
 			for (const i in payload) {
