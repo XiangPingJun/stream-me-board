@@ -7,24 +7,23 @@ fs.readFileSync('toParse.txt', 'utf-8').split('\n').forEach(line => {
 	line = line.trim()
 	if (line.match(/^#\d+/)) {
 		lastQuestion = line.replace(/^#\d+\s*/, '').trim()
-		result[lastQuestion] = result[lastQuestion] || { question: lastQuestion }
+		result[lastQuestion] = result[lastQuestion] || { Q: lastQuestion }
 	} else if (line.match(/^A:/)) {
-		const answer = line.replace('A:', '').trim()
-		result[lastQuestion].answer = result[lastQuestion].options.findIndex(option => option == answer)
+		const A = line.replace('A:', '').trim()
+		result[lastQuestion].A = result[lastQuestion].OP.findIndex(option => option == A)
 	} else if (line.split(' ').length > 1) {
-		result[lastQuestion].options = line.split(' ')
+		result[lastQuestion].OP = line.split(' ')
 	}
 })
 let j = 0
 for (let i in result) {
-	if (!result[i].answer || -1 == result[i].answer || !result[i].options || result[i].options.length < 2) {
+	if (!result[i].A || -1 == result[i].A || !result[i].OP || result[i].OP.length < 2) {
 		delete result[i]
 		continue
 	}
-	result[i].options = result[i].options.filter(option => option).map(option => option.trim())
+	result[i].OP = result[i].OP.filter(option => option).map(option => option.trim())
 	j++
 }
-console.log(result)
 fs.writeFileSync('result.json', JSON.stringify(result), 'utf-8')
 
 
