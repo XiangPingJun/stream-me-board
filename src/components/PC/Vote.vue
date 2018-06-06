@@ -57,7 +57,8 @@ export default {
         this.promptLogin()
         return
       }
-      this.$set(this.clickCount, i, this.clickCount[i] + 1)
+      if (this.clickCount < Math.random() * 3 + 28)
+        this.$set(this.clickCount, i, this.clickCount[i] + 1)
       if (!this.timeout) {
         this.timeout = setTimeout(() => {
           this.clickable = false
