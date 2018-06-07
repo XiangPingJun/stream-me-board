@@ -1,7 +1,7 @@
 const request = require("request")
 const fs = require('fs')
 
-let result = JSON.parse(fs.readFileSync('result.json', 'utf-8'))
+let result = JSON.parse(fs.readFileSync('index.ts', 'utf-8').replace('export default ', ''))
 let lastQuestion
 fs.readFileSync('toParse.txt', 'utf-8').split('\n').forEach(line => {
 	//line = line.replace('\r', '')
@@ -55,7 +55,7 @@ for (let i in result) {
 	}
 }
 console.log(`Total ${Object.keys(result).length} questions`)
-fs.writeFileSync('result.json', JSON.stringify(result), 'utf-8')
+fs.writeFileSync('result.json', 'export default ' + JSON.stringify(result), 'utf-8')
 
 
 

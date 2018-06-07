@@ -10,23 +10,38 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
+const quiz_1 = require("./quiz");
 admin.initializeApp();
 const firestore = admin.firestore();
 // Create and Deploy Your First Cloud Functions
 // https://firebase.google.com/docs/functions/write-firebase-functions
 exports.schedule = functions.https.onRequest((request, response) => __awaiter(this, void 0, void 0, function* () {
     // Remove inactive user
-    const doc = yield firestore.doc('activity/onlineUsers').get();
+    let doc = yield firestore.doc('activity/onlineUsers').get();
     const idsToRemove = {};
     for (const i in doc.data())
         if (new Date().getTime() - doc.data()[i].getTime() > 60000)
             idsToRemove[i] = admin.firestore.FieldValue.delete();
     if (Object.keys(idsToRemove).length > 0)
         yield firestore.doc('activity/onlineUsers').update(idsToRemove);
-    // update last executed
-    yield firestore.doc('system/schedule').set({
-        lastExecuted: new Date()
-    });
+    // quiz
+    doc = yield firestore.doc('system/quiz').get();
+    if (new Date().getTime() - doc.data().time.getTime() > 600000) {
+        doc = yield firestore.doc('system/quizHistory').get();
+        const complement = {};
+        for (const i in quiz_1.default)
+            if (!doc.data()[i])
+                complement[i] = quiz_1.default[i];
+        const questions = Object.keys(complement);
+        if (0 == questions.length)
+            yield firestore.doc('system/quizHistory').set({});
+        else {
+            const question = questions[Math.floor(Math.random() * questions.length)];
+            yield firestore.doc('system/quiz').set(Object.assign({ time: admin.firestore.FieldValue.serverTimestamp(), Q: question }, complement[question]));
+            yield firestore.doc('system/quizHistory').update({ [question]: true });
+            yield firestore.doc('activity/quiz').set({});
+        }
+    }
     response.send('Done.');
 }));
 //# sourceMappingURL=index.js.map
