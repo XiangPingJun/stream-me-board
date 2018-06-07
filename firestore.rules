@@ -18,6 +18,10 @@ service cloud.firestore {
       allow update;
       allow write: if isAdmin();
     }
+    match /activity/quiz {
+      allow read;
+      allow update;
+    }
     match /activity/onlineUsers {
       allow read;
       allow update;

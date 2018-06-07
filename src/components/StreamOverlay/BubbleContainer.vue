@@ -5,12 +5,10 @@
 </template>
 
 <script>
-import { getWindowWidth, getWindowHeight } from '../../common'
+import { getWindowWidth, getWindowHeight, DISPLAY_TIMEOUT } from '../../common'
 import ChatBubble from './ChatBubble'
 import { mapActions, mapState } from 'vuex'
 import { clearInterval, setTimeout, setInterval } from 'timers';
-
-const CHAT_TIMEOUT = 5000
 
 export default {
 	data() { return { chats: [], rmObsoleteHandler: null, dummy: null } },
@@ -28,7 +26,7 @@ export default {
 	},
 	methods: {
 		rmObsolete() {
-			this.chats = this.chats.filter(chat => new Date().getTime() - chat.time.seconds * 1000 < CHAT_TIMEOUT)
+			this.chats = this.chats.filter(chat => new Date().getTime() - chat.time.seconds * 1000 < DISPLAY_TIMEOUT)
 		},
 		placeChat() {
 			this.chats.forEach((chat, i) => {
