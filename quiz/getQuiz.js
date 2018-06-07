@@ -4,26 +4,57 @@ const fs = require('fs')
 let result = JSON.parse(fs.readFileSync('result.json', 'utf-8'))
 let lastQuestion
 fs.readFileSync('toParse.txt', 'utf-8').split('\n').forEach(line => {
+	//line = line.replace('\r', '')
 	line = line.trim()
-	if (line.match(/^#\d+/)) {
-		lastQuestion = line.replace(/^#\d+\s*/, '').trim()
-		result[lastQuestion] = result[lastQuestion] || { Q: lastQuestion }
-	} else if (line.match(/^A:/)) {
-		const A = line.replace('A:', '').trim()
-		result[lastQuestion].A = result[lastQuestion].OP.findIndex(option => option == A)
-	} else if (line.split(' ').length > 1) {
-		result[lastQuestion].OP = line.split(' ')
+	if (!line)
+		return
+
+	// line.split(' ').forEach((token, i) => {
+	// 	token = token.trim()
+	// 	if (0 == i) {
+	// 		lastQuestion = token
+	// 		result[lastQuestion] = result[lastQuestion] || { OP: [] }
+	// 	} else if (5 == i)
+	// 		//result[lastQuestion].A = result[lastQuestion].OP.findIndex(option => option == token)
+	// 		result[lastQuestion].A = parseInt(token) - 1
+	// 	else
+	// 		result[lastQuestion].OP.push(token)
+	// })
+
+	// if (line.match(/^#\d+/)) {
+	// 	lastQuestion = line.replace(/^#\d+\s*/, '').trim()
+	// 	result[lastQuestion] = result[lastQuestion] || {}
+	// } else if (line.match(/^A:/)) {
+	// 	const A = line.replace('A:', '').trim()
+	// 	result[lastQuestion].A = result[lastQuestion].A || result[lastQuestion].OP.findIndex(option => option == A)
+	// } else if (line.split(' ').length > 1) {
+	// 	result[lastQuestion].OP = result[lastQuestion].OP || line.split(' ').filter(option => option).map(option => option.trim())
+	// }
+	if (line.match(/^[^\d].*/)) {
+		lastQuestion = line
+		result[lastQuestion] = result[lastQuestion] || {}
+	} else if (line.split('　').length > 1) {
+		result[lastQuestion].OP = line.split('　').map(option => option.trim()).filter(option => option)
+		result[lastQuestion].A = result[lastQuestion].OP.findIndex(option => -1 != option.indexOf('tttt'))
+		result[lastQuestion].OP = result[lastQuestion].OP.map(op => op.replace(/tttt/g, '')).map(op => op.replace(/^\d/, ''))
 	}
+
+	// if (line.match(/^#\d+/)) {
+	// 	lastQuestion = line.replace(/^#\d+\s*/, '').trim()
+	// 	result[lastQuestion] = result[lastQuestion] || {}
+	// } else if (line.match(/^\w$/)) {
+	// 	result[lastQuestion].A = line.toUpperCase().charCodeAt(0) - 'A'.charCodeAt(0)
+	// } else if (line.split(' ').length > 1) {
+	// 	result[lastQuestion].OP = result[lastQuestion].OP || line.split(' ').filter(option => option).map(option => option.trim())
+	// }
 })
-let j = 0
 for (let i in result) {
-	if (!result[i].A || -1 == result[i].A || !result[i].OP || result[i].OP.length < 2) {
+	if (!result[i].A || -1 == result[i].A || isNaN(result[i].A) || !result[i].OP || result[i].OP.length < 2 || result[i].OP.length > 4 || -1 != i.indexOf('中國') || -1 != i.indexOf('我國')) {
 		delete result[i]
 		continue
 	}
-	result[i].OP = result[i].OP.filter(option => option).map(option => option.trim())
-	j++
 }
+console.log(`Total ${Object.keys(result).length} questions`)
 fs.writeFileSync('result.json', JSON.stringify(result), 'utf-8')
 
 
