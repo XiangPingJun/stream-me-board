@@ -1,35 +1,38 @@
 service cloud.firestore {
   match /databases/{database}/documents {
   	match /adminUser/{anything=**} {
-    	allow read: if isAdmin();
+    	allow read: if isAdmin()
     }
   	match /system/{anything=**} {
-      allow read;
-      allow write: if isAdmin();
+      allow read
+      allow write: if isAdmin()
     }
     match /user/{anything=**} {
-      allow read, write;
+      allow read, write
     }
     match /allChat/{anything=**} {
-      allow read, write;
+      allow read, write
     }
     match /activity/vote {
-      allow read;
-      allow update;
-      allow write: if isAdmin();
+      allow read
+      allow update: if !voteEnded()
+      allow write: if isAdmin()
     }
     match /activity/quiz {
-      allow read;
-      allow update;
+      allow read
+      allow update
     }
     match /activity/onlineUsers {
-      allow read;
-      allow update;
-      allow write;
+      allow read
+      allow update
+      allow write
     }
     
     function isAdmin() { 
       return exists(/databases/$(database)/documents/adminUser/$(request.auth.uid))
+    }
+    function voteEnded() {
+      return true==get(/databases/$(database)/documents/system/vote).data.ended
     }
   }
 }

@@ -43,7 +43,6 @@ import Notify from './Notify'
 import HistoryVideo from './HistoryVideo'
 import FollowUs from './FollowUs'
 import Vote from './Vote'
-import { VOTE_TIMEOUT } from '../../common'
 import { mapGetters, mapActions, mapState } from 'vuex'
 
 export default {
@@ -93,7 +92,7 @@ export default {
     middleDialog() {
       if (!this.fontLoaded)
         return null
-      if (this.voting)
+      if (!this.voteInfo.ended)
         return 'VOTE'
       if (this.uiMode.quiz)
         return 'QUIZ'
@@ -112,7 +111,7 @@ export default {
       if ('VOTE' == this.middleDialog && !this.voted)
         return 'VOTE'
     },
-    ...mapState(['voting', 'stream', 'uiMode', 'historyVideo', 'fontLoaded']), ...mapGetters(['videoUrl', 'myInfo', 'voted', 'onlineUsers'])
+    ...mapState(['voteInfo', 'stream', 'uiMode', 'historyVideo', 'fontLoaded']), ...mapGetters(['videoUrl', 'myInfo', 'voted', 'onlineUsers'])
   },
   methods: { ...mapActions(['subscribeData']) }
 }

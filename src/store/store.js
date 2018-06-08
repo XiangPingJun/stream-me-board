@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import actions from './actions'
-import { QUIZ_TIMEOUT, TOTAL_AVATAR, VOTE_TIMEOUT } from '../common'
+import { QUIZ_TIMEOUT, TOTAL_AVATAR } from '../common'
 
 Vue.use(Vuex)
 const generateRandomAvatar = () => Math.floor(Math.random() * TOTAL_AVATAR)
@@ -20,8 +20,8 @@ export default new Vuex.Store({
 		onlineUids: [],
 		historyVideo: [],
 		fontLoaded: false,
-		voteInfo: null, voteRoster: [], voting: false,
-		quizInfo: null, quizRoster: [], quizng: false,
+		voteInfo: { ended: true }, voteRoster: [],
+		quizInfo: null, quizRoster: [],
 	},
 	getters: {
 		myInfo(state) { return state.allUsers[state.myUid] || {} },
@@ -46,7 +46,7 @@ export default new Vuex.Store({
 		},
 		videoUrl(state) { return state.stream.streaming ? state.stream.videoUrl : state.selectedVideoUrl },
 		voteStatTime(state) { return (!state.voteInfo || !state.voteInfo.time) ? 0 : state.voteInfo.time.seconds * 1000 },
-		voted(state) { return state.voteRoster.find((roster, i) => roster.users.find(user => user.uid == state.myUid)) },
+		voted(state) { return !!state.voteRoster.find((roster, i) => roster.users.find(user => user.uid == state.myUid)) },
 		quized(state) { return state.quizRoster.find((roster, i) => roster.users.find(user => user.uid == state.myUid)) },
 	},
 	mutations: {
@@ -70,17 +70,13 @@ export default new Vuex.Store({
 				total: 0
 			}))
 		},
-		updateVoting(state, payload) {
-			if (!state.voteInfo || !state.voteInfo.time)
-				state.voting = false
-			else
-				state.voting = new Date().getTime() - state.voteInfo.time.seconds * 1000 < VOTE_TIMEOUT
-		},
-		updateVoteRoster(state, payload) {
-			for (const i in payload) {
-				state.voteRoster[i].users = payload[i].users
-				state.voteRoster[i].total = payload[i].total
-			}
+		addVotes(state, payload) {
+			payload.votes.forEach((count, i) => {
+				if (0 == count)
+					return
+				state.voteRoster[i].users.push(state.allUsers[payload.uid])
+				state.voteRoster[i].total += count
+			})
 		},
 		updateQuizing(state, payload) {
 			if (!state.quizInfo || !state.quizInfo.time)

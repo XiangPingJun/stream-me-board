@@ -29,10 +29,10 @@
 
       <label>選項數:</label>
       <label v-for="(item, i) in new Array(4)" :key="i">
-        <input type="radio" v-model="voteOptionCount" :value="i+2" :disabled="voting" name="vote-option-count"/> {{i+2}}個 
+        <input type="radio" v-model="voteOptionCount" :value="i+2" :disabled="!voteInfo.ended" name="vote-option-count"/> {{i+2}}個 
       </label>
-      <button v-if="!voting" @click="startVote(voteOptionCount)"><i class="fa fa-chart-bar"/> 投票</button>
-      <button v-if="voting" :disabled="true"><i class="fas fa-spinner fa-pulse"/> 投票進行中</button>
+      <button v-if="voteInfo.ended" @click="startVote(voteOptionCount)"><i class="fa fa-chart-bar"/> 投票</button>
+      <button v-if="!voteInfo.ended" :disabled="true"><i class="fas fa-spinner fa-pulse"/> 投票進行中</button>
     </div>
     <notifications position="bottom left"/>
   </div>
@@ -40,7 +40,6 @@
 
 <script>
 import { mapActions, mapState } from 'vuex'
-import { VOTE_TIMEOUT } from '../../common'
 
 export default {
   data() {
@@ -48,7 +47,7 @@ export default {
   },
   created() { this.subscribeData() },
   methods: { ...mapActions(['subscribeData', 'loginAdmin', 'startStream', 'stopStream', 'saveVideoUrl', 'saveGameTitle', 'saveGameUrl', 'saveGameDescription', 'startVote', 'sendChat']) },
-  computed: { ...mapState(['voting', 'isAdmin', 'stream', 'voteRoster']) },
+  computed: { ...mapState(['voteInfo', 'isAdmin', 'stream', 'voteRoster']) },
   mounted() {
     this.unsubscribeAction = this.$store.subscribeAction((action, state) => {
       if ('notify' == action.type)
@@ -67,14 +66,12 @@ export default {
       else
         this.sendChat({ uid: 'system', text: '直播結束囉！期待下次與大家相會！', })
     },
-    voting(val, oldVal) {
-      if (val || undefined == val || undefined == oldVal)
+    voteInfo(val, oldVal) {
+      if (!val.ended || val.ended == oldVal.ended)
         return
-      setTimeout(() => {
-        let text = ''
-        this.voteRoster.forEach(item => text += ` ${item.option}(${item.total}票)`)
-        this.sendChat({ uid: 'system', text: text, })
-      }, 2000)
+      let text = ''
+      this.voteRoster.forEach(item => text += ` ${item.option}(${item.total}票)`)
+      this.sendChat({ uid: 'system', text: text })
     }
   }
 }

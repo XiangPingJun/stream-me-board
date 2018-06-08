@@ -43,6 +43,15 @@ export default {
   },
   beforeDestroy() { clearInterval(this.flipInterval) },
   computed: { ...mapState(['voteRoster']), ...mapGetters(['voteStatTime', 'myInfo', 'voted']) },
+  watch: {
+    voted: {
+      immediate: true,
+      handler(val) {
+        if (!val)
+          this.clickable = false
+      }
+    }
+  },
   methods: {
     optionStyle(i) {
       return {
@@ -57,7 +66,7 @@ export default {
         this.promptLogin()
         return
       }
-      if (this.clickCount < Math.random() * 3 + 28)
+      if (this.clickCount[i] < Math.random() * 3 + 28)
         this.$set(this.clickCount, i, this.clickCount[i] + 1)
       if (!this.timeout) {
         this.timeout = setTimeout(() => {

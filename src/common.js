@@ -18,7 +18,7 @@ export const getWindowHeight = () => window.innerHeight || document.documentElem
 export const VOTE_TIMEOUT = 30000
 export const QUIZ_TIMEOUT = 20000
 export const DISPLAY_TIMEOUT = 5000
-export const preservedUser = {
+export const preservedUsers = {
 	system: {
 		avatarSelected: 0,
 		level: 1,

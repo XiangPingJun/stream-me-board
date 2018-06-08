@@ -1,4 +1,4 @@
-import { getVideoTime, FINGERPRINT, VOTE_TIMEOUT, preservedUser } from '../common'
+import { getVideoTime, FINGERPRINT, VOTE_TIMEOUT, preservedUsers } from '../common'
 import shortid from 'shortid'
 const firestore = firebase.firestore()
 firestore.settings({ timestampsInSnapshots: true })
@@ -77,7 +77,7 @@ export default {
 		})
 		// all users
 		firestore.collection('user').onSnapshot(snap => {
-			let allUsers = { ...preservedUser }
+			let allUsers = { ...preservedUsers }
 			snap.forEach(doc => allUsers[doc.id] = doc.data())
 			commit('setAllUsers', allUsers)
 		})
@@ -133,21 +133,12 @@ export default {
 		})
 		// vote
 		firestore.doc("system/vote").onSnapshot(doc => commit('setVoteInfo', doc.data()))
-		firestore.doc("activity/vote").onSnapshot(doc => {
-			const roster = []
-			for (const uid in doc.data()) {
-				doc.data()[uid].forEach((count, i) => {
-					if (!roster[i])
-						roster[i] = { users: [], total: 0 }
-					if (0 == count)
-						return
-					roster[i].users.push(state.allUsers[uid])
-					roster[i].total += count
-				})
-			}
-			commit('updateVoteRoster', roster)
+		firestore.doc("activity/vote").onSnapshot({ includeMetadataChanges: true }, doc => {
+			if (doc.metadata.hasPendingWrites)
+				return
+			for (const [uid, votes] of Object.entries(doc.data()))
+				commit('addVotes', { uid, votes })
 		})
-		setInterval(() => commit('updateVoting'), 1000)
 		// history video
 		fetch('https://www.googleapis.com/youtube/v3/search?key=AIzaSyBCYPReX74lujmX9tg8AiM-OFGqmKYMZkU&channelId=UCLeQT6hvBgnq_-aKKlcgj1Q&part=snippet,id&order=date&maxResults=50').then(res => res.json()).then(data => commit('setHistoryVideo', data.items.filter(item => item.id.videoId)))
 		// font loaded
@@ -164,10 +155,9 @@ export default {
 	},
 	async loginVisitor({ dispatch, state }, payload) {
 		try {
-			if (preservedUser[payload]) {
-				dispatch('notify', { type: 'error', text: '暱稱已被使用!' })
-				dispatch('promptLogin')
-			}
+			for (const [i, user] of Object.entries(preservedUsers))
+				if (payload == user.name)
+					throw { code: 'auth/wrong-password' }
 			const me = Object.values(state.allUsers).find(user => user.name == payload)
 			if (me) {
 				await firebase.auth().signInWithEmailAndPassword(me.email, 'dummy-password')
@@ -189,15 +179,20 @@ export default {
 				dispatch('checkTrophy')
 			}
 		} catch (error) {
-			dispatch('notify', { type: 'error', text: error.message })
-			throw error
+			if ('auth/wrong-password' == error.code) {
+				dispatch('notify', { type: 'error', text: '暱稱已被使用!' })
+				dispatch('promptLogin')
+			} else {
+				dispatch('notify', { type: 'error', text: error.message })
+				throw error
+			}
 		}
 	},
 	async logout({ state, dispatch, commit }) {
 		try {
 			commit('generateAnonymousAvatar')
 			await firestore.doc('activity/onlineUsers').update({
-				[state.myUid]: firestore.FieldValue.delete()
+				[state.myUid]: firebase.firestore.FieldValue.delete()
 			})
 			await firebase.auth().signOut()
 			commit('updateUiMode', { selectAvatar: false })
@@ -320,20 +315,27 @@ export default {
 			await firestore.doc('system/vote').set({
 				time: firebase.firestore.FieldValue.serverTimestamp(),
 				optionCount: payload,
+				ended: false
 			})
+			setTimeout(() => firestore.doc('system/vote').update({ ended: true }), VOTE_TIMEOUT)
 		} catch (error) {
 			dispatch('notify', { type: 'error', text: error.message })
 			throw error
 		}
 	},
 	async sendVote({ state, dispatch }, payload) {
-		await firestore.doc('activity/vote').update({
-			[state.myUid]: payload
-		})
-		dispatch('sendChat', {
-			uid: state.myUid,
-			text: payload.reduce((acc, val) => acc + val) + '票！',
-		})
+		try {
+			await firestore.doc('activity/vote').update({ [state.myUid]: payload })
+			dispatch('sendChat', {
+				uid: state.myUid,
+				text: payload.reduce((acc, val) => acc + val) + '票！',
+			})
+		} catch (error) {
+			if ('permission-denied' == error.code)
+				return
+			dispatch('notify', { type: 'error', text: error.message })
+			throw error
+		}
 	},
 	playHistory({ commit }, payload) {
 		commit('setSelectedVideoUrl', convertToYoutube(payload))
