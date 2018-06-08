@@ -3,7 +3,7 @@
     <UnderlineText><i class="fas fa-dice"/> 暴力投票系統<PieChart :rate="timerRate" style="margin:0 3px"/></UnderlineText>
     <div v-if="!voted" class="caption yellow">一人有多票!滑鼠點越快投越多票!</div>
     <div v-if="voted" class="caption">已經投過票囉！</div>
-    <Well v-for="(roster, i) in voteRoster" @click.native="addClick(i)" :style="optionStyle(i)" class="option" :key="i">
+    <Well v-for="(roster, i) in voteRoster" @click.native="addClick(i)" :style="optionStyle(i)" :class="optionClass(i)" :key="i">
       <i class="fas fa-angle-right"/> {{roster.option}} ({{fliper[i]}}票)
       <span v-if="!voted && clickCount[i]" class="green">+{{clickCount[i]}}</span>
       <span v-if="clickable" class="click red"><i class="fas fa-arrow-left"/> Click!!</span>
@@ -42,12 +42,12 @@ export default {
     }, 100)
   },
   beforeDestroy() { clearInterval(this.flipInterval) },
-  computed: { ...mapState(['voteRoster']), ...mapGetters(['voteStatTime', 'myInfo', 'voted']) },
+  computed: { ...mapState(['voteRoster', 'voteInfo']), ...mapGetters(['voteStatTime', 'myInfo', 'voted']) },
   watch: {
     voted: {
       immediate: true,
       handler(val) {
-        if (!val)
+        if (val)
           this.clickable = false
       }
     }
@@ -58,6 +58,12 @@ export default {
         cursor: this.clickable ? 'pointer' : 'default',
         'user-select': 'none'
       }
+    },
+    optionClass(i) {
+      if (!this.voteInfo.ended)
+        return
+      if (Math.max(...this.voteRoster.map(roster => roster.total)) != this.voteRoster[i].total)
+        return 'animated zoomOutLeft'
     },
     addClick(i) {
       if (!this.clickable)

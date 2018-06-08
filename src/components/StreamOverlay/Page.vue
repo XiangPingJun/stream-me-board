@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Vote v-if="!voteInfo.ended" style="opacity: 0.8"/>
+    <Vote v-if="uiMode.vote" style="opacity: 0.8"/>
     <BubbleContainer style="opacity: 0.75"/>
   </div>
 </template>
@@ -13,7 +13,7 @@ import { mapState, mapActions } from 'vuex'
 export default {
   components: { BubbleContainer, Vote },
   created() { this.subscribeData() },
-  computed: { ...mapState(['voteInfo']) },
+  computed: { ...mapState(['uiMode']) },
   methods: { ...mapActions(['subscribeData']) },
 }
 </script>

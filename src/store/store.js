@@ -21,7 +21,6 @@ export default new Vuex.Store({
 		historyVideo: [],
 		fontLoaded: false,
 		voteInfo: { ended: true }, voteRoster: [],
-		quizInfo: null, quizRoster: [],
 	},
 	getters: {
 		myInfo(state) { return state.allUsers[state.myUid] || {} },
@@ -45,9 +44,8 @@ export default new Vuex.Store({
 			})
 		},
 		videoUrl(state) { return state.stream.streaming ? state.stream.videoUrl : state.selectedVideoUrl },
-		voteStatTime(state) { return (!state.voteInfo || !state.voteInfo.time) ? 0 : state.voteInfo.time.seconds * 1000 },
+		voteStatTime(state) { return state.voteInfo.time ? state.voteInfo.time.seconds * 1000 : 0 },
 		voted(state) { return !!state.voteRoster.find((roster, i) => roster.users.find(user => user.uid == state.myUid)) },
-		quized(state) { return state.quizRoster.find((roster, i) => roster.users.find(user => user.uid == state.myUid)) },
 	},
 	mutations: {
 		setStream(state, payload) { state.stream = payload },
@@ -62,31 +60,23 @@ export default new Vuex.Store({
 		setHistoryVideo(state, payload) { state.historyVideo = payload },
 		setSelectedVideoUrl(state, payload) { state.selectedVideoUrl = payload },
 		setFontLoaded(state, payload) { state.fontLoaded = payload },
-		setVoteInfo(state, payload) {
-			state.voteInfo = payload
-			state.voteRoster = Array.apply(null, new Array(payload.optionCount)).map((item, i) => ({
+		setVoteInfo(state, payload) { state.voteInfo = payload },
+		initVoteRoster(state, payload) {
+			state.voteRoster = Array.apply(null, new Array(payload)).map((item, i) => ({
 				option: String.fromCharCode(65 + i),
 				users: [],
 				total: 0
 			}))
 		},
 		addVotes(state, payload) {
+			if (state.voteInfo.ended)
+				return
 			payload.votes.forEach((count, i) => {
-				if (0 == count)
+				if (0 == count || !state.voteRoster[i])
 					return
 				state.voteRoster[i].users.push(state.allUsers[payload.uid])
 				state.voteRoster[i].total += count
 			})
-		},
-		updateQuizing(state, payload) {
-			if (!state.quizInfo || !state.quizInfo.time)
-				state.quizing = false
-			else
-				state.quizing = new Date().getTime() - state.quizInfo.time.seconds * 1000 < QUIZ_TIMEOUT
-		},
-		updateQuizRoster(state, payload) {
-			for (const i in payload)
-				state.quizRoster[i].users = payload[i].users
 		},
 	},
 	actions: actions

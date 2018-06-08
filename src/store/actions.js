@@ -1,4 +1,4 @@
-import { getVideoTime, FINGERPRINT, VOTE_TIMEOUT, preservedUsers } from '../common'
+import { getVideoTime, FINGERPRINT, VOTE_TIMEOUT, preservedUsers, DISPLAY_TIMEOUT } from '../common'
 import shortid from 'shortid'
 const firestore = firebase.firestore()
 firestore.settings({ timestampsInSnapshots: true })
@@ -6,67 +6,6 @@ let unsubscribeChat = () => { }
 
 export default {
 	notify({ }, payload) { },
-	async saveMyInfo({ state, dispatch, commit }, payload) {
-		try {
-			await firestore.collection('user').doc(state.myUid).set(payload)
-		} catch (error) {
-			dispatch('notify', { type: 'error', text: error.message })
-			throw error
-		}
-	},
-	addExp({ getters, dispatch }, payload) {
-		if (payload > 100)
-			dispatch('notify', { type: 'error', text: `unsupport addExp ${payload}` })
-		getters.myInfo.exp += payload
-		if (getters.myInfo.exp >= 100) {
-			getters.myInfo.level++
-			getters.myInfo.exp -= 100
-			const nextAvatar = getters.randomNextAvatar
-			if (null === nextAvatar) {
-				dispatch('notify', { text: '升滿了?! 你真的有認真在看直播嗎?' })
-			} else {
-				getters.myInfo.avatarList.push(nextAvatar)
-				dispatch('notify', { data: { avatar: nextAvatar }, text: '升級! 獲得新角色!' })
-			}
-		}
-		dispatch('saveMyInfo', getters.myInfo)
-	},
-	checkTrophy({ getters, state, dispatch }) {
-		if (!getters.myInfo.name)
-			return
-		if (state.stream.streaming && !getters.myInfo.viewedStream.includes(state.stream.time)) {
-			getters.myInfo.viewedStream.push(state.stream.time)
-			if (!getters.myInfo.trophy.includes('WATCH_FIRST_TIME')) {
-				getters.myInfo.trophy.push('WATCH_FIRST_TIME')
-				notify('第一次來看直播！')
-			}
-			dispatch('saveMyInfo', getters.myInfo)
-			dispatch('addExp', 100)
-		}
-		function notify(msg) {
-			dispatch('notify', { data: { symbol: 'trophy' }, text: msg })
-		}
-	},
-	async sendHeartbeat({ state }) {
-		try {
-			const anonymousUid = `${FINGERPRINT} ${state.anonymousAvatar}`
-			if (state.myUid) {
-				firestore.doc('activity/onlineUsers').update({
-					[state.myUid]: firebase.firestore.FieldValue.serverTimestamp()
-				})
-				firestore.doc('activity/onlineUsers').update({
-					[anonymousUid]: firebase.firestore.FieldValue.delete()
-				})
-			} else {
-				firestore.doc('activity/onlineUsers').update({
-					[anonymousUid]: firebase.firestore.FieldValue.serverTimestamp()
-				})
-			}
-		} catch (error) {
-			dispatch('notify', { type: 'error', text: error.message })
-			throw error
-		}
-	},
 	subscribeData({ state, commit, dispatch }) {
 		// Is me banned?
 		firestore.doc('system/ban').onSnapshot(doc => {
@@ -132,7 +71,15 @@ export default {
 			}
 		})
 		// vote
-		firestore.doc("system/vote").onSnapshot(doc => commit('setVoteInfo', doc.data()))
+		firestore.doc("system/vote").onSnapshot(doc => {
+			if (doc.data().ended)
+				setTimeout(() => commit('updateUiMode', { vote: false }), 3000)
+			else
+				commit('updateUiMode', { vote: true })
+			if (!state.voteInfo.time || (doc.data().time && state.voteInfo.time.seconds != doc.data().time.seconds))
+				commit('initVoteRoster', doc.data().optionCount)
+			commit('setVoteInfo', doc.data())
+		})
 		firestore.doc("activity/vote").onSnapshot({ includeMetadataChanges: true }, doc => {
 			if (doc.metadata.hasPendingWrites)
 				return
@@ -143,6 +90,67 @@ export default {
 		fetch('https://www.googleapis.com/youtube/v3/search?key=AIzaSyBCYPReX74lujmX9tg8AiM-OFGqmKYMZkU&channelId=UCLeQT6hvBgnq_-aKKlcgj1Q&part=snippet,id&order=date&maxResults=50').then(res => res.json()).then(data => commit('setHistoryVideo', data.items.filter(item => item.id.videoId)))
 		// font loaded
 		document.fonts.ready.then(() => commit('setFontLoaded', true));
+	},
+	async saveMyInfo({ state, dispatch, commit }, payload) {
+		try {
+			await firestore.collection('user').doc(state.myUid).set(payload)
+		} catch (error) {
+			dispatch('notify', { type: 'error', text: error.message })
+			throw error
+		}
+	},
+	addExp({ getters, dispatch }, payload) {
+		if (payload > 100)
+			dispatch('notify', { type: 'error', text: `unsupport addExp ${payload}` })
+		getters.myInfo.exp += payload
+		if (getters.myInfo.exp >= 100) {
+			getters.myInfo.level++
+			getters.myInfo.exp -= 100
+			const nextAvatar = getters.randomNextAvatar
+			if (null === nextAvatar) {
+				dispatch('notify', { text: '升滿了?! 你真的有認真在看直播嗎?' })
+			} else {
+				getters.myInfo.avatarList.push(nextAvatar)
+				dispatch('notify', { data: { avatar: nextAvatar }, text: '升級! 獲得新角色!' })
+			}
+		}
+		dispatch('saveMyInfo', getters.myInfo)
+	},
+	checkTrophy({ getters, state, dispatch }) {
+		if (!getters.myInfo.name)
+			return
+		if (state.stream.streaming && !getters.myInfo.viewedStream.includes(state.stream.time)) {
+			getters.myInfo.viewedStream.push(state.stream.time)
+			if (!getters.myInfo.trophy.includes('WATCH_FIRST_TIME')) {
+				getters.myInfo.trophy.push('WATCH_FIRST_TIME')
+				notify('第一次來看直播！')
+			}
+			dispatch('saveMyInfo', getters.myInfo)
+			dispatch('addExp', 100)
+		}
+		function notify(msg) {
+			dispatch('notify', { data: { symbol: 'trophy' }, text: msg })
+		}
+	},
+	async sendHeartbeat({ state }) {
+		try {
+			const anonymousUid = `${FINGERPRINT} ${state.anonymousAvatar}`
+			if (state.myUid) {
+				firestore.doc('activity/onlineUsers').update({
+					[state.myUid]: firebase.firestore.FieldValue.serverTimestamp()
+				})
+				firestore.doc('activity/onlineUsers').update({
+					[anonymousUid]: firebase.firestore.FieldValue.delete()
+				})
+			} else {
+				firestore.doc('activity/onlineUsers').update({
+					[anonymousUid]: firebase.firestore.FieldValue.serverTimestamp()
+				})
+			}
+		} catch (error) {
+			dispatch('notify', { type: 'error', text: error.message })
+			throw error
+		}
 	},
 	async loginAdmin({ state, dispatch }, payload) {
 		try {
@@ -309,7 +317,12 @@ export default {
 			throw error
 		}
 	},
-	async startVote({ dispatch }, payload) {
+	async sendVoteResultSystemMsg({ dispatch, state }, payload) {
+		let text = ''
+		state.voteRoster.forEach(item => text += ` ${item.option}(${item.total}票)`)
+		dispatch('sendChat', { uid: 'system', text: text })
+	},
+	async startVote({ dispatch, state }, payload) {
 		try {
 			await firestore.doc('activity/vote').set({})
 			await firestore.doc('system/vote').set({
@@ -317,7 +330,9 @@ export default {
 				optionCount: payload,
 				ended: false
 			})
-			setTimeout(() => firestore.doc('system/vote').update({ ended: true }), VOTE_TIMEOUT)
+			await new Promise(resolve => setTimeout(resolve, VOTE_TIMEOUT))
+			await firestore.doc('system/vote').update({ ended: true })
+			dispatch('sendVoteResultSystemMsg')
 		} catch (error) {
 			dispatch('notify', { type: 'error', text: error.message })
 			throw error

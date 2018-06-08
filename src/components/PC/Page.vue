@@ -92,7 +92,7 @@ export default {
     middleDialog() {
       if (!this.fontLoaded)
         return null
-      if (!this.voteInfo.ended)
+      if (this.uiMode.vote)
         return 'VOTE'
       if (this.uiMode.quiz)
         return 'QUIZ'
@@ -111,7 +111,7 @@ export default {
       if ('VOTE' == this.middleDialog && !this.voted)
         return 'VOTE'
     },
-    ...mapState(['voteInfo', 'stream', 'uiMode', 'historyVideo', 'fontLoaded']), ...mapGetters(['videoUrl', 'myInfo', 'voted', 'onlineUsers'])
+    ...mapState(['stream', 'uiMode', 'historyVideo', 'fontLoaded']), ...mapGetters(['videoUrl', 'myInfo', 'voted', 'onlineUsers'])
   },
   methods: { ...mapActions(['subscribeData']) }
 }

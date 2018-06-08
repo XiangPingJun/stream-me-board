@@ -2,6 +2,8 @@ import * as functions from 'firebase-functions'
 import * as admin from 'firebase-admin'
 import QUIZ from './quiz'
 
+const QUIZ_TIMEOUT = 20000
+
 admin.initializeApp()
 const firestore = admin.firestore()
 
@@ -35,10 +37,14 @@ export const schedule = functions.https.onRequest(async (request, response) => {
 			await firestore.doc('system/quiz').set({
 				time: admin.firestore.FieldValue.serverTimestamp(),
 				Q: question,
+				ended: false,
 				...complement[question]
 			})
 			await firestore.doc('system/quizHistory').update({ [question]: true })
 			await firestore.doc('activity/quiz').set({})
+
+			await new Promise(resolve => setTimeout(resolve, QUIZ_TIMEOUT))
+			await firestore.doc('system/quiz').update({ ended: true })
 		}
 	}
 

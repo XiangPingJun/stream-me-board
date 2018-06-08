@@ -11,6 +11,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 const quiz_1 = require("./quiz");
+const QUIZ_TIMEOUT = 20000;
 admin.initializeApp();
 const firestore = admin.firestore();
 // Create and Deploy Your First Cloud Functions
@@ -37,9 +38,11 @@ exports.schedule = functions.https.onRequest((request, response) => __awaiter(th
             yield firestore.doc('system/quizHistory').set({});
         else {
             const question = questions[Math.floor(Math.random() * questions.length)];
-            yield firestore.doc('system/quiz').set(Object.assign({ time: admin.firestore.FieldValue.serverTimestamp(), Q: question }, complement[question]));
+            yield firestore.doc('system/quiz').set(Object.assign({ time: admin.firestore.FieldValue.serverTimestamp(), Q: question, ended: false }, complement[question]));
             yield firestore.doc('system/quizHistory').update({ [question]: true });
             yield firestore.doc('activity/quiz').set({});
+            yield new Promise((resolve, reject) => setTimeout(resolve, QUIZ_TIMEOUT));
+            yield firestore.doc('system/quiz').update({ ended: true });
         }
     }
     response.send('Done.');

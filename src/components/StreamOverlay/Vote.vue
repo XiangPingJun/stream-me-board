@@ -3,7 +3,7 @@
 		<div>
 			<div class="title animated flipInX" v-if="voteStatTime"><i class="fas fa-dice"/> 投票啦!<PieChart :rate="timerRate" style="margin:0 0.1em"/></div>
 			<div class="option-container">
-				<div v-for="(roster, i) in voteRoster" class="option" :key="i">
+				<div v-for="(roster, i) in voteRoster" class="option" :key="i" :class="optionClass(i)">
 					<div class="code animated flipInY">{{roster.option}}</div>
 					<div class="count animated flipInX">({{fliper[i]}}票)</div>
 					<div class="arrow animated flipInY" v-if="roster.users.length"><i class="fas fa-arrow-up"/></div>
@@ -38,8 +38,16 @@ export default {
 			this.timerRate = 1 - ((new Date().getTime() - this.voteStatTime) / VOTE_TIMEOUT)
 		}, 100)
 	},
+	methods: {
+		optionClass(i) {
+			if (!this.voteInfo.ended)
+				return
+			if (Math.max(...this.voteRoster.map(roster => roster.total)) != this.voteRoster[i].total)
+				return 'animated bounceOut'
+		}
+	},
 	beforeDestroy() { clearInterval(this.flipInterval) },
-	computed: { ...mapState(['voteRoster']), ...mapGetters(['voteStatTime']) },
+	computed: { ...mapState(['voteInfo', 'voteRoster']), ...mapGetters(['voteStatTime']) },
 }
 </script>
 
