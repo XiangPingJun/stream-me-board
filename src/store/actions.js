@@ -105,7 +105,14 @@ export default {
 		// history video
 		fetch('https://www.googleapis.com/youtube/v3/search?key=AIzaSyBCYPReX74lujmX9tg8AiM-OFGqmKYMZkU&channelId=UCLeQT6hvBgnq_-aKKlcgj1Q&part=snippet,id&order=date&maxResults=50').then(res => res.json()).then(data => commit('setHistoryVideo', data.items.filter(item => item.id.videoId)))
 		// font loaded
-		document.fonts.ready.then(() => commit('setFontLoaded', true));
+		Promise.all([
+			new Promise(resolve => {
+				const thank = new Image()
+				thank.src = 'static/thank.png'
+				thank.onload = resolve
+			}),
+			document.fonts.ready
+		]).then(() => commit('setPreLoaded', true))
 	},
 	async saveMyExp({ state }, payload) {
 		await firestore.collection('user').doc(state.myUid).update({ exp: payload })

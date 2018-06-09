@@ -31,13 +31,15 @@ export default {
   flex-grow: 1;
   box-sizing: border-box;
   line-height: 20px;
+  overflow-y: auto;
+  padding: 0px 4px;
 }
-::-webkit-scrollbar-track {
+/* ::-webkit-scrollbar-track {
   background-color: #aa8c6e;
 }
 ::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
+  width: 0px;
+  height: 0px;
 }
 ::-webkit-scrollbar-thumb {
   border-radius: 3px;
@@ -46,5 +48,5 @@ export default {
 ::-webkit-scrollbar-button {
   width: 7px;
   height: 7px;
-}
+} */
 </style>

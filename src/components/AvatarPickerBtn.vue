@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import Avatar from '../Avatar'
+import Avatar from './Avatar'
 import { mapActions } from 'vuex'
 
 export default {

@@ -1,7 +1,7 @@
 <template>
   <div>
     <NightSkyBackground/>
-    <div class="page">
+    <div class="page" v-show="preLoaded">
       <VideoBox ref="video" :height="videoHeight" :width="videoWidth"/>
       <div class="right-side">
         <!-- top section -->
@@ -20,7 +20,7 @@
         <HistoryVideo v-if="'HISTORY_VIDEO'==middleDialog" class="middle animated flipInY"/>
 
         <!-- bottom section -->
-        <ChatBox ref="chatBox" v-if="uiMode.chat && fontLoaded" class="bottom animated flipInX"/>
+        <ChatBox ref="chatBox" v-if="uiMode.chat" class="bottom animated flipInX"/>
       </div>
     </div>
     <notifications position="bottom center"/>
@@ -50,6 +50,14 @@ export default {
   components: { VideoBox, NightSkyBackground, ChatBox, Quiz, MyInfo, AnonymousInfo, Login, Arrow, AvatarPicker, Notify, Playground, HistoryVideo, FollowUs, Vote },
   mounted() {
     this.subscribeData()
+    this.unsubscribeAction = this.$store.subscribeAction((action, state) => {
+      if ('notify' == action.type)
+        return this.$notify({
+          group: 'notify',
+          data: { ...action.payload.data },
+          ...action.payload
+        })
+    })
     const width = document.documentElement.clientWidth
     const height = document.documentElement.clientHeight
     this.videoWidth = width - 390
@@ -60,20 +68,10 @@ export default {
         this.videoHeight = height - 50
       }
     })
-    this.unsubscribeAction = this.$store.subscribeAction((action, state) => {
-      if ('notify' == action.type)
-        return this.$notify({
-          group: 'notify',
-          data: { ...action.payload.data },
-          ...action.payload
-        })
-    })
   },
   beforeDestroy() { this.unsubscribeAction() },
   computed: {
     topDialog() {
-      if (!this.fontLoaded)
-        return null
       if (this.myInfo.name && 'MY_INFO' == this.uiMode.account)
         return 'MY_INFO'
       if ('LOGIN' == this.uiMode.account)
@@ -82,8 +80,6 @@ export default {
         return 'ANONYMOUS'
     },
     middleDialog() {
-      if (!this.fontLoaded)
-        return null
       if (this.uiMode.selectAvatar)
         return 'AVATAR_PICKER'
       if (this.uiMode.vote)
@@ -103,7 +99,7 @@ export default {
       if ('VOTE' == this.middleDialog && !this.voted)
         return 'VOTE'
     },
-    ...mapState(['stream', 'uiMode', 'historyVideo', 'fontLoaded']), ...mapGetters(['videoUrl', 'myInfo', 'voted', 'onlineUsers'])
+    ...mapState(['stream', 'uiMode', 'historyVideo', 'preLoaded']), ...mapGetters(['myInfo', 'voted', 'onlineUsers'])
   },
   methods: { ...mapActions(['subscribeData']) }
 }

@@ -1,14 +1,11 @@
 <template>
-  <div class="icon-btn">
+  <div class="icon-btn" @click="$emit('click')">
     <i :class="icon"/>
   </div>
 </template>
 
 <script>
-import Button from '../Button'
-
 export default {
-  components: { Button },
   props: ['icon'],
 }
 </script>

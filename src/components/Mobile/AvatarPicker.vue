@@ -1,5 +1,5 @@
 <template>
-  <DialogBox overflowY="auto">
+  <div>
     <div><UnderlineText>選擇您的角色： (已獲得{{myInfo.avatarList.length}}/{{TOTAL_AVATAR}})</UnderlineText></div>          
     <Well>
 			<div class="grid">
@@ -9,19 +9,18 @@
        />
 			</div>
     </Well>
-  </DialogBox>
+  </div>
 </template>
 
 <script>
 import UnderlineText from '../UnderlineText'
 import Well from '../Well'
 import AvatarPickerBtn from '../AvatarPickerBtn'
-import DialogBox from '../DialogBox'
 import { TOTAL_AVATAR } from '../../common'
 import { mapGetters } from 'vuex'
 
 export default {
-  components: { UnderlineText, Well, AvatarPickerBtn, DialogBox },
+  components: { UnderlineText, Well, AvatarPickerBtn },
   computed: {
     avatarList() {
       const list = [...this.myInfo.avatarList]
