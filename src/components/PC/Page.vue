@@ -20,11 +20,10 @@
         <HistoryVideo v-if="'HISTORY_VIDEO'==middleDialog" class="middle animated flipInY"/>
 
         <!-- bottom section -->
-        <ChatBox ref="chatBox" v-if="uiMode.chat" class="bottom animated flipInX"/>
+        <ChatBox ref="chatBox" v-if="chatLines.length" class="bottom animated flipInX"/>
       </div>
     </div>
-    <notifications position="bottom center"/>
-    <Notify/>
+    <Notify :large="true"/>
   </div>
 </template>
 
@@ -39,7 +38,7 @@ import Login from './Login'
 import Arrow from './Arrow'
 import AvatarPicker from './AvatarPicker'
 import Playground from './Playground'
-import Notify from './Notify'
+import Notify from '../Notify'
 import HistoryVideo from './HistoryVideo'
 import FollowUs from './FollowUs'
 import Vote from './Vote'
@@ -99,7 +98,7 @@ export default {
       if ('VOTE' == this.middleDialog && !this.voted)
         return 'VOTE'
     },
-    ...mapState(['stream', 'uiMode', 'historyVideo', 'preLoaded']), ...mapGetters(['myInfo', 'voted', 'onlineUsers'])
+    ...mapState(['stream', 'uiMode', 'historyVideo', 'preLoaded', 'chatLines']), ...mapGetters(['myInfo', 'voted', 'onlineUsers'])
   },
   methods: { ...mapActions(['subscribeData']) }
 }

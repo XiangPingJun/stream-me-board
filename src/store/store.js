@@ -26,7 +26,7 @@ export default new Vuex.Store({
 	getters: {
 		myInfo(state) { return state.allUsers[state.myUid] || {} },
 		randomNextAvatar(state, getters) {
-			if (null === getters.myInfo)
+			if (!getters.myInfo.name)
 				return generateRandomAvatar()
 			const candidate = new Array(30).fill(0).map((item, i) => i).filter(item => getters.myInfo.avatarList.indexOf(item) < 0)
 			if (0 == candidate.length)

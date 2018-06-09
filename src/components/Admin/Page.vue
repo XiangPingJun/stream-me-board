@@ -34,12 +34,13 @@
       <button v-if="voteInfo.ended" @click="startVote(voteOptionCount)"><i class="fa fa-chart-bar"/> 投票</button>
       <button v-if="!voteInfo.ended" :disabled="true"><i class="fas fa-spinner fa-pulse"/> 投票進行中</button>
     </div>
-    <notifications position="bottom left"/>
+    <Notify :large="true"/>
   </div>
 </template>
 
 <script>
 import { mapActions, mapState } from 'vuex'
+import Notify from '../Notify'
 
 export default {
   data() {
@@ -51,7 +52,11 @@ export default {
   mounted() {
     this.unsubscribeAction = this.$store.subscribeAction((action, state) => {
       if ('notify' == action.type)
-        return this.$notify(action.payload)
+        return this.$notify({
+          group: 'notify',
+          data: { ...action.payload.data },
+          ...action.payload
+        })
     })
   },
   beforeDestroy() {

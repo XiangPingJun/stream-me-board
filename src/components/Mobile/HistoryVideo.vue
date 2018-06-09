@@ -6,8 +6,8 @@
     </a>
     <div class="grid">
       <WhiteBorder v-for="(video, i) in historyVideo" :key="i" style="margin: 0 5px 5px 0;">
-        <div class="thumbnail" @click="playHistory(video.id.videoId)">
-          <img :src="video.snippet.thumbnails.default.url"/>
+        <div :style="thumbnailStyle" @click="playHistory(video.id.videoId)">
+          <img :style="thumbnailStyle" :src="video.snippet.thumbnails.medium.url"/>
         </div>
       </WhiteBorder>
     </div>
@@ -23,7 +23,19 @@ import { mapState, mapActions, mapMutations } from 'vuex'
 
 export default {
   components: { UnderlineText, Well, Content, WhiteBorder },
-  computed: { ...mapState(['historyVideo']) },
+  computed: {
+    thumbnailWidth() {
+      return (document.documentElement.clientWidth - 58) / 2
+    },
+    thumbnailStyle() {
+      return {
+        width: this.thumbnailWidth + 'px',
+        height: this.thumbnailWidth * (9 / 16) + 'px',
+        overflow: 'hidden'
+      }
+    },
+    ...mapState(['historyVideo'])
+  },
   methods: { ...mapActions(['playHistory']), ...mapMutations(['updateUiMode']) }
 }
 </script>
@@ -34,14 +46,5 @@ export default {
   display: flex;
   flex-wrap: wrap;
   align-items: flex-start;
-}
-.thumbnail {
-  width: 120px;
-  height: 68px;
-  overflow: hidden;
-  cursor: pointer;
-}
-.thumbnail img {
-  margin-top: -11px;
 }
 </style>

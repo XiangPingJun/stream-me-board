@@ -30,7 +30,6 @@ export default {
 				unsubscribeChat()
 				unsubscribeChat = firestore.collection(`allChat/${stream.time}/chat-line`).onSnapshot(snap => {
 					commit('setChatLines', snap.docs.map(doc => doc.data()).reverse())
-					commit('updateUiMode', { chat: true })
 				})
 			}
 			commit('setStream', stream)
@@ -317,7 +316,7 @@ export default {
 			const total = payload.reduce((acc, val) => acc + val)
 			dispatch('sendChat', {
 				uid: state.myUid,
-				text: total + '票！',
+				text: `+${total}票！`,
 			})
 			if (total > 20)
 				dispatch('getTrophy', { text: '快手指！投超過20票！', id: 'QUICK_VOTE_FINGER' })

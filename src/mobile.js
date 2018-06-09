@@ -3,8 +3,10 @@
 import Vue from 'vue'
 import Page from './components/Mobile/Page'
 import store from './store/store'
+import Notifications from 'vue-notification'
 
 Vue.config.productionTip = false
+Vue.use(Notifications)
 
 /* eslint-disable no-new */
 new Vue({

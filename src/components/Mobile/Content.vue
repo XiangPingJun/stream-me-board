@@ -32,7 +32,7 @@ export default {
   box-sizing: border-box;
   line-height: 20px;
   overflow-y: auto;
-  padding: 0px 4px;
+  padding: 4px 4px;
 }
 /* ::-webkit-scrollbar-track {
   background-color: #aa8c6e;

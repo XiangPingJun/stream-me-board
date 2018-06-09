@@ -1,6 +1,6 @@
 <template>
   <div>
-		<div style="margin-bottom:10px;" class="yellow">ヽ(ﾟ▽ﾟ)ノ 歡迎！怎麼稱呼呢？</div>
+		<div style="margin-bottom:10px;" class="yellow">{{notifyText}}</div>
 		<div><InputBox ref="input" placeholder="輸入暱稱吧:↵" @submit="onSubmit" :loading="loading" class="input"/></div>
 		<Invisible ref="invisible">{{userNameTest}}</Invisible>
   </div>
@@ -18,6 +18,7 @@ export default {
 			userNameTest: '',
 			unsubscribeAction: () => { },
 			loading: false,
+			notifyText: 'ヽ(ﾟ▽ﾟ)ノ 歡迎！怎麼稱呼呢？'
 		}
 	},
 	mounted() {
