@@ -21,6 +21,7 @@ export default new Vuex.Store({
 		historyVideo: [],
 		fontLoaded: false,
 		voteInfo: { ended: true }, voteRoster: [],
+		quizInfo: { ended: true }, quizRoster: [],
 	},
 	getters: {
 		myInfo(state) { return state.allUsers[state.myUid] || {} },
@@ -44,8 +45,9 @@ export default new Vuex.Store({
 			})
 		},
 		videoUrl(state) { return state.stream.streaming ? state.stream.videoUrl : state.selectedVideoUrl },
-		voteStatTime(state) { return state.voteInfo.time ? state.voteInfo.time.seconds * 1000 : 0 },
+		voteStartTime(state) { return state.voteInfo.time ? state.voteInfo.time.seconds * 1000 : 0 },
 		voted(state) { return !!state.voteRoster.find((roster, i) => roster.users.find(user => user.uid == state.myUid)) },
+		quizStartTime(state) { return state.quizInfo.time ? state.quizInfo.time.seconds * 1000 : 0 },
 	},
 	mutations: {
 		setStream(state, payload) { state.stream = payload },
@@ -77,6 +79,13 @@ export default new Vuex.Store({
 				state.voteRoster[i].users.push(state.allUsers[payload.uid])
 				state.voteRoster[i].total += count
 			})
+		},
+		setQuizInfo(state, payload) { state.quizInfo = payload },
+		initQuizRoster(state, payload) {
+			state.voteRoster = Array.apply(null, new Array(payload)).map((item, i) => ({
+				option: payload[i],
+				users: [],
+			}))
 		},
 	},
 	actions: actions

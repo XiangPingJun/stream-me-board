@@ -1,7 +1,7 @@
 <template>
   <div class="container">
 		<div>
-			<div class="title animated flipInX" v-if="voteStatTime"><i class="fas fa-dice"/> 投票啦!<PieChart :rate="timerRate" style="margin:0 0.1em"/></div>
+			<div class="title animated flipInX" v-if="voteStartTime"><i class="fas fa-dice"/> 投票啦!<PieChart :rate="timerRate" style="margin:0 0.1em"/></div>
 			<div class="option-container">
 				<div v-for="(roster, i) in voteRoster" class="option" :key="i" :class="optionClass(i)">
 					<div class="code animated flipInY">{{roster.option}}</div>
@@ -35,7 +35,7 @@ export default {
 				if (this.fliper[i] > roster.total)
 					this.$set(this.fliper, i, roster.total)
 			})
-			this.timerRate = 1 - ((new Date().getTime() - this.voteStatTime) / VOTE_TIMEOUT)
+			this.timerRate = 1 - ((new Date().getTime() - this.voteStartTime) / VOTE_TIMEOUT)
 		}, 100)
 	},
 	methods: {
@@ -47,7 +47,7 @@ export default {
 		}
 	},
 	beforeDestroy() { clearInterval(this.flipInterval) },
-	computed: { ...mapState(['voteInfo', 'voteRoster']), ...mapGetters(['voteStatTime']) },
+	computed: { ...mapState(['voteInfo', 'voteRoster']), ...mapGetters(['voteStartTime']) },
 }
 </script>
 

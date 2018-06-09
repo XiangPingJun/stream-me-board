@@ -18,6 +18,7 @@ import InputBox from '../InputBox'
 import DialogBox from '../DialogBox'
 import DarkButton from '../DarkButton'
 import { mapGetters, mapActions, mapState } from 'vuex'
+import { setTimeout } from 'timers';
 
 export default {
   data() {
@@ -31,10 +32,7 @@ export default {
   mounted() {
     this.scrollContent = this.$refs.chatBox.$refs.content
     this.scrollContent.addEventListener('scroll', () => {
-      if (!this.showScrollToBottom)
-        return
-      if (this.isScrollBottom())
-        this.showScrollToBottom = false
+      setTimeout(() => this.showScrollToBottom = !this.isScrollBottom())
     })
     this.scrollToBottom()
   },

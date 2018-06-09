@@ -22,7 +22,7 @@ export default {
 		})
 		// online user
 		setInterval(() => dispatch('sendHeartbeat'), 60000)
-		firestore.doc('activity/onlineUsers').onSnapshot(doc => commit('setOnlineUids', Object.keys(doc.data())))
+		firestore.doc('activity/online').onSnapshot(doc => commit('setOnlineUids', Object.keys(doc.data())))
 		// system info
 		firestore.doc('system/stream').onSnapshot(doc => {
 			const stream = doc.data()
@@ -86,6 +86,18 @@ export default {
 			for (const [uid, votes] of Object.entries(doc.data()))
 				commit('addVotes', { uid, votes })
 		})
+		// quiz
+		firestore.doc("system/quiz").onSnapshot(doc => {
+			if (doc.data().ended)
+				setTimeout(() => commit('updateUiMode', { quiz: false }), 3000)
+			else
+				commit('updateUiMode', { quiz: true })
+			if (!state.quizInfo.time || (doc.data().time && state.quizInfo.time.seconds != doc.data().time.seconds))
+				commit('initQuizRoster', doc.data().OP)
+			commit('setQuizInfo', doc.data())
+		})
+		firestore.doc("activity/vote").onSnapshot({ includeMetadataChanges: true }, doc => {
+		})
 		// history video
 		fetch('https://www.googleapis.com/youtube/v3/search?key=AIzaSyBCYPReX74lujmX9tg8AiM-OFGqmKYMZkU&channelId=UCLeQT6hvBgnq_-aKKlcgj1Q&part=snippet,id&order=date&maxResults=50').then(res => res.json()).then(data => commit('setHistoryVideo', data.items.filter(item => item.id.videoId)))
 		// font loaded
@@ -136,14 +148,14 @@ export default {
 		try {
 			const anonymousUid = `${FINGERPRINT} ${state.anonymousAvatar}`
 			if (state.myUid) {
-				firestore.doc('activity/onlineUsers').update({
+				firestore.doc('activity/online').update({
 					[state.myUid]: firebase.firestore.FieldValue.serverTimestamp()
 				})
-				firestore.doc('activity/onlineUsers').update({
+				firestore.doc('activity/online').update({
 					[anonymousUid]: firebase.firestore.FieldValue.delete()
 				})
 			} else {
-				firestore.doc('activity/onlineUsers').update({
+				firestore.doc('activity/online').update({
 					[anonymousUid]: firebase.firestore.FieldValue.serverTimestamp()
 				})
 			}
@@ -199,7 +211,7 @@ export default {
 	async logout({ state, dispatch, commit }) {
 		try {
 			commit('generateAnonymousAvatar')
-			await firestore.doc('activity/onlineUsers').update({
+			await firestore.doc('activity/online').update({
 				[state.myUid]: firebase.firestore.FieldValue.delete()
 			})
 			await firebase.auth().signOut()

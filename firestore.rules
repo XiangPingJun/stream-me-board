@@ -22,7 +22,7 @@ service cloud.firestore {
       allow read
       allow update
     }
-    match /activity/onlineUsers {
+    match /activity/online {
       allow read
       allow update
       allow write

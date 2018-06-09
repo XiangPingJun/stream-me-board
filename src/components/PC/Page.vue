@@ -20,7 +20,7 @@
         <HistoryVideo v-if="'HISTORY_VIDEO'==middleDialog" class="middle animated flipInY"/>
 
         <!-- bottom section -->
-        <ChatBox v-if="uiMode.chat && fontLoaded" class="bottom animated flipInX"/>
+        <ChatBox ref="chatBox" v-if="uiMode.chat && fontLoaded" class="bottom animated flipInX"/>
       </div>
     </div>
     <notifications position="bottom center"/>
@@ -46,16 +46,10 @@ import Vote from './Vote'
 import { mapGetters, mapActions, mapState } from 'vuex'
 
 export default {
-  data() {
-    return {
-      videoWidth: 0,
-      videoHeight: 0,
-      unsubscribeAction: () => { },
-    }
-  },
+  data() { return { videoWidth: 0, videoHeight: 0, unsubscribeAction: () => { }, } },
   components: { VideoBox, NightSkyBackground, ChatBox, Quiz, MyInfo, AnonymousInfo, Login, Arrow, AvatarPicker, Notify, Playground, HistoryVideo, FollowUs, Vote },
-  created() { this.subscribeData() },
   mounted() {
+    this.subscribeData()
     const width = document.documentElement.clientWidth
     const height = document.documentElement.clientHeight
     this.videoWidth = width - 390
@@ -75,9 +69,7 @@ export default {
         })
     })
   },
-  beforeDestroy() {
-    this.unsubscribeAction()
-  },
+  beforeDestroy() { this.unsubscribeAction() },
   computed: {
     topDialog() {
       if (!this.fontLoaded)
@@ -92,12 +84,12 @@ export default {
     middleDialog() {
       if (!this.fontLoaded)
         return null
+      if (this.uiMode.selectAvatar)
+        return 'AVATAR_PICKER'
       if (this.uiMode.vote)
         return 'VOTE'
       if (this.uiMode.quiz)
         return 'QUIZ'
-      if (this.uiMode.selectAvatar)
-        return 'AVATAR_PICKER'
       if (this.uiMode.followUs)
         return 'FOLLOW_US'
       if (false == this.stream.streaming && this.historyVideo)
@@ -112,6 +104,22 @@ export default {
         return 'VOTE'
     },
     ...mapState(['stream', 'uiMode', 'historyVideo', 'fontLoaded']), ...mapGetters(['videoUrl', 'myInfo', 'voted', 'onlineUsers'])
+  },
+  watch: {
+    topDialog: {
+      immediate: true,
+      handler() {
+        if (this.$refs.chatBox && !this.$refs.chatBox.showScrollToBottom)
+          setTimeout(() => this.$refs.chatBox.scrollToBottom())
+      }
+    },
+    middleDialog: {
+      immediate: true,
+      handler() {
+        if (this.$refs.chatBox && !this.$refs.chatBox.showScrollToBottom)
+          setTimeout(() => this.$refs.chatBox.scrollToBottom())
+      }
+    },
   },
   methods: { ...mapActions(['subscribeData']) }
 }

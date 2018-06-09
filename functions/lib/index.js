@@ -18,13 +18,13 @@ const firestore = admin.firestore();
 // https://firebase.google.com/docs/functions/write-firebase-functions
 exports.schedule = functions.https.onRequest((request, response) => __awaiter(this, void 0, void 0, function* () {
     // Remove inactive user
-    let doc = yield firestore.doc('activity/onlineUsers').get();
+    let doc = yield firestore.doc('activity/online').get();
     const idsToRemove = {};
     for (const i in doc.data())
         if (new Date().getTime() - doc.data()[i].getTime() > 60000)
             idsToRemove[i] = admin.firestore.FieldValue.delete();
     if (Object.keys(idsToRemove).length > 0)
-        yield firestore.doc('activity/onlineUsers').update(idsToRemove);
+        yield firestore.doc('activity/online').update(idsToRemove);
     // quiz
     doc = yield firestore.doc('system/quiz').get();
     if (new Date().getTime() - doc.data().time.getTime() > 600000) {

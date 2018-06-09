@@ -38,11 +38,11 @@ export default {
         if (this.fliper[i] > roster.total)
           this.$set(this.fliper, i, roster.total)
       })
-      this.timerRate = 1 - ((new Date().getTime() - this.voteStatTime) / VOTE_TIMEOUT)
+      this.timerRate = 1 - ((new Date().getTime() - this.voteStartTime) / VOTE_TIMEOUT)
     }, 100)
   },
   beforeDestroy() { clearInterval(this.flipInterval) },
-  computed: { ...mapState(['voteRoster', 'voteInfo']), ...mapGetters(['voteStatTime', 'myInfo', 'voted']) },
+  computed: { ...mapState(['voteRoster', 'voteInfo']), ...mapGetters(['voteStartTime', 'myInfo', 'voted']) },
   watch: {
     voted: {
       immediate: true,
