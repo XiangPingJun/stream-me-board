@@ -50,8 +50,6 @@ export default {
   flex-direction: column;
   margin-top: 8px;
   margin-bottom: 8px;
-  transition-property: width, height;
-  transition-duration: 0.25s;
 }
 .stroke {
   position: absolute;
@@ -83,18 +81,6 @@ export default {
     4px -4px #57332d, 4px 4px #57332d;
   box-sizing: border-box;
   line-height: 20px;
-  transition-property: width, height;
-  transition-duration: 0.25s;
-  line-height: 1.1em;
-}
-s {
-  text-decoration: none;
-  background-image: linear-gradient(
-    transparent 7px,
-    #cc1f1f 7px,
-    #cc1f1f 9px,
-    transparent 9px
-  );
 }
 ::-webkit-scrollbar-track {
   background-color: #aa8c6e;

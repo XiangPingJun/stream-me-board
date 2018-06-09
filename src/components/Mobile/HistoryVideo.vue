@@ -1,5 +1,5 @@
 <template>
-  <DialogBox overflowY="auto">
+  <Content overflowY="auto">
     <div><UnderlineText>直播結束囉!來看過去的直播吧!</UnderlineText></div>
     <a @click.stop.prevent="updateUiMode({followUs:true})">
       <i class="far fa-hand-point-right"/> 如何追蹤我們的頻道？ <i class="far fa-hand-point-left"/>
@@ -11,19 +11,18 @@
         </div>
       </WhiteBorder>
     </div>
-  </DialogBox>
+  </Content>
 </template>
 
 <script>
 import UnderlineText from '../UnderlineText'
 import Well from '../Well'
-import Button from '../Button'
-import DialogBox from '../DialogBox'
+import Content from './Content'
 import WhiteBorder from '../WhiteBorder'
 import { mapState, mapActions, mapMutations } from 'vuex'
 
 export default {
-  components: { UnderlineText, Well, Button, DialogBox, WhiteBorder },
+  components: { UnderlineText, Well, Content, WhiteBorder },
   computed: { ...mapState(['historyVideo']) },
   methods: { ...mapActions(['playHistory']), ...mapMutations(['updateUiMode']) }
 }

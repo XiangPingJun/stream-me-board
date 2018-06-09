@@ -1,5 +1,5 @@
 <template>
-  <div :style="{width:videoSize.width}" style="display:flex; justify-content:center;">
+  <div :style="videoSize" style="display:flex; justify-content:center;">
     <iframe ref="iframe" frameBorder="0" allowFullScreen="true" :src="videoUrl" :style="videoSize" v-show="loaded && videoUrl"/>
     <img src="static/thank.png" v-if="null===videoUrl && false===stream.streaming" :style="{height:videoSize.height}"/>
   </div>

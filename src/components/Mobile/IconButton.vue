@@ -1,9 +1,7 @@
 <template>
-  <Button class="icon-btn" style="margin-bottom:4px">
-    <div class="icon-btn-content">
-      <i :class="icon"/>
-    </div>
-  </Button>
+  <div class="icon-btn">
+    <i :class="icon"/>
+  </div>
 </template>
 
 <script>
@@ -19,8 +17,8 @@ export default {
 .icon-btn {
   width: 35px;
   height: 35px;
-}
-.icon-btn-content {
-  padding-top: 3px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>

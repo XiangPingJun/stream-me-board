@@ -19,13 +19,12 @@
 <script>
 import UnderlineText from '../UnderlineText'
 import Well from '../Well'
-import Button from '../Button'
 import DialogBox from '../DialogBox'
 import WhiteBorder from '../WhiteBorder'
 import { mapState, mapActions, mapMutations } from 'vuex'
 
 export default {
-  components: { UnderlineText, Well, Button, DialogBox, WhiteBorder },
+  components: { UnderlineText, Well, DialogBox, WhiteBorder },
   computed: { ...mapState(['historyVideo']) },
   methods: { ...mapActions(['playHistory']), ...mapMutations(['updateUiMode']) }
 }
