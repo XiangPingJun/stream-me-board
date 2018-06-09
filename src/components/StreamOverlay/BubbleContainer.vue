@@ -8,7 +8,6 @@
 import { getWindowWidth, getWindowHeight, DISPLAY_TIMEOUT } from '../../common'
 import ChatBubble from './ChatBubble'
 import { mapActions, mapState } from 'vuex'
-import { clearInterval, setTimeout, setInterval } from 'timers';
 
 export default {
 	data() { return { chats: [], rmObsoleteHandler: null, dummy: null } },

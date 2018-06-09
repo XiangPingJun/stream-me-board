@@ -9,7 +9,6 @@
 import ChatLine from './ChatLine'
 import MicWarningBar from './MicWarningBar'
 import { mapActions, mapState } from 'vuex'
-import { setTimeout } from 'timers';
 
 export default {
   components: { ChatLine, MicWarningBar },

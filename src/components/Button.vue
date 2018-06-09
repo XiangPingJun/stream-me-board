@@ -47,6 +47,8 @@
 }
 .btn-content {
   display: flex;
+  justify-content: center;
+  align-content: center;
   flex-grow: 1;
   color: #f8ecd5;
   text-shadow: 0px 3px #705749;

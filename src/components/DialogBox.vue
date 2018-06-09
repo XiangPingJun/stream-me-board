@@ -85,6 +85,7 @@ export default {
   line-height: 20px;
   transition-property: width, height;
   transition-duration: 0.25s;
+  line-height: 1.1em;
 }
 s {
   text-decoration: none;

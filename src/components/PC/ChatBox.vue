@@ -18,7 +18,6 @@ import InputBox from '../InputBox'
 import DialogBox from '../DialogBox'
 import DarkButton from '../DarkButton'
 import { mapGetters, mapActions, mapState } from 'vuex'
-import { setTimeout, setInterval } from 'timers';
 
 export default {
   data() { return { showScrollToBottom: false, scrollContent: null, height: 0, heightHandler: null } },
