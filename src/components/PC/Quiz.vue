@@ -1,69 +1,13 @@
 <template>
   <DialogBox overflowY="auto">
-    <div><UnderlineText>動漫通問答遊戲</UnderlineText></div>          
-    <div class="question">截至目前「真●三國無雙7帝王傳」系列遊戲中，哪位無雙臉女將並沒有配對的夫君轉正登場？</div>
-    <Well>
-      <div>&lt;小喬大喬&gt;</div>
+    <UnderlineText><i class="far fa-question-circle"/> 益智問答通<PieChart :rate="timerRate" style="margin:0 3px"/></UnderlineText>
+    <div class="question">{{quizInfo.Q}}</div>
+    <Well v-for="(roster, i) in quizRoster" @click.native="select(i)" 
+      :style="{cursor: clickable?'pointer':'default'}" :class="optionClass(i)" class="option" :key="i"
+    >
+      <i class="fas fa-angle-right"/> {{roster.option}}
       <div style="display:flex;">
-        <Avatar index="11" whoAmI="true"/>
-        <Avatar index="12"/>
-        <Avatar index="12"/>
-        <Avatar index="12" whoAmI="true"/>
-        <Avatar index="12"/>
-        <Avatar index="12"/>
-        <Avatar index="12"/>
-        <Avatar index="12"/>
-        <Avatar index="12"/>
-        <Avatar index="12"/>
-        <Avatar index="12"/>
-      </div>
-    </Well>
-    <Well>
-      <div>&lt;小喬大喬&gt;</div>
-      <div style="display:flex;">
-        <Avatar index="11"/>
-        <Avatar index="12"/>
-        <Avatar index="12"/>
-        <Avatar index="12"/>
-        <Avatar index="12"/>
-        <Avatar index="12"/>
-        <Avatar index="12"/>
-        <Avatar index="12"/>
-        <Avatar index="12"/>
-        <Avatar index="12"/>
-        <Avatar index="12"/>
-      </div>
-    </Well>
-    <Well>
-      <div>&lt;小喬大喬&gt;</div>
-      <div style="display:flex;">
-        <Avatar index="11"/>
-        <Avatar index="12"/>
-        <Avatar index="12"/>
-        <Avatar index="12"/>
-        <Avatar index="12"/>
-        <Avatar index="12"/>
-        <Avatar index="12"/>
-        <Avatar index="12"/>
-        <Avatar index="12"/>
-        <Avatar index="12"/>
-        <Avatar index="12"/>
-      </div>
-    </Well>
-    <Well>
-      <div>&lt;小喬大喬&gt;</div>
-      <div style="display:flex;">
-        <Avatar index="11"/>
-        <Avatar index="12"/>
-        <Avatar index="12"/>
-        <Avatar index="12"/>
-        <Avatar index="12"/>
-        <Avatar index="12"/>
-        <Avatar index="12"/>
-        <Avatar index="12"/>
-        <Avatar index="12"/>
-        <Avatar index="12"/>
-        <Avatar index="12"/>
+        <UserAvatar v-for="(uid, i) in roster.uids" :user="allUsers[uid]" :key="i"/>
       </div>
     </Well>
   </DialogBox>
@@ -72,11 +16,40 @@
 <script>
 import UnderlineText from '../UnderlineText'
 import Well from '../Well'
-import Avatar from '../Avatar'
+import UserAvatar from './UserAvatar'
+import PieChart from '../PieChart'
 import DialogBox from '../DialogBox'
+import { QUIZ_TIMEOUT } from '../../common'
+import { mapState, mapActions, mapGetters } from 'vuex'
 
 export default {
-  components: { UnderlineText, Well, Avatar, DialogBox, }
+  data() { return { clickable: true, dialogClass: 'animated flipInY', timerRate: 0 } },
+  components: { DialogBox, UnderlineText, Well, UserAvatar, PieChart },
+  mounted() {
+    this.$el.addEventListener("animationend", () => this.dialogClass = '')
+    this.flipInterval = setInterval(() => this.timerRate = 1 - ((new Date().getTime() - this.quizStartTime) / QUIZ_TIMEOUT), 100)
+  },
+  beforeDestroy() { clearInterval(this.flipInterval) },
+  computed: { ...mapState(['quizRoster', 'quizInfo', 'allUsers']), ...mapGetters(['quizStartTime', 'myInfo', 'quizAnswered']) },
+  watch: { quizAnswered: { immediate: true, handler(val) { if (val) this.clickable = false } } },
+  methods: {
+    optionClass(i) {
+      if (!this.quizInfo.ended)
+        return
+      if (this.quizInfo.A != i)
+        return 'animated zoomOutLeft'
+    },
+    select(i) {
+      if (!this.clickable)
+        return
+      if (!this.myInfo.name) {
+        this.promptLogin()
+        return
+      }
+      this.sendAnswer(i)
+    },
+    ...mapActions(['sendAnswer', 'promptLogin'])
+  }
 }
 </script>
 
@@ -89,8 +62,7 @@ export default {
   margin-bottom: 10px;
 }
 .option {
-  display: inline-block;
-  padding-top: 9px;
   margin-right: 5px;
+  user-select: none;
 }
 </style>

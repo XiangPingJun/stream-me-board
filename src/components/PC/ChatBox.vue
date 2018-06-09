@@ -18,15 +18,10 @@ import InputBox from '../InputBox'
 import DialogBox from '../DialogBox'
 import DarkButton from '../DarkButton'
 import { mapGetters, mapActions, mapState } from 'vuex'
-import { setTimeout } from 'timers';
+import { setTimeout, setInterval } from 'timers';
 
 export default {
-  data() {
-    return {
-      showScrollToBottom: false,
-      scrollContent: null,
-    }
-  },
+  data() { return { showScrollToBottom: false, scrollContent: null, height: 0, heightHandler: null } },
   components: { ChatLine, InputBox, DialogBox, DarkButton },
   computed: { ...mapState(['allUsers', 'chatLines']), ...mapGetters(['myInfo']) },
   mounted() {
@@ -35,7 +30,14 @@ export default {
       setTimeout(() => this.showScrollToBottom = !this.isScrollBottom())
     })
     this.scrollToBottom()
+    this.heightHandler = setInterval(() => {
+      if (this.$el.clientHeight == this.height)
+        return
+      this.scrollToBottom()
+      this.height = this.$el.clientHeight
+    })
   },
+  beforeDestroy() { clearInterval(this.heightHandler) },
   methods: {
     onInputFocus() {
       if (this.myInfo.name)

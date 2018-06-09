@@ -105,22 +105,6 @@ export default {
     },
     ...mapState(['stream', 'uiMode', 'historyVideo', 'fontLoaded']), ...mapGetters(['videoUrl', 'myInfo', 'voted', 'onlineUsers'])
   },
-  watch: {
-    topDialog: {
-      immediate: true,
-      handler() {
-        if (this.$refs.chatBox && !this.$refs.chatBox.showScrollToBottom)
-          setTimeout(() => this.$refs.chatBox.scrollToBottom())
-      }
-    },
-    middleDialog: {
-      immediate: true,
-      handler() {
-        if (this.$refs.chatBox && !this.$refs.chatBox.showScrollToBottom)
-          setTimeout(() => this.$refs.chatBox.scrollToBottom())
-      }
-    },
-  },
   methods: { ...mapActions(['subscribeData']) }
 }
 </script>

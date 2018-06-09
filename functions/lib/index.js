@@ -41,7 +41,7 @@ exports.schedule = functions.https.onRequest((request, response) => __awaiter(th
             yield firestore.doc('system/quiz').set(Object.assign({ time: admin.firestore.FieldValue.serverTimestamp(), Q: question, ended: false }, complement[question]));
             yield firestore.doc('system/quizHistory').update({ [question]: true });
             yield firestore.doc('activity/quiz').set({});
-            yield new Promise((resolve, reject) => setTimeout(resolve, QUIZ_TIMEOUT));
+            yield new Promise(resolve => setTimeout(resolve, QUIZ_TIMEOUT));
             yield firestore.doc('system/quiz').update({ ended: true });
         }
     }

@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import actions from './actions'
-import { QUIZ_TIMEOUT, TOTAL_AVATAR } from '../common'
+import { TOTAL_AVATAR } from '../common'
 
 Vue.use(Vuex)
 const generateRandomAvatar = () => Math.floor(Math.random() * TOTAL_AVATAR)
@@ -46,8 +46,9 @@ export default new Vuex.Store({
 		},
 		videoUrl(state) { return state.stream.streaming ? state.stream.videoUrl : state.selectedVideoUrl },
 		voteStartTime(state) { return state.voteInfo.time ? state.voteInfo.time.seconds * 1000 : 0 },
-		voted(state) { return !!state.voteRoster.find((roster, i) => roster.users.find(user => user.uid == state.myUid)) },
+		voted(state) { return !!state.voteRoster.find((roster, i) => roster.uids.indexOf(state.myUid) >= 0) },
 		quizStartTime(state) { return state.quizInfo.time ? state.quizInfo.time.seconds * 1000 : 0 },
+		quizAnswered(state) { return !!state.quizRoster.find((roster, i) => roster.uids.indexOf(state.myUid) >= 0) },
 	},
 	mutations: {
 		setStream(state, payload) { state.stream = payload },
@@ -66,7 +67,7 @@ export default new Vuex.Store({
 		initVoteRoster(state, payload) {
 			state.voteRoster = Array.apply(null, new Array(payload)).map((item, i) => ({
 				option: String.fromCharCode(65 + i),
-				users: [],
+				uids: [],
 				total: 0
 			}))
 		},
@@ -76,16 +77,21 @@ export default new Vuex.Store({
 			payload.votes.forEach((count, i) => {
 				if (0 == count || !state.voteRoster[i])
 					return
-				state.voteRoster[i].users.push(state.allUsers[payload.uid])
+				state.voteRoster[i].uids = [...new Set([...state.voteRoster[i].uids, payload.uid])]
 				state.voteRoster[i].total += count
 			})
 		},
 		setQuizInfo(state, payload) { state.quizInfo = payload },
 		initQuizRoster(state, payload) {
-			state.voteRoster = Array.apply(null, new Array(payload)).map((item, i) => ({
-				option: payload[i],
-				users: [],
+			state.quizRoster = payload.map((item, i) => ({
+				option: item,
+				uids: [],
 			}))
+		},
+		addAnswer(state, payload) {
+			if (state.quizInfo.ended)
+				return
+			state.quizRoster[payload.answer].uids = [...new Set([...state.quizRoster[payload.answer].uids, payload.uid])]
 		},
 	},
 	actions: actions

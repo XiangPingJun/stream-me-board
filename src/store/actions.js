@@ -96,7 +96,11 @@ export default {
 				commit('initQuizRoster', doc.data().OP)
 			commit('setQuizInfo', doc.data())
 		})
-		firestore.doc("activity/vote").onSnapshot({ includeMetadataChanges: true }, doc => {
+		firestore.doc("activity/quiz").onSnapshot({ includeMetadataChanges: true }, doc => {
+			if (doc.metadata.hasPendingWrites)
+				return
+			for (const [uid, answer] of Object.entries(doc.data()))
+				commit('addAnswer', { uid, answer })
 		})
 		// history video
 		fetch('https://www.googleapis.com/youtube/v3/search?key=AIzaSyBCYPReX74lujmX9tg8AiM-OFGqmKYMZkU&channelId=UCLeQT6hvBgnq_-aKKlcgj1Q&part=snippet,id&order=date&maxResults=50').then(res => res.json()).then(data => commit('setHistoryVideo', data.items.filter(item => item.id.videoId)))
@@ -357,6 +361,16 @@ export default {
 				uid: state.myUid,
 				text: payload.reduce((acc, val) => acc + val) + '票！',
 			})
+		} catch (error) {
+			if ('permission-denied' == error.code)
+				return
+			dispatch('notify', { type: 'error', text: error.message })
+			throw error
+		}
+	},
+	async sendAnswer({ state, dispatch }, payload) {
+		try {
+			await firestore.doc('activity/quiz').update({ [state.myUid]: payload })
 		} catch (error) {
 			if ('permission-denied' == error.code)
 				return

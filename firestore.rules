@@ -20,7 +20,7 @@ service cloud.firestore {
     }
     match /activity/quiz {
       allow read
-      allow update
+      allow update: if !quizEnded()
     }
     match /activity/online {
       allow read
@@ -33,6 +33,9 @@ service cloud.firestore {
     }
     function voteEnded() {
       return true==get(/databases/$(database)/documents/system/vote).data.ended
+    }
+    function quizEnded() {
+      return true==get(/databases/$(database)/documents/system/quiz).data.ended
     }
   }
 }
