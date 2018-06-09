@@ -7,7 +7,7 @@
       <div class="info">
         <UnderlineText>{{myInfo.name}}</UnderlineText>
         <div v-tooltip.bottom="{content:'一起聊聊天、參加小遊戲就可以解鎖更多新角色！', offset:3}"
-          style="cursor:default">Lv {{myInfo.level}}. ({{myInfo.exp}}%){{levelMsg}}</div>
+          style="cursor:default">Lv {{Math.floor(myInfo.exp/100)}}. ({{myInfo.exp%100}}%){{levelMsg}}</div>
       </div>
       <div class="logout">
         <DarkButton @click="logout" v-tooltip.left="{content:'登出', offset:3}"><i class="fa fa-sign-out-alt" /></DarkButton>

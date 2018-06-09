@@ -47,7 +47,7 @@ export default {
   },
   created() { this.subscribeData() },
   methods: { ...mapActions(['subscribeData', 'loginAdmin', 'startStream', 'stopStream', 'saveVideoUrl', 'saveGameTitle', 'saveGameUrl', 'saveGameDescription', 'startVote', 'sendChat']) },
-  computed: { ...mapState(['voteInfo', 'isAdmin', 'stream', 'voteRoster']) },
+  computed: { ...mapState(['voteInfo', 'isAdmin', 'stream', 'voteRoster', 'quizRoster', 'quizInfo']) },
   mounted() {
     this.unsubscribeAction = this.$store.subscribeAction((action, state) => {
       if ('notify' == action.type)
@@ -65,6 +65,22 @@ export default {
         setTimeout(() => this.sendChat({ uid: 'system', text: '直播開始囉！大家坐穩啦！', }), 3000)
       else
         this.sendChat({ uid: 'system', text: '直播結束囉！期待下次與大家相會！', })
+    },
+    voteInfo(val, oldVal) {
+      if (!val.ended)
+        return
+      let text = ''
+      this.voteRoster.forEach(item => text += ` ${item.option}(${item.total}票)`)
+      this.sendChat({ uid: 'system', text: text })
+    },
+    quizInfo(val, oldVal) {
+      if (val.ended) {
+        this.sendChat({ uid: 'system', text: `A: ${this.quizInfo.OP[this.quizInfo.A]}` })
+      } else {
+        let text = `Q: ${this.quizInfo.Q}`
+        this.quizInfo.OP.forEach(op => text += ` [${op}]`)
+        this.sendChat({ uid: 'system', text: text })
+      }
     }
   }
 }

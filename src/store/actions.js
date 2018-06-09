@@ -107,21 +107,28 @@ export default {
 		// font loaded
 		document.fonts.ready.then(() => commit('setFontLoaded', true));
 	},
-	async saveMyInfo({ state, dispatch, commit }, payload) {
-		try {
-			await firestore.collection('user').doc(state.myUid).set(payload)
-		} catch (error) {
-			dispatch('notify', { type: 'error', text: error.message })
-			throw error
-		}
+	async saveMyExp({ state }, payload) {
+		await firestore.collection('user').doc(state.myUid).update({ exp: payload })
 	},
-	addExp({ getters, dispatch }, payload) {
-		if (payload > 100)
-			dispatch('notify', { type: 'error', text: `unsupport addExp ${payload}` })
-		getters.myInfo.exp += payload
-		if (getters.myInfo.exp >= 100) {
-			getters.myInfo.level++
-			getters.myInfo.exp -= 100
+	async saveMyAvatar({ state }, payload) {
+		await firestore.collection('user').doc(state.myUid).update({ avatarSelected: payload })
+	},
+	async saveMyBestVoteRecord({ state }, payload) {
+		await firestore.collection('user').doc(state.myUid).update({ bestVoteRecord: payload })
+	},
+	async getTrophy({ state, getters, dispatch }, payload) {
+		if (getters.myInfo.trophy.includes(payload.id))
+			return
+		await firestore.collection('user').doc(state.myUid).update({ trophy: [...getters.myInfo.trophy, payload.id] })
+		dispatch('addExp', 100)
+		dispatch('notify', { data: { symbol: 'trophy' }, text: payload.text })
+	},
+	async addMyViewedStream({ state, getters }, payload) {
+		await firestore.collection('user').doc(state.myUid).update({ viewedStream: [...getters.myInfo.viewedStream, payload] })
+	},
+	addExp({ state, getters, dispatch }, payload) {
+		const exp = getters.myInfo.exp + payload
+		if (Math.floor(exp / 100) > Math.floor(getters.myInfo.exp / 100)) {
 			const nextAvatar = getters.randomNextAvatar
 			if (null === nextAvatar) {
 				dispatch('notify', { text: '升滿了?! 你真的有認真在看直播嗎?' })
@@ -130,42 +137,34 @@ export default {
 				dispatch('notify', { data: { avatar: nextAvatar }, text: '升級! 獲得新角色!' })
 			}
 		}
-		dispatch('saveMyInfo', getters.myInfo)
+		dispatch('saveMyExp', exp)
 	},
 	checkTrophy({ getters, state, dispatch }) {
 		if (!getters.myInfo.name)
 			return
 		if (state.stream.streaming && !getters.myInfo.viewedStream.includes(state.stream.time)) {
-			getters.myInfo.viewedStream.push(state.stream.time)
 			if (!getters.myInfo.trophy.includes('WATCH_FIRST_TIME')) {
-				getters.myInfo.trophy.push('WATCH_FIRST_TIME')
-				notify('第一次來看直播！')
+				dispatch('getTrophy', { text: '第一次來看直播！', id: 'WATCH_FIRST_TIME' })
+			} else {
+				dispatch('notify', { data: { symbol: 'trophy' }, text: '上來看直播！' })
+				dispatch('addExp', 100)
 			}
-			dispatch('saveMyInfo', getters.myInfo)
-			dispatch('addExp', 100)
-		}
-		function notify(msg) {
-			dispatch('notify', { data: { symbol: 'trophy' }, text: msg })
+			dispatch('addMyViewedStream', state.stream.time)
 		}
 	},
 	async sendHeartbeat({ state }) {
-		try {
-			const anonymousUid = `${FINGERPRINT} ${state.anonymousAvatar}`
-			if (state.myUid) {
-				firestore.doc('activity/online').update({
-					[state.myUid]: firebase.firestore.FieldValue.serverTimestamp()
-				})
-				firestore.doc('activity/online').update({
-					[anonymousUid]: firebase.firestore.FieldValue.delete()
-				})
-			} else {
-				firestore.doc('activity/online').update({
-					[anonymousUid]: firebase.firestore.FieldValue.serverTimestamp()
-				})
-			}
-		} catch (error) {
-			dispatch('notify', { type: 'error', text: error.message })
-			throw error
+		const anonymousUid = `${FINGERPRINT} ${state.anonymousAvatar}`
+		if (state.myUid) {
+			firestore.doc('activity/online').update({
+				[state.myUid]: firebase.firestore.FieldValue.serverTimestamp()
+			})
+			firestore.doc('activity/online').update({
+				[anonymousUid]: firebase.firestore.FieldValue.delete()
+			})
+		} else {
+			firestore.doc('activity/online').update({
+				[anonymousUid]: firebase.firestore.FieldValue.serverTimestamp()
+			})
 		}
 	},
 	async loginAdmin({ state, dispatch }, payload) {
@@ -194,7 +193,6 @@ export default {
 					uid: user.uid,
 					avatarList: [state.anonymousAvatar],
 					avatarSelected: state.anonymousAvatar,
-					level: 1,
 					exp: 0,
 					email: email,
 					viewedStream: [],
@@ -226,28 +224,21 @@ export default {
 		}
 	},
 	changeAvatar({ dispatch, commit, getters }, payload) {
-		if (!getters.myInfo.avatarList.includes(payload))
-			return
-		getters.myInfo.avatarSelected = payload
-		dispatch('saveMyInfo', getters.myInfo)
+		dispatch('saveMyAvatar', payload)
 		commit('updateUiMode', { selectAvatar: false })
 	},
 	async sendChat({ dispatch, commit, state }, payload) {
-		try {
-			let index = (parseInt('zzz', 36) - state.chatLines.length).toString(36)
-			index += payload.text.substr(0, 10)
-			const time = getVideoTime()
-			await firestore.collection(`allChat/${state.stream.time}/chat-line`).doc(index).set({
-				...payload,
-				fingerprint: FINGERPRINT,
-				videoTime: Math.floor(time / 3600) + ':' + Math.floor(time % 3600 / 60) + ':' + Math.floor(time % 3600 % 60),
-				id: shortid.generate(),
-				time: firebase.firestore.FieldValue.serverTimestamp()
-			})
-		} catch (error) {
-			dispatch('notify', { type: 'error', text: error.message })
-			throw error
-		}
+		let index = (parseInt('zzz', 36) - state.chatLines.length).toString(36)
+		index += payload.text.substr(0, 10)
+		const time = getVideoTime()
+		await firestore.collection(`allChat/${state.stream.time}/chat-line`).doc(index).set({
+			...payload,
+			fingerprint: FINGERPRINT,
+			videoTime: Math.floor(time / 3600) + ':' + Math.floor(time % 3600 / 60) + ':' + Math.floor(time % 3600 % 60),
+			id: shortid.generate(),
+			time: firebase.firestore.FieldValue.serverTimestamp()
+		})
+		dispatch('addExp', 3)
 	},
 	promptLogin({ commit, dispatch }) {
 		commit('updateUiMode', { account: 'LOGIN' })
@@ -257,49 +248,29 @@ export default {
 		commit('updateUiMode', { selectAvatar: true })
 	},
 	async saveGameTitle({ dispatch, state }, payload) {
-		try {
-			await firestore.doc('system/stream').update({
-				gameTitle: payload
-			})
-			dispatch('notify', { text: '已更新直播主題' })
-		} catch (error) {
-			dispatch('notify', { type: 'error', text: error.message })
-			throw error
-		}
+		await firestore.doc('system/stream').update({
+			gameTitle: payload
+		})
+		dispatch('notify', { text: '已更新直播主題' })
 	},
 	async saveGameUrl({ dispatch, state }, payload) {
-		try {
-			await firestore.doc('system/stream').update({
-				gameUrl: payload
-			})
-			dispatch('notify', { text: '已更新直播主題的連結' })
-		} catch (error) {
-			dispatch('notify', { type: 'error', text: error.message })
-			throw error
-		}
+		await firestore.doc('system/stream').update({
+			gameUrl: payload
+		})
+		dispatch('notify', { text: '已更新直播主題的連結' })
 	},
 	async saveGameDescription({ dispatch, state }, payload) {
-		try {
-			await firestore.doc('system/stream').update({
-				gameDescription: payload
-			})
-			dispatch('notify', { text: '已更新直播主題的簡述' })
-		} catch (error) {
-			dispatch('notify', { type: 'error', text: error.message })
-			throw error
-		}
+		await firestore.doc('system/stream').update({
+			gameDescription: payload
+		})
+		dispatch('notify', { text: '已更新直播主題的簡述' })
 	},
 	async saveVideoUrl({ dispatch, state }, payload) {
-		try {
-			await firestore.doc('system/stream').set({
-				...state.stream,
-				videoUrl: convertToEmbeded(payload)
-			})
-			dispatch('notify', { text: '已更新直播影片網址' })
-		} catch (error) {
-			dispatch('notify', { type: 'error', text: error.message })
-			throw error
-		}
+		await firestore.doc('system/stream').set({
+			...state.stream,
+			videoUrl: convertToEmbeded(payload)
+		})
+		dispatch('notify', { text: '已更新直播影片網址' })
 		function convertToEmbeded(url) {
 			let arr = /\/\/youtu.be\/(.*)/.exec(url)
 			if (arr)
@@ -313,54 +284,37 @@ export default {
 		}
 	},
 	async startStream({ dispatch, state }, payload) {
-		try {
-			await firestore.doc('system/stream').update({
-				time: new Date().toLocaleString().replace(/\//g, '-'),
-				streaming: true
-			})
-		} catch (error) {
-			dispatch('notify', { type: 'error', text: error.message })
-			throw error
-		}
+		await firestore.doc('system/stream').update({
+			time: new Date().toLocaleString().replace(/\//g, '-'),
+			streaming: true
+		})
 	},
 	async stopStream({ dispatch, state }, payload) {
-		try {
-			await firestore.doc('system/stream').update({
-				streaming: false
-			})
-		} catch (error) {
-			dispatch('notify', { type: 'error', text: error.message })
-			throw error
-		}
-	},
-	async sendVoteResultSystemMsg({ dispatch, state }, payload) {
-		let text = ''
-		state.voteRoster.forEach(item => text += ` ${item.option}(${item.total}票)`)
-		dispatch('sendChat', { uid: 'system', text: text })
+		await firestore.doc('system/stream').update({
+			streaming: false
+		})
 	},
 	async startVote({ dispatch, state }, payload) {
-		try {
-			await firestore.doc('activity/vote').set({})
-			await firestore.doc('system/vote').set({
-				time: firebase.firestore.FieldValue.serverTimestamp(),
-				optionCount: payload,
-				ended: false
-			})
-			await new Promise(resolve => setTimeout(resolve, VOTE_TIMEOUT))
-			await firestore.doc('system/vote').update({ ended: true })
-			dispatch('sendVoteResultSystemMsg')
-		} catch (error) {
-			dispatch('notify', { type: 'error', text: error.message })
-			throw error
-		}
+		await firestore.doc('system/vote').set({
+			time: firebase.firestore.FieldValue.serverTimestamp(),
+			optionCount: payload,
+			ended: false
+		})
+		await firestore.doc('activity/vote').update({})
+		await new Promise(resolve => setTimeout(resolve, VOTE_TIMEOUT))
+		await firestore.doc('system/vote').update({ ended: true })
 	},
-	async sendVote({ state, dispatch }, payload) {
+	async sendVote({ getters, state, dispatch }, payload) {
 		try {
 			await firestore.doc('activity/vote').update({ [state.myUid]: payload })
+			const total = payload.reduce((acc, val) => acc + val)
 			dispatch('sendChat', {
 				uid: state.myUid,
-				text: payload.reduce((acc, val) => acc + val) + '票！',
+				text: total + '票！',
 			})
+			if (total > 20)
+				dispatch('getTrophy', { text: '快手指！投超過20票！', id: 'QUICK_VOTE_FINGER' })
+			dispatch('addExp', Math.min(total, 17))
 		} catch (error) {
 			if ('permission-denied' == error.code)
 				return

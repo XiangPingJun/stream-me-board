@@ -35,7 +35,7 @@ fs.readFileSync('toParse.txt', 'utf-8').split('\n').forEach(line => {
 		result[lastQuestion] = result[lastQuestion] || {}
 	} else if (line.split('　').length > 1) {
 		result[lastQuestion].OP = line.split('　').map(option => option.trim()).filter(option => option)
-		result[lastQuestion].A = result[lastQuestion].OP.findIndex(option => -1 != option.indexOf('tttt'))
+		result[lastQuestion].A = result[lastQuestion].OP.findIndex(option => option.indexOf('tttt') >= 0)
 		result[lastQuestion].OP = result[lastQuestion].OP.map(op => op.replace(/tttt/g, '')).map(op => op.replace(/^\d/, ''))
 	}
 
@@ -49,7 +49,7 @@ fs.readFileSync('toParse.txt', 'utf-8').split('\n').forEach(line => {
 	// }
 })
 for (let i in result) {
-	if (!result[i].A || -1 == result[i].A || isNaN(result[i].A) || !result[i].OP || result[i].OP.length < 2 || result[i].OP.length > 4 || -1 != i.indexOf('中國') || -1 != i.indexOf('我國')) {
+	if (!result[i].A || -1 == result[i].A || isNaN(result[i].A) || !result[i].OP || result[i].OP.length < 2 || result[i].OP.length > 4 || i.indexOf('中國') >= 0 || i.indexOf('我國') >= 0) {
 		delete result[i]
 		continue
 	}

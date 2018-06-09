@@ -53,7 +53,7 @@ export default {
 				}
 				let closestDistance = Infinity
 				let closestCandidate = null
-				Array.apply(null, new Array(30)).map(() => {
+				new Array(30).fill(0).map(() => {
 					const randX = Math.random() * (getWindowWidth() - chat.width - 20)
 					const randY = Math.random() * (getWindowHeight() - chat.height - 20)
 					let x = 1, y = 1

@@ -21,7 +21,7 @@ export const DISPLAY_TIMEOUT = 5000
 export const preservedUsers = {
 	system: {
 		avatarSelected: 0,
-		level: 1,
+		exp: 100,
 		name: '系統',
 		preserved: true
 	}

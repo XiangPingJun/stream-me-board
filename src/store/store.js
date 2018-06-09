@@ -26,14 +26,12 @@ export default new Vuex.Store({
 	getters: {
 		myInfo(state) { return state.allUsers[state.myUid] || {} },
 		randomNextAvatar(state, getters) {
-			let result = generateRandomAvatar()
 			if (null === getters.myInfo)
-				return result
-			else if (getters.myInfo.avatarList.length == TOTAL_AVATAR)
+				return generateRandomAvatar()
+			const candidate = new Array(30).fill(0).map((item, i) => i).filter(item => getters.myInfo.avatarList.indexOf(item) < 0)
+			if (0 == candidate.length)
 				return null
-			for (; ; result = generateRandomAvatar())
-				if (!getters.myInfo.avatarList.find(avatar => avatar == result))
-					return result
+			return Math.floor(Math.random() * candidate.length)
 		},
 		onlineUsers(state) {
 			return state.onlineUids.map(uid => {
@@ -65,7 +63,7 @@ export default new Vuex.Store({
 		setFontLoaded(state, payload) { state.fontLoaded = payload },
 		setVoteInfo(state, payload) { state.voteInfo = payload },
 		initVoteRoster(state, payload) {
-			state.voteRoster = Array.apply(null, new Array(payload)).map((item, i) => ({
+			state.voteRoster = new Array(payload).fill(0).map((item, i) => ({
 				option: String.fromCharCode(65 + i),
 				uids: [],
 				total: 0
@@ -75,9 +73,9 @@ export default new Vuex.Store({
 			if (state.voteInfo.ended)
 				return
 			payload.votes.forEach((count, i) => {
-				if (0 == count || !state.voteRoster[i])
+				if (0 == count || !state.voteRoster[i] || state.voteRoster[i].uids.indexOf(payload.uid) >= 0)
 					return
-				state.voteRoster[i].uids = [...new Set([...state.voteRoster[i].uids, payload.uid])]
+				state.voteRoster[i].uids.push(payload.uid)
 				state.voteRoster[i].total += count
 			})
 		},
