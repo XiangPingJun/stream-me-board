@@ -1,6 +1,6 @@
 <template>
   <Content>
-    <div class="my-info-container">
+    <div class="my-info-container animated flipInX">
       <div class="avatar-box" :style="{'background-image': 'url(static/avatar-border.png)'}">
         <Avatar :index="myInfo.avatarSelected" :large="true" />
       </div>
@@ -12,7 +12,7 @@
         <DarkButton @click="logout"><i class="fa fa-sign-out-alt"/></DarkButton>
       </div>
     </div>
-    <AvatarPicker/>
+    <AvatarPicker class="animated flipInY"/>
   </Content>
 </template>
 

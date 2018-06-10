@@ -45,7 +45,7 @@ import Vote from './Vote'
 import { mapGetters, mapActions, mapState } from 'vuex'
 
 export default {
-  data() { return { videoWidth: 0, videoHeight: 0, unsubscribeAction: () => { }, } },
+  data() { return { videoWidth: 0, videoHeight: 0 } },
   components: { VideoBox, NightSkyBackground, ChatBox, Quiz, MyInfo, AnonymousInfo, Login, Arrow, AvatarPicker, Notify, Playground, HistoryVideo, FollowUs, Vote },
   mounted() {
     this.subscribeData()

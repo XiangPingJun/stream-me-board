@@ -4,7 +4,7 @@
       <div class="notification vue-notification" :class="props.item.type" :style="style">
         <i v-if="props.item.data.symbol" :class="`fas fa-${props.item.data.symbol}`"/>
         <Avatar v-if="undefined!=props.item.data.avatar" :index="props.item.data.avatar"/>
-        <div v-html="props.item.text" style="margin-left:5px;"/>
+        <span v-html="props.item.text" style="margin-left:5px;"/>
       </div>
     </template>
   </notifications>

@@ -1,13 +1,14 @@
 <template>
 	<Content overflowY="auto" ref="chatBox">
-    <div class="chat-list">
-      <ChatLine v-for="(line, key) in chatLines" :key="key" :user="allUsers[line.uid]" :text="line.text" class="animated flipInX"/>
+    <div class="chat-list animated fadeIn">
+      <ChatLine v-for="(line, key) in chatLines" :key="key" :user="allUsers[line.uid]" :text="line.text" :class="lineClass(line.id)"/>
     </div>
-    <div class="mask top"></div>
-    <div class="mask bottom"></div>
-    <InputBox placeholder="說點什麼吧:↵" ref="input" @focus="onInputFocus" @submit="submit" class="input" maxlength="140"/>
+    <div class="mask"></div>
+    <div style="display:flex; justify-content: center;">
+      <InputBox placeholder="說點什麼吧:↵" ref="input" @focus="onInputFocus" @submit="submit" class="input animated flipInX" maxlength="140"/>
+    </div>
     <div v-if="showScrollToBottom" class="scroll-to-bottom">
-      <DarkButton v-tooltip.left="{content:'查看新留言', offset:3}" @click="scrollToBottom"><i class="fas fa-chevron-down"/></DarkButton>
+      <DarkButton @click="scrollToBottom"><i class="fas fa-chevron-down"/></DarkButton>
     </div>
 	</Content>
 </template>
@@ -20,7 +21,7 @@ import DarkButton from '../DarkButton'
 import { mapGetters, mapActions, mapState } from 'vuex'
 
 export default {
-  data() { return { showScrollToBottom: false, scrollContent: null, height: 0, heightHandler: null } },
+  data() { return { showScrollToBottom: false, scrollContent: null, height: 0, newLineIds: [] } },
   components: { ChatLine, InputBox, Content, DarkButton },
   computed: { ...mapState(['allUsers', 'chatLines']), ...mapGetters(['myInfo']) },
   mounted() {
@@ -29,14 +30,14 @@ export default {
       setTimeout(() => this.showScrollToBottom = !this.isScrollBottom())
     })
     this.scrollToBottom()
-    this.heightHandler = setInterval(() => {
+    this.heightInterval = setInterval(() => {
       if (this.$el.clientHeight == this.height)
         return
       this.scrollToBottom()
       this.height = this.$el.clientHeight
     })
   },
-  beforeDestroy() { clearInterval(this.heightHandler) },
+  beforeDestroy() { clearInterval(this.heightInterval) },
   methods: {
     onInputFocus() {
       if (this.myInfo.name)
@@ -56,7 +57,12 @@ export default {
         text: text,
       })
       this.$refs.input.text = ''
+      this.$refs.input.unfocus()
       this.scrollToBottom()
+    },
+    lineClass(id) {
+      if (this.newLineIds.indexOf(id) >= 0)
+        return 'animated flipInX'
     },
     ...mapActions(['promptLogin', 'sendChat'])
   },
@@ -64,6 +70,8 @@ export default {
     chatLines(newVal, oldVal) {
       if (!this.showScrollToBottom)
         setTimeout(() => this.scrollToBottom())
+      if (oldVal.length > 0)
+        this.newLineIds = newVal.filter(newLine => !oldVal.find(oldLine => oldLine.id == newLine.id)).map(line => line.id)
     }
   }
 }
@@ -74,26 +82,19 @@ export default {
   margin-top: 10px;
   margin-bottom: 5px;
   position: absolute;
-  bottom: 5px;
-  width: calc(100% - 24px);
+  top: 0px;
+  width: calc(100% - 12px);
 }
 .mask {
-  box-shadow: 0 0 0 8px #917863;
+  box-shadow: 0 0 0 23px #917863;
   position: absolute;
   width: calc(100% - 28px);
-}
-.mask.top {
-  bottom: 40px;
-}
-.mask.bottom {
-  bottom: 8px;
-}
-.chat-list {
-  padding-bottom: 40px;
+  top: 23px;
 }
 .scroll-to-bottom {
   position: absolute;
-  bottom: 45px;
+  bottom: 10px;
+  right: 4px;
   display: flex;
 }
 .fas.fa-chevron-down {

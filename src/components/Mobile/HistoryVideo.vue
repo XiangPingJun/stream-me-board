@@ -1,13 +1,15 @@
 <template>
   <Content overflowY="auto">
-    <div><UnderlineText>直播結束囉!來看過去的直播吧!</UnderlineText></div>
-    <a @click.stop.prevent="updateUiMode({followUs:true})">
-      <i class="far fa-hand-point-right"/> 如何追蹤我們的頻道？ <i class="far fa-hand-point-left"/>
-    </a>
-    <div class="grid">
+    <div class="animated flipInX">
+      <div><UnderlineText>直播結束囉!來看過去的直播吧!</UnderlineText></div>
+      <a @click.stop.prevent="updateUiMode({followUs:true})">
+        <i class="fas fa-bell"/> 如何追蹤我們的頻道？
+      </a>
+    </div>
+    <div class="grid animated flipInYY">
       <WhiteBorder v-for="(video, i) in historyVideo" :key="i" style="margin: 0 5px 5px 0;">
-        <div :style="thumbnailStyle" @click="playHistory(video.id.videoId)">
-          <img :style="thumbnailStyle" :src="video.snippet.thumbnails.medium.url"/>
+        <div :style="thumbnailStyle()" @click="playHistory(video.id.videoId)">
+          <img :style="thumbnailStyle()" :src="video.snippet.thumbnails.medium.url"/>
         </div>
       </WhiteBorder>
     </div>
@@ -23,20 +25,23 @@ import { mapState, mapActions, mapMutations } from 'vuex'
 
 export default {
   components: { UnderlineText, Well, Content, WhiteBorder },
-  computed: {
-    thumbnailWidth() {
-      return (document.documentElement.clientWidth - 58) / 2
-    },
+  computed: { ...mapState(['historyVideo']) },
+  mounted() {
+    this.resizeListener = () => this.$forceUpdate()
+    window.addEventListener('resize', this.resizeListener, false)
+  },
+  beforeDestroy() { window.removeEventListener('resize', this.resizeListener) },
+  methods: {
     thumbnailStyle() {
+      const thumbnailWidth = (document.documentElement.clientWidth - 58) / 2
       return {
-        width: this.thumbnailWidth + 'px',
-        height: this.thumbnailWidth * (9 / 16) + 'px',
+        width: thumbnailWidth + 'px',
+        height: thumbnailWidth * (9 / 16) + 'px',
         overflow: 'hidden'
       }
     },
-    ...mapState(['historyVideo'])
-  },
-  methods: { ...mapActions(['playHistory']), ...mapMutations(['updateUiMode']) }
+    ...mapActions(['playHistory']), ...mapMutations(['updateUiMode'])
+  }
 }
 </script>
 

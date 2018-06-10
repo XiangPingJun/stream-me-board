@@ -248,7 +248,7 @@ export default {
 	},
 	promptLogin({ commit, dispatch }) {
 		commit('updateUiMode', { account: 'LOGIN' })
-		dispatch('notify', { type: 'warn', text: '要先輸入暱稱才能繼續喲！', data: { symbol: 'exclamation-triangle' } })
+		dispatch('notify', { type: 'warn', text: '輸入暱稱才能繼續喲!', data: { symbol: 'exclamation-triangle' } })
 	},
 	promptSelectAvatar({ commit }) {
 		commit('updateUiMode', { selectAvatar: true })

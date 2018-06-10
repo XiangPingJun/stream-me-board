@@ -94,6 +94,7 @@ export default {
 .scroll-to-bottom {
   position: absolute;
   bottom: 45px;
+  right: 16px;
   display: flex;
 }
 .fas.fa-chevron-down {

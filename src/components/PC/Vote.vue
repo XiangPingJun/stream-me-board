@@ -26,7 +26,7 @@ import { VOTE_TIMEOUT } from '../../common'
 import { mapGetters, mapActions, mapState } from 'vuex'
 
 export default {
-  data() { return { fliper: [], clickCount: [], clickable: true, flipInterval: null, timeout: null, dialogClass: 'animated flipInY', timerRate: 0 } },
+  data() { return { fliper: [], clickCount: [], clickable: true, timeout: null, dialogClass: 'animated flipInY', timerRate: 0 } },
   components: { DialogBox, UnderlineText, Well, UserAvatar, PieChart },
   mounted() {
     this.$el.addEventListener("animationend", () => this.dialogClass = '')

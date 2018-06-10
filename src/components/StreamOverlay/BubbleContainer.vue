@@ -10,7 +10,7 @@ import ChatBubble from './ChatBubble'
 import { mapActions, mapState } from 'vuex'
 
 export default {
-	data() { return { chats: [], rmObsoleteHandler: null, dummy: null } },
+	data() { return { chats: [], dummy: null } },
 	components: { ChatBubble },
 	computed: { ...mapState(['chatLines']) },
 	watch: {
@@ -95,8 +95,6 @@ export default {
 	mounted() {
 		this.rmObsoleteHandler = setInterval(() => this.rmObsolete(), 1000)
 	},
-	beforeDestroy() {
-		clearInterval(this.rmObsoleteHandler)
-	}
+	beforeDestroy() { clearInterval(this.rmObsoleteHandler) }
 }
 </script>

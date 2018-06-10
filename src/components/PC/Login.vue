@@ -16,13 +16,7 @@ import { mapActions } from 'vuex'
 
 export default {
 	components: { InputBox, Invisible, DialogBox },
-	data() {
-		return {
-			userNameTest: '',
-			unsubscribeAction: () => { },
-			loading: false,
-		}
-	},
+	data() { return { userNameTest: '', loading: false, } },
 	mounted() {
 		this.$refs.input.focus()
 		this.unsubscribeAction = this.$store.subscribeAction((action, state) => {
@@ -45,9 +39,7 @@ export default {
 		},
 		...mapActions(['loginVisitor', 'notify'])
 	},
-	beforeDestroy() {
-		this.unsubscribeAction()
-	}
+	beforeDestroy() { this.unsubscribeAction() }
 }
 </script>
 

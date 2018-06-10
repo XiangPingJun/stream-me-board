@@ -3,15 +3,19 @@
     <div style="display:flex">
       <VideoBox ref="video" :width="videoWidth"/>
       <div class="tool-bar">
-        <IconButton @click="updateUiMode({showAccount:true})" icon="fas fa-user"/>
-        <IconButton icon="fas fa-comment-alt"/>
-        <IconButton @click="setUiMode({})" v-if="false==stream.streaming" icon="fab fa-youtube"/>
+        <IconButton icon="fas fa-comment" v-if="'CHAT_BOX'==dialog"/>
+        <IconButton icon="far fa-comment" v-if="'CHAT_BOX'!=dialog" @click="setUiMode({chatBox:true})"/>
+        <IconButton icon="fas fa-list-alt" v-if="'HISTORY_VIDEO'==dialog"/>
+        <IconButton icon="far fa-list-alt" v-if="'HISTORY_VIDEO'!=dialog" @click="setUiMode({})"/>
+        <IconButton icon="fas fa-user" v-if="'MY_INFO'==dialog||'LOGIN'==dialog" />
+        <IconButton icon="far fa-user" v-if="'MY_INFO'!=dialog&&'LOGIN'!=dialog" @click="updateUiMode({showAccount:true})"/>
       </div>
     </div>
     <div style="margin: 8px 4px 0px 4px">
-      <HistoryVideo v-if="'HISTORY_VIDEO'==dialog" :style="dialogStyle"/>
-      <MyInfo v-if="'MY_INFO'==dialog" :style="dialogStyle"/>
-      <Login v-if="'ANONYMOUS'==dialog||'LOGIN'==dialog" :style="dialogStyle"/>
+      <HistoryVideo v-if="'HISTORY_VIDEO'==dialog" :style="dialogStyle()"/>
+      <MyInfo v-if="'MY_INFO'==dialog" :style="dialogStyle()"/>
+      <Login v-if="'LOGIN'==dialog" :style="dialogStyle()"/>
+      <ChatBox v-if="'CHAT_BOX'==dialog" :style="dialogStyle()"/>
     </div>
     <Notify/>
   </div>
@@ -24,28 +28,28 @@ import IconButton from './IconButton'
 import MyInfo from './MyInfo'
 import Login from './Login'
 import Notify from '../Notify'
+import ChatBox from './ChatBox'
 import { mapActions, mapState, mapGetters, mapMutations } from 'vuex'
+import { setInterval } from 'timers';
 
 export default {
-  components: { VideoBox, IconButton, HistoryVideo, MyInfo, Login, Notify },
+  components: { VideoBox, IconButton, HistoryVideo, MyInfo, Login, Notify, ChatBox },
   computed: {
     videoWidth() { return document.documentElement.clientWidth - 40 },
-    dialogStyle() {
-      return { height: document.documentElement.clientHeight - this.videoWidth * (9 / 16) - 10 + 'px' }
-    },
     dialog() {
+      if (!this.preLoaded)
+        return
       if (this.uiMode.vote)
         return 'VOTE'
       if (this.uiMode.quiz)
         return 'QUIZ'
       if (this.uiMode.showAccount)
-        return this.myInfo.name ? 'MY_INFO' : 'ANONYMOUS'
+        return this.myInfo.name ? 'MY_INFO' : 'LOGIN'
       if (this.uiMode.followUs)
         return 'FOLLOW_US'
-      if (false == this.stream.streaming && this.historyVideo)
-        return 'HISTORY_VIDEO'
-      if (this.stream.streaming && this.onlineUsers)
-        return 'PLAYGROUND'
+      if (this.uiMode.chatBox)
+        return 'CHAT_BOX'
+      return this.stream.streaming ? 'PLAYGROUND' : 'HISTORY_VIDEO'
     },
     ...mapState(['uiMode', 'stream', 'preLoaded', 'historyVideo']), ...mapGetters(['onlineUsers', 'myInfo'])
   },
@@ -53,15 +57,32 @@ export default {
     this.subscribeData()
     this.unsubscribeAction = this.$store.subscribeAction((action, state) => {
       if ('notify' == action.type)
-        return this.$notify({
+        this.$notify({
           group: 'notify',
           data: { ...action.payload.data },
           ...action.payload
         })
+      else if ('promptLogin' == action.type)
+        this.setUiMode({ showAccount: true })
     })
+    this.scrollInterval = setInterval(() => {
+      if (window.scrollY > 0)
+        window.scrollTo(0, 0)
+    }, 500)
+    this.resizeListener = () => this.$forceUpdate()
+    window.addEventListener('resize', this.resizeListener, false)
   },
-  beforeDestroy() { this.unsubscribeAction() },
-  methods: { ...mapActions(['subscribeData']), ...mapMutations(['setUiMode', 'updateUiMode']) },
+  beforeDestroy() {
+    this.unsubscribeAction()
+    clearInterval(this.scrollInterval)
+    window.removeEventListener('resize', this.resizeListener)
+  },
+  methods: {
+    dialogStyle() {
+      return { height: document.documentElement.clientHeight - this.videoWidth * (9 / 16) - 10 + 'px' }
+    },
+    ...mapActions(['subscribeData']), ...mapMutations(['setUiMode', 'updateUiMode'])
+  },
 }
 </script>
 

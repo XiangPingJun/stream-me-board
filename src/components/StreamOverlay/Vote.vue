@@ -23,7 +23,7 @@ import { VOTE_TIMEOUT } from '../../common'
 import { mapGetters, mapActions, mapState } from 'vuex'
 
 export default {
-	data() { return { fliper: [], flipInterval: null, timeout: null, timerRate: 0 } },
+	data() { return { fliper: [], timeout: null, timerRate: 0 } },
 	components: { Avatar, PieChart },
 	mounted() {
 		this.flipInterval = setInterval(() => {

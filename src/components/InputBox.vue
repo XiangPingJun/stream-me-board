@@ -51,6 +51,7 @@ input {
 }
 input::placeholder {
   color: #f8ecd5;
+  vertical-align: middle;
 }
 input:focus {
   outline: none;
