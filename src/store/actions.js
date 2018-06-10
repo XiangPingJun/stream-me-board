@@ -176,7 +176,7 @@ export default {
 		const doc = await firestore.doc('activity/online').get()
 		const idsToRemove = {}
 		for (const [i, time] of Object.entries(doc.data()))
-			if (time.seconds && (new Date().getTime() - time.seconds * 1000 > 60000))
+			if (time && (new Date().getTime() - time.seconds * 1000 > 60000))
 				idsToRemove[i] = firebase.firestore.FieldValue.delete()
 		if (Object.keys(idsToRemove).length > 0)
 			await firestore.doc('activity/online').update(idsToRemove)

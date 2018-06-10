@@ -7,8 +7,8 @@
         <IconButton icon="far fa-comments" v-if="'CHAT_BOX'!=dialog" @click="setUiMode({chatBox:true})"/>
         <IconButton icon="fas fa-list-alt" v-if="'HISTORY_VIDEO'==dialog&&!stream.streaming"/>
         <IconButton icon="far fa-list-alt" v-if="'HISTORY_VIDEO'!=dialog&&!stream.streaming" @click="setUiMode({})"/>
-        <IconButton icon="fas fa-question-circle" v-if="'PLAYGROUND'==dialog&&stream.streaming"/>
-        <IconButton icon="far fa-question-circle" v-if="'PLAYGROUND'!=dialog&&stream.streaming" @click="setUiMode({})"/>
+        <!-- <IconButton icon="fas fa-list-alt" v-if="'PLAYGROUND'==dialog&&stream.streaming"/>
+        <IconButton icon="far fa-list-alt" v-if="'PLAYGROUND'!=dialog&&stream.streaming" @click="setUiMode({})"/> -->
         <IconButton icon="fas fa-user" v-if="'MY_INFO'==dialog||'LOGIN'==dialog" />
         <IconButton icon="far fa-user" v-if="'MY_INFO'!=dialog&&'LOGIN'!=dialog" @click="updateUiMode({showAccount:true})"/>
       </div>
@@ -18,6 +18,7 @@
       <MyInfo v-if="'MY_INFO'==dialog" :style="dialogStyle()"/>
       <Login v-if="'LOGIN'==dialog" :style="dialogStyle()"/>
       <ChatBox v-if="'CHAT_BOX'==dialog" :style="dialogStyle()"/>
+      <Quiz v-if="'QUIZ'==dialog" :style="dialogStyle()"/>      
     </div>
     <div v-show="!preLoaded" class="loading-container">
       <i class="fas fa-spinner fa-10x fa-pulse"/>
@@ -34,11 +35,12 @@ import MyInfo from './MyInfo'
 import Login from './Login'
 import Notify from '../Notify'
 import ChatBox from './ChatBox'
+import Quiz from './Quiz'
 import { mapActions, mapState, mapGetters, mapMutations } from 'vuex'
 import { setInterval } from 'timers';
 
 export default {
-  components: { VideoBox, IconButton, HistoryVideo, MyInfo, Login, Notify, ChatBox },
+  components: { VideoBox, IconButton, HistoryVideo, MyInfo, Login, Notify, ChatBox, Quiz },
   computed: {
     videoWidth() { return document.documentElement.clientWidth - 40 },
     dialog() {
