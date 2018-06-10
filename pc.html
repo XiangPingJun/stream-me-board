@@ -23,6 +23,19 @@
         overflow: hidden;
       }
     </style>
+    <script>
+      var player;
+      function onYouTubeIframeAPIReady() {
+        player = new YT.Player('player', {
+          height: '390',
+          width: '640',
+          videoId: 'M7lc1UVf-VE',
+          events: {
+            onReady: function (event) { event.target.playVideo() }
+          }
+        });
+      }
+    </script>
   </head>
   <body>
     <div id="app"></div>

@@ -11,11 +11,16 @@
     <div class="padding-line"/>
 
     <div><UnderlineText>線上的網友們</UnderlineText></div>
-    <Well style="margin-bottom:20px;">
+    <Well style="margin-bottom:10px;">
       <div style="display:flex;">
         <UserAvatar v-for="(user, i) in onlineUsers" :user="user" :key="i"/>
       </div>
     </Well>
+    <div class="padding-line"/>    
+
+    <a @click.stop.prevent="updateUiMode({followUs:true})">
+      <i class="fas fa-bell"/> 如何追蹤我們的頻道？    
+    </a>
   </DialogBox>
 </template>
 
@@ -43,6 +48,6 @@ export default {
   margin-bottom: 5px;
 }
 .padding-line {
-  margin-bottom: 20px;
+  margin-bottom: 15px;
 }
 </style>

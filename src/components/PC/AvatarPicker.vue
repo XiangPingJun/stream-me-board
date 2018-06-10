@@ -3,8 +3,8 @@
     <div><UnderlineText>選擇您的角色： (已獲得{{myInfo.avatarList.length}}/{{TOTAL_AVATAR}})</UnderlineText></div>          
     <Well>
 			<div class="grid">
-        <AvatarPickerBtn v-for="avatar in avatarList" 
-          :index="avatar" :key="avatar" 
+        <AvatarPickerBtn v-for="(avatar,i) in avatarList" 
+          :index="avatar" :key="i" 
           :whoAmI="!myInfo.avatarList.includes(avatar)" 
        />
 			</div>

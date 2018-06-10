@@ -5,7 +5,7 @@
     </div>
     <div class="mask"></div>
     <div style="display:flex; justify-content: center;">
-      <InputBox placeholder="說點什麼吧:↵" ref="input" @focus="onInputFocus" @submit="submit" class="input animated flipInX" maxlength="140"/>
+      <InputBox placeholder="說點什麼吧:↵" ref="input" @focus="onInputFocus" @submit="submit" class="input" maxlength="140"/>
     </div>
     <div v-if="showScrollToBottom" class="scroll-to-bottom">
       <DarkButton @click="scrollToBottom"><i class="fas fa-chevron-down"/></DarkButton>
@@ -15,7 +15,7 @@
 
 <script>
 import ChatLine from './ChatLine'
-import InputBox from '../InputBox'
+import InputBox from './InputBox'
 import Content from './Content'
 import DarkButton from '../DarkButton'
 import { mapGetters, mapActions, mapState } from 'vuex'
@@ -45,7 +45,7 @@ export default {
       this.promptLogin()
     },
     isScrollBottom() {
-      return this.scrollContent.offsetHeight + this.scrollContent.scrollTop == this.scrollContent.scrollHeight
+      return this.scrollContent.offsetHeight + this.scrollContent.scrollTop < this.scrollContent.scrollHeight + 200
     },
     scrollToBottom() {
       this.scrollContent.scrollTo(0, this.scrollContent.scrollHeight)
@@ -95,10 +95,10 @@ export default {
   bottom: 10px;
   right: 4px;
   display: flex;
+  opacity: 0.8;
 }
 .fas.fa-chevron-down {
   margin: 3px;
-  opacity: 0.75;
 }
 .chat-list {
   padding-top: 35px;

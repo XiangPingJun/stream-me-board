@@ -2,9 +2,10 @@
   <div style="display:flex; justify-content:center;" :style="{width:videoSize.width}">
     <div class="video-box animated" :class="{flipInX: loaded}" v-show="loaded && videoUrl">
       <div class="video-container">
-        <iframe ref="iframe" frameBorder="0" allowFullScreen="true" :src="videoUrl" :style="videoSize"/>
+        <iframe ref="iframe" frameBorder="0" allow="autoplay; encrypted-media" :src="videoUrl" :style="videoSize"/>
       </div>
     </div>
+    <button @click="play">play</button>
     <img src="static/thank.png" class="animated flipInY" v-if="null===videoUrl && false===stream.streaming" style="height: 80vh"/>
   </div>
 </template>
@@ -12,6 +13,7 @@
 <script>
 import { mapGetters, mapState } from 'vuex'
 import { setVideoPlayer } from '../../common'
+import { setTimeout } from 'timers';
 
 export default {
   props: ['width', 'height'],
@@ -40,15 +42,18 @@ export default {
     setupYoutube() {
       if ('undefined' === typeof YT || !YT.Player)
         return setTimeout(() => this.setupYoutube(), 1000)
-      const player = new YT.Player(this.$refs.iframe, {
+      const player = this.player = new YT.Player(this.$refs.iframe, {
         events: {
           onReady: () => {
-            player.playVideo()
-            player.setPlaybackQuality('hd720')
+            console.log(this.$refs.iframe.playVideo)
+            setTimeout(() => player.playVideo(), 5000)
           }
         }
       })
       setVideoPlayer(player)
+    },
+    play() {
+      this.player.playVideo()
     }
   }
 }

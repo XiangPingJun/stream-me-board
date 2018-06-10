@@ -1,6 +1,5 @@
 <template>
   <div>
-    <NightSkyBackground/>
     <div class="page" v-show="preLoaded">
       <VideoBox ref="video" :height="videoHeight" :width="videoWidth"/>
       <div class="right-side">
@@ -29,7 +28,6 @@
 
 <script>
 import VideoBox from './VideoBox'
-import NightSkyBackground from './NightSkyBackground'
 import ChatBox from './ChatBox'
 import Quiz from './Quiz'
 import MyInfo from './MyInfo'
@@ -46,7 +44,7 @@ import { mapGetters, mapActions, mapState } from 'vuex'
 
 export default {
   data() { return { videoWidth: 0, videoHeight: 0 } },
-  components: { VideoBox, NightSkyBackground, ChatBox, Quiz, MyInfo, AnonymousInfo, Login, Arrow, AvatarPicker, Notify, Playground, HistoryVideo, FollowUs, Vote },
+  components: { VideoBox, ChatBox, Quiz, MyInfo, AnonymousInfo, Login, Arrow, AvatarPicker, Notify, Playground, HistoryVideo, FollowUs, Vote },
   mounted() {
     this.subscribeData()
     this.unsubscribeAction = this.$store.subscribeAction((action, state) => {

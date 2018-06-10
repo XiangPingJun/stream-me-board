@@ -21,23 +21,24 @@ export default {
 			commit('setAllUsers', allUsers)
 		})
 		// online user
-		setInterval(() => dispatch('sendHeartbeat'), 60000)
+		setInterval(() => dispatch('sendHeartbeat'), 6000)
 		firestore.doc('activity/online').onSnapshot(doc => commit('setOnlineUids', Object.keys(doc.data())))
 		// system info
 		firestore.doc('system/stream').onSnapshot(doc => {
-			const stream = doc.data()
-			if (state.stream.time != stream.time) {
+			if (state.stream.time != doc.data().time) {
 				unsubscribeChat()
-				unsubscribeChat = firestore.collection(`allChat/${stream.time}/chat-line`).onSnapshot(snap => {
+				unsubscribeChat = firestore.collection(`allChat/${doc.data().time}/chat-line`).onSnapshot(snap => {
 					commit('setChatLines', snap.docs.map(doc => doc.data()).reverse())
 				})
 			}
-			commit('setStream', stream)
+			if (localStorage.version != doc.data().version) {
+				localStorage.version != doc.data().version
+				location.replace(location.href)
+			}
+			commit('setStream', doc.data())
 			dispatch('checkTrophy')
 		})
 		firestore.doc("system/info").onSnapshot(doc => {
-			if (doc.data().emergency)
-				location.replace('//live-2-0-131ee.firebaseapp.com/watch.html')
 			if (null != doc.data().version && state.systemInfo && state.systemInfo.version != doc.data().version)
 				window.location.reload(true)
 			commit('setSystemInfo', doc.data())
@@ -122,6 +123,9 @@ export default {
 	async saveMyBestVoteRecord({ state }, payload) {
 		await firestore.collection('user').doc(state.myUid).update({ bestVoteRecord: payload })
 	},
+	async saveMyAvatarList({ state }, payload) {
+		await firestore.collection('user').doc(state.myUid).update({ avatarList: payload })
+	},
 	async getTrophy({ state, getters, dispatch }, payload) {
 		if (getters.myInfo.trophy.includes(payload.id))
 			return
@@ -139,7 +143,7 @@ export default {
 			if (null === nextAvatar) {
 				dispatch('notify', { text: '升滿了?! 你真的有認真在看直播嗎?' })
 			} else {
-				getters.myInfo.avatarList.push(nextAvatar)
+				dispatch('saveMyAvatarList', [...getters.myInfo.avatarList, nextAvatar])
 				dispatch('notify', { data: { avatar: nextAvatar }, text: '升級! 獲得新角色!' })
 			}
 		}
@@ -173,13 +177,13 @@ export default {
 			})
 		}
 		// Remove inactive user
-		const doc = await firestore.doc('activity/online').get()
-		const idsToRemove = {}
-		for (const [i, time] of Object.entries(doc.data()))
-			if (time && (new Date().getTime() - time.seconds * 1000 > 60000))
-				idsToRemove[i] = firebase.firestore.FieldValue.delete()
-		if (Object.keys(idsToRemove).length > 0)
-			await firestore.doc('activity/online').update(idsToRemove)
+		// const doc = await firestore.doc('activity/online').get()
+		// const idsToRemove = {}
+		// for (const [i, time] of Object.entries(doc.data()))
+		// 	if (time && (new Date().getTime() - time.seconds * 1000 > 240000))
+		// 		idsToRemove[i] = firebase.firestore.FieldValue.delete()
+		// if (Object.keys(idsToRemove).length > 0)
+		// 	await firestore.doc('activity/online').update(idsToRemove)
 	},
 	async loginAdmin({ state, dispatch }, payload) {
 		try {

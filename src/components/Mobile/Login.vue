@@ -12,7 +12,7 @@
 
 <script>
 import Content from './Content'
-import InputBox from '../InputBox'
+import InputBox from './InputBox'
 import Invisible from '../Invisible'
 import { mapActions } from 'vuex'
 

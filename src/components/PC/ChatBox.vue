@@ -44,7 +44,7 @@ export default {
       this.promptLogin()
     },
     isScrollBottom() {
-      return this.scrollContent.offsetHeight + this.scrollContent.scrollTop == this.scrollContent.scrollHeight
+      return this.scrollContent.offsetHeight + this.scrollContent.scrollTop < this.scrollContent.scrollHeight + 200
     },
     scrollToBottom() {
       this.scrollContent.scrollTo(0, this.scrollContent.scrollHeight)
@@ -96,9 +96,9 @@ export default {
   bottom: 45px;
   right: 16px;
   display: flex;
+  opacity: 0.8;
 }
 .fas.fa-chevron-down {
   margin: 3px;
-  opacity: 0.75;
 }
 </style>

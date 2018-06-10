@@ -1,15 +1,15 @@
 <template>
-  <div class="btn-border" :style="containerStyle" @click="changeAvatar(index)">
+  <div class="btn-border" :style="containerStyle" @click="!whoAmI && changeAvatar(index)">
     <div class="btn-content">
 			<Avatar :index="index" :large="true" :whoAmI="whoAmI"/>
 		</div>
-    <div class="stroke color-5" style="bottom:2px; right:2px;"></div>    
+    <div class="stroke color-5" style="bottom:2px; right:2px;"></div>
     <div class="stroke color-5" style="bottom:2px; left:2px;"></div>
-    <div class="stroke color-bg" style="bottom:2px; left:10px;"></div>        
-    <div class="stroke color-bg" style="bottom:2px; right:10px;"></div> 
-    <div class="stroke color-3" style="width: calc(100% - 28px); bottom:2px; left:14px;"></div>        
+    <div class="stroke color-bg" style="bottom:2px; left:10px;"></div>
+    <div class="stroke color-bg" style="bottom:2px; right:10px;"></div>
+    <div class="stroke color-3" style="width: calc(100% - 28px); bottom:2px; left:14px;"></div>
     <div class="stroke color-1" style="top:2px; left:6px;"></div>
-    <div class="stroke color-1" style="height:12px; top:6px; left:2px;"></div>        
+    <div class="stroke color-1" style="height:12px; top:6px; left:2px;"></div>
   </div>
 </template>
 

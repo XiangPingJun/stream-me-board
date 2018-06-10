@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Vote v-if="uiMode.vote" style="opacity: 0.8"/>
+    <Vote v-if="uiMode.vote" style="opacity: 0.75"/>
     <BubbleContainer style="opacity: 0.75"/>
   </div>
 </template>
