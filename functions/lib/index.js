@@ -17,33 +17,23 @@ const firestore = admin.firestore();
 // Create and Deploy Your First Cloud Functions
 // https://firebase.google.com/docs/functions/write-firebase-functions
 exports.schedule = functions.https.onRequest((request, response) => __awaiter(this, void 0, void 0, function* () {
-    // Remove inactive user
-    let doc = yield firestore.doc('activity/online').get();
-    const idsToRemove = {};
-    for (const i in doc.data())
-        if (new Date().getTime() - doc.data()[i].getTime() > 60000)
-            idsToRemove[i] = admin.firestore.FieldValue.delete();
-    if (Object.keys(idsToRemove).length > 0)
-        yield firestore.doc('activity/online').update(idsToRemove);
     // quiz
-    doc = yield firestore.doc('system/quiz').get();
-    if (new Date().getTime() - doc.data().time.getTime() > 600000) {
-        doc = yield firestore.doc('system/quizHistory').get();
-        const complement = {};
-        for (const i in quiz_1.default)
-            if (!doc.data()[i])
-                complement[i] = quiz_1.default[i];
-        const questions = Object.keys(complement);
-        if (0 == questions.length)
-            yield firestore.doc('system/quizHistory').set({});
-        else {
-            const question = questions[Math.floor(Math.random() * questions.length)];
-            yield firestore.doc('system/quiz').set(Object.assign({ time: admin.firestore.FieldValue.serverTimestamp(), Q: question, ended: false }, complement[question]));
-            yield firestore.doc('system/quizHistory').update({ [question]: true });
-            yield firestore.doc('activity/quiz').set({});
-            yield new Promise(resolve => setTimeout(resolve, QUIZ_TIMEOUT));
-            yield firestore.doc('system/quiz').update({ ended: true });
-        }
+    let doc = yield firestore.doc('system/quiz').get();
+    doc = yield firestore.doc('system/quizHistory').get();
+    const complement = {};
+    for (const i in quiz_1.default)
+        if (!doc.data()[i])
+            complement[i] = quiz_1.default[i];
+    const questions = Object.keys(complement);
+    if (0 == questions.length)
+        yield firestore.doc('system/quizHistory').set({});
+    else {
+        const question = questions[Math.floor(Math.random() * questions.length)];
+        yield firestore.doc('system/quiz').set(Object.assign({ time: admin.firestore.FieldValue.serverTimestamp(), Q: question, ended: false }, complement[question]));
+        yield firestore.doc('system/quizHistory').update({ [question]: true });
+        yield firestore.doc('activity/quiz').set({});
+        yield new Promise(resolve => setTimeout(resolve, QUIZ_TIMEOUT));
+        yield firestore.doc('system/quiz').update({ ended: true });
     }
     response.send('Done.');
 }));

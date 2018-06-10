@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div><UnderlineText>選擇您的角色： (已獲得{{myInfo.avatarList.length}}/{{TOTAL_AVATAR}})</UnderlineText></div>          
+    <UnderlineText>選擇您的角色： (已獲得{{myInfo.avatarList.length}}/{{TOTAL_AVATAR}})</UnderlineText>
     <Well>
 			<div class="grid">
         <AvatarPickerBtn v-for="avatar in avatarList" 

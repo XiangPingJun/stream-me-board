@@ -1,7 +1,7 @@
 <template>
   <DialogBox ref="dialog" overflowY="auto" :class="dialogClass">
     <UnderlineText><i class="fas fa-dice"/> 暴力投票系統<PieChart :rate="timerRate" style="margin:0 3px"/></UnderlineText>
-    <div v-if="!voted" class="caption yellow">一人有多票!滑鼠點越快投越多票!</div>
+    <div v-if="!voted" class="caption yellow">一人有多票!<br/>滑鼠點越快越多下，就投越多票!</div>
     <div v-if="voted" class="caption">已經投過票囉！</div>
     <Well v-for="(roster, i) in voteRoster" @click.native="addClick(i)" 
       :style="{cursor: clickable?'pointer':'default'}" :class="optionClass(i)" class="option" :key="i"

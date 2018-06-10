@@ -47,6 +47,7 @@ export default {
     return { name: '', password: '', sending: null, voteOptionCount: 2 }
   },
   created() { this.subscribeData() },
+  components: { Notify },
   methods: { ...mapActions(['subscribeData', 'loginAdmin', 'startStream', 'stopStream', 'saveVideoUrl', 'saveGameTitle', 'saveGameUrl', 'saveGameDescription', 'startVote', 'sendChat']) },
   computed: { ...mapState(['voteInfo', 'isAdmin', 'stream', 'voteRoster', 'quizRoster', 'quizInfo']) },
   mounted() {

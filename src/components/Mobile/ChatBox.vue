@@ -79,17 +79,16 @@ export default {
 
 <style scoped>
 .input {
-  margin-top: 10px;
-  margin-bottom: 5px;
+  margin-top: 4px;
   position: absolute;
   top: 0px;
   width: calc(100% - 12px);
 }
 .mask {
-  box-shadow: 0 0 0 23px #917863;
+  box-shadow: 0 0 0 22px #917863;
   position: absolute;
-  width: calc(100% - 28px);
-  top: 23px;
+  width: calc(100%);
+  top: 18px;
 }
 .scroll-to-bottom {
   position: absolute;
@@ -100,5 +99,8 @@ export default {
 .fas.fa-chevron-down {
   margin: 3px;
   opacity: 0.75;
+}
+.chat-list {
+  padding-top: 35px;
 }
 </style>

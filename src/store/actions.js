@@ -161,17 +161,25 @@ export default {
 	async sendHeartbeat({ state }) {
 		const anonymousUid = `${FINGERPRINT} ${state.anonymousAvatar}`
 		if (state.myUid) {
-			firestore.doc('activity/online').update({
+			await firestore.doc('activity/online').update({
 				[state.myUid]: firebase.firestore.FieldValue.serverTimestamp()
 			})
-			firestore.doc('activity/online').update({
+			await firestore.doc('activity/online').update({
 				[anonymousUid]: firebase.firestore.FieldValue.delete()
 			})
 		} else {
-			firestore.doc('activity/online').update({
+			await firestore.doc('activity/online').update({
 				[anonymousUid]: firebase.firestore.FieldValue.serverTimestamp()
 			})
 		}
+		// Remove inactive user
+		const doc = await firestore.doc('activity/online').get()
+		const idsToRemove = {}
+		for (const [i, time] of Object.entries(doc.data()))
+			if (time.seconds && (new Date().getTime() - time.seconds * 1000 > 60000))
+				idsToRemove[i] = firebase.firestore.FieldValue.delete()
+		if (Object.keys(idsToRemove).length > 0)
+			await firestore.doc('activity/online').update(idsToRemove)
 	},
 	async loginAdmin({ state, dispatch }, payload) {
 		try {
@@ -235,7 +243,7 @@ export default {
 	},
 	async sendChat({ dispatch, commit, state }, payload) {
 		let index = (parseInt('zzz', 36) - state.chatLines.length).toString(36)
-		index += payload.text.substr(0, 10)
+		index += payload.text.substr(0, 10).replace(/\//g, '／')
 		const time = getVideoTime()
 		await firestore.collection(`allChat/${state.stream.time}/chat-line`).doc(index).set({
 			...payload,
@@ -320,7 +328,7 @@ export default {
 			})
 			if (total > 20)
 				dispatch('getTrophy', { text: '快手指！投超過20票！', id: 'QUICK_VOTE_FINGER' })
-			dispatch('addExp', Math.min(total, 17))
+			dispatch('addExp', total - 3)
 		} catch (error) {
 			if ('permission-denied' == error.code)
 				return

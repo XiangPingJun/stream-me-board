@@ -1,21 +1,26 @@
 <template>
-  <div v-show="preLoaded">
-    <div style="display:flex">
+  <div>
+    <div v-show="preLoaded" style="display:flex">
       <VideoBox ref="video" :width="videoWidth"/>
-      <div class="tool-bar">
-        <IconButton icon="fas fa-comment" v-if="'CHAT_BOX'==dialog"/>
-        <IconButton icon="far fa-comment" v-if="'CHAT_BOX'!=dialog" @click="setUiMode({chatBox:true})"/>
-        <IconButton icon="fas fa-list-alt" v-if="'HISTORY_VIDEO'==dialog"/>
-        <IconButton icon="far fa-list-alt" v-if="'HISTORY_VIDEO'!=dialog" @click="setUiMode({})"/>
+      <div class="tool-bar" v-if="undefined!=stream.streaming">
+        <IconButton icon="fas fa-comments" v-if="'CHAT_BOX'==dialog"/>
+        <IconButton icon="far fa-comments" v-if="'CHAT_BOX'!=dialog" @click="setUiMode({chatBox:true})"/>
+        <IconButton icon="fas fa-list-alt" v-if="'HISTORY_VIDEO'==dialog&&!stream.streaming"/>
+        <IconButton icon="far fa-list-alt" v-if="'HISTORY_VIDEO'!=dialog&&!stream.streaming" @click="setUiMode({})"/>
+        <IconButton icon="fas fa-question-circle" v-if="'PLAYGROUND'==dialog&&stream.streaming"/>
+        <IconButton icon="far fa-question-circle" v-if="'PLAYGROUND'!=dialog&&stream.streaming" @click="setUiMode({})"/>
         <IconButton icon="fas fa-user" v-if="'MY_INFO'==dialog||'LOGIN'==dialog" />
         <IconButton icon="far fa-user" v-if="'MY_INFO'!=dialog&&'LOGIN'!=dialog" @click="updateUiMode({showAccount:true})"/>
       </div>
     </div>
-    <div style="margin: 8px 4px 0px 4px">
+    <div v-show="preLoaded" style="margin: 8px 4px 0px 4px">
       <HistoryVideo v-if="'HISTORY_VIDEO'==dialog" :style="dialogStyle()"/>
       <MyInfo v-if="'MY_INFO'==dialog" :style="dialogStyle()"/>
       <Login v-if="'LOGIN'==dialog" :style="dialogStyle()"/>
       <ChatBox v-if="'CHAT_BOX'==dialog" :style="dialogStyle()"/>
+    </div>
+    <div v-show="!preLoaded" class="loading-container">
+      <i class="fas fa-spinner fa-10x fa-pulse"/>
     </div>
     <Notify/>
   </div>
@@ -49,7 +54,10 @@ export default {
         return 'FOLLOW_US'
       if (this.uiMode.chatBox)
         return 'CHAT_BOX'
-      return this.stream.streaming ? 'PLAYGROUND' : 'HISTORY_VIDEO'
+      if (this.stream.streaming)
+        return 'CHAT_BOX'
+      if (false === this.stream.streaming)
+        return 'HISTORY_VIDEO'
     },
     ...mapState(['uiMode', 'stream', 'preLoaded', 'historyVideo']), ...mapGetters(['onlineUsers', 'myInfo'])
   },
@@ -90,5 +98,15 @@ export default {
 .tool-bar {
   display: flex;
   flex-direction: column;
+}
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+.loading-container i {
+  text-shadow: none;
+  font-size: 1.5em;
 }
 </style>
