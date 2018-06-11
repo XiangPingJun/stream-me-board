@@ -15,11 +15,12 @@
         </div>
       </div>
       <div v-show="preLoaded" style="margin: 8px 4px 0px 4px">
-        <HistoryVideo v-if="'HISTORY_VIDEO'==dialog" :style="dialogStyle()"/>
         <MyInfo v-if="'MY_INFO'==dialog" :style="dialogStyle()"/>
         <Login v-if="'LOGIN'==dialog" :style="dialogStyle()"/>
+        <Vote v-if="'VOTE'==dialog" :style="dialogStyle()"/>
+        <Quiz v-if="'QUIZ'==dialog" :style="dialogStyle()"/>
+        <HistoryVideo v-if="'HISTORY_VIDEO'==dialog" :style="dialogStyle()"/>
         <ChatBox v-if="'CHAT_BOX'==dialog" :style="dialogStyle()"/>
-        <Quiz v-if="'QUIZ'==dialog" :style="dialogStyle()"/>      
       </div>
       <div v-show="!preLoaded" class="loading-container">
         <i class="fas fa-spinner fa-10x fa-pulse"/>
@@ -38,11 +39,12 @@ import Login from './Login'
 import Notify from '../Notify'
 import ChatBox from './ChatBox'
 import Quiz from './Quiz'
+import Vote from './Vote'
 import { mapActions, mapState, mapGetters, mapMutations } from 'vuex'
 import { setInterval } from 'timers';
 
 export default {
-  components: { VideoBox, IconButton, HistoryVideo, MyInfo, Login, Notify, ChatBox, Quiz },
+  components: { VideoBox, IconButton, HistoryVideo, MyInfo, Login, Notify, ChatBox, Quiz, Vote },
   computed: {
     videoWidth() { return document.documentElement.clientWidth - 40 },
     dialog() {
@@ -83,18 +85,13 @@ export default {
     }, 500)
     this.handleResize = () => this.$forceUpdate()
     window.addEventListener('resize', this.handleResize, false)
-    window.addEventListener("deviceorientation", this.handleOrientation, true)
   },
   beforeDestroy() {
     this.unsubscribeAction()
     clearInterval(this.scrollInterval)
     window.removeEventListener('resize', this.handleResize)
-    window.addEventListener("deviceorientation", this.handleOrientation, true)
   },
   methods: {
-    handleOrientation() {
-
-    },
     dialogStyle() {
       return { height: document.documentElement.clientHeight - this.videoWidth * (9 / 16) - 10 + 'px' }
     },

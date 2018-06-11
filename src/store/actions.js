@@ -318,7 +318,7 @@ export default {
 			optionCount: payload,
 			ended: false
 		})
-		await firestore.doc('activity/vote').update({})
+		await firestore.doc('activity/vote').set({})
 		await new Promise(resolve => setTimeout(resolve, VOTE_TIMEOUT))
 		await firestore.doc('system/vote').update({ ended: true })
 	},
