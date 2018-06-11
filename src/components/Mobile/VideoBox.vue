@@ -40,7 +40,12 @@ export default {
         return setTimeout(() => this.setupYoutube(), 1000)
       const player = new YT.Player(this.$refs.iframe, {
         events: {
-          onReady: () => player.playVideo()
+          onReady: () => {
+            player.playVideo()
+            setTimeout(() => player.playVideo(), 500)
+            setTimeout(() => player.playVideo(), 1000)
+            setTimeout(() => player.playVideo(), 3000)
+          }
         }
       })
       setVideoPlayer(player)

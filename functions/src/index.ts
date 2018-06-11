@@ -20,7 +20,7 @@ export const schedule = functions.https.onRequest(async (request, response) => {
 			complement[i] = QUIZ[i]
 	const questions = Object.keys(complement)
 
-	if (0 == questions.length)
+	if (0 === questions.length)
 		await firestore.doc('system/quizHistory').set({})
 	else {
 		const question = questions[Math.floor(Math.random() * questions.length)]

@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <link rel="shortcut icon" type="image/png" sizes="32x32" href="static/gamepad-32x32.png"/>
     <link rel="Bookmark" type="image/png" sizes="32x32" href="static/gamepad-32x32.png"/>
+    <link rel="stylesheet" href="static/background.css">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
     <link rel="stylesheet" href="static/tooltip.css">
     <link rel="stylesheet" href="/static/fontawesome/css/fontawesome-all.css">
@@ -19,23 +20,9 @@
       body {
         cursor: default;
         margin: 0px;
-        background: linear-gradient(to bottom, #45283C 0%, #3f339e 100%);
         overflow: hidden;
       }
     </style>
-    <script>
-      var player;
-      function onYouTubeIframeAPIReady() {
-        player = new YT.Player('player', {
-          height: '390',
-          width: '640',
-          videoId: 'M7lc1UVf-VE',
-          events: {
-            onReady: function (event) { event.target.playVideo() }
-          }
-        });
-      }
-    </script>
   </head>
   <body>
     <div id="app"></div>

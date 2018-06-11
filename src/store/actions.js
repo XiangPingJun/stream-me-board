@@ -21,7 +21,7 @@ export default {
 			commit('setAllUsers', allUsers)
 		})
 		// online user
-		setInterval(() => dispatch('sendHeartbeat'), 6000)
+		setInterval(() => dispatch('sendHeartbeat'), 60000)
 		firestore.doc('activity/online').onSnapshot(doc => commit('setOnlineUids', Object.keys(doc.data())))
 		// system info
 		firestore.doc('system/stream').onSnapshot(doc => {

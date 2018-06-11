@@ -25,7 +25,7 @@ exports.schedule = functions.https.onRequest((request, response) => __awaiter(th
         if (!doc.data()[i])
             complement[i] = quiz_1.default[i];
     const questions = Object.keys(complement);
-    if (0 == questions.length)
+    if (0 === questions.length)
         yield firestore.doc('system/quizHistory').set({});
     else {
         const question = questions[Math.floor(Math.random() * questions.length)];

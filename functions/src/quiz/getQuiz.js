@@ -5,7 +5,7 @@ let result = JSON.parse(fs.readFileSync('index.ts', 'utf-8').replace('export def
 let lastQuestion
 fs.readFileSync('toParse.txt', 'utf-8').split('\n').forEach(line => {
 	//line = line.replace('\r', '')
-	line = line.trim()
+	line = line.trim().replace(/\.\.\./g, '…').replace(/\.\./g, '…')
 	if (!line)
 		return
 

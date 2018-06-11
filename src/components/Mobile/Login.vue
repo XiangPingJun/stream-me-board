@@ -21,6 +21,13 @@ export default {
 	data() { return { userNameTest: '', loading: false } },
 	mounted() {
 		this.$refs.input.focus()
+		this.unsubscribeAction = this.$store.subscribeAction((action, state) => {
+			if ('promptLogin' === action.type) {
+				this.$refs.input.focus()
+				this.$refs.input.text = ''
+				this.loading = false
+			}
+		})
 	},
 	methods: {
 		onSubmit(text) {

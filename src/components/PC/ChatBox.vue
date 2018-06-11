@@ -90,6 +90,7 @@ export default {
 }
 .chat-list {
   padding-bottom: 40px;
+  overflow-x: hidden;
 }
 .scroll-to-bottom {
   position: absolute;

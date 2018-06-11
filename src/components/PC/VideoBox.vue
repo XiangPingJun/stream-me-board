@@ -5,7 +5,6 @@
         <iframe ref="iframe" frameBorder="0" allow="autoplay; encrypted-media" :src="videoUrl" :style="videoSize"/>
       </div>
     </div>
-    <button @click="play">play</button>
     <img src="static/thank.png" class="animated flipInY" v-if="null===videoUrl && false===stream.streaming" style="height: 80vh"/>
   </div>
 </template>
@@ -42,18 +41,17 @@ export default {
     setupYoutube() {
       if ('undefined' === typeof YT || !YT.Player)
         return setTimeout(() => this.setupYoutube(), 1000)
-      const player = this.player = new YT.Player(this.$refs.iframe, {
+      const player = new YT.Player(this.$refs.iframe, {
         events: {
           onReady: () => {
-            console.log(this.$refs.iframe.playVideo)
-            setTimeout(() => player.playVideo(), 5000)
+            player.playVideo()
+            setTimeout(() => player.playVideo(), 500)
+            setTimeout(() => player.playVideo(), 1000)
+            setTimeout(() => player.playVideo(), 3000)
           }
         }
       })
       setVideoPlayer(player)
-    },
-    play() {
-      this.player.playVideo()
     }
   }
 }
