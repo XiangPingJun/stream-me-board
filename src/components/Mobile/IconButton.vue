@@ -1,5 +1,5 @@
 <template>
-  <div class="icon-btn animated flipInY" @click="$emit('click')">
+  <div class="icon-btn" @click="$emit('click')">
     <i :class="icon"/>
   </div>
 </template>

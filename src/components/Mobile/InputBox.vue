@@ -1,6 +1,6 @@
 <template>
   <form @submit.prevent="onSubmit">
-    <input v-model="text" :placeholder="placeholder" @focus="$emit('focus')" :maxlength="maxlength" 
+    <input v-model="text" :placeholder="placeholder" :maxlength="maxlength" 
       :disabled="disabled || loading" ref="input"  :style="inputStyle"/>
   </form>
 </template>

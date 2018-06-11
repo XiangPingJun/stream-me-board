@@ -1,29 +1,31 @@
 <template>
   <div>
-    <div v-show="preLoaded" style="display:flex">
-      <VideoBox ref="video" :width="videoWidth"/>
-      <div class="tool-bar" v-if="undefined!=stream.streaming">
-        <IconButton icon="fas fa-comments" v-if="'CHAT_BOX'==dialog"/>
-        <IconButton icon="far fa-comments" v-if="'CHAT_BOX'!=dialog" @click="setUiMode({chatBox:true})"/>
-        <IconButton icon="fas fa-list-alt" v-if="'HISTORY_VIDEO'==dialog&&!stream.streaming"/>
-        <IconButton icon="far fa-list-alt" v-if="'HISTORY_VIDEO'!=dialog&&!stream.streaming" @click="setUiMode({})"/>
-        <!-- <IconButton icon="fas fa-list-alt" v-if="'PLAYGROUND'==dialog&&stream.streaming"/>
-        <IconButton icon="far fa-list-alt" v-if="'PLAYGROUND'!=dialog&&stream.streaming" @click="setUiMode({})"/> -->
-        <IconButton icon="fas fa-user" v-if="'MY_INFO'==dialog||'LOGIN'==dialog" />
-        <IconButton icon="far fa-user" v-if="'MY_INFO'!=dialog&&'LOGIN'!=dialog" @click="updateUiMode({showAccount:true})"/>
+    <div>
+      <div v-show="preLoaded" style="display:flex">
+        <VideoBox ref="video" :width="videoWidth"/>
+        <div class="tool-bar animated flipInY" v-if="undefined!=stream.streaming">
+          <IconButton icon="fas fa-comments" v-if="'CHAT_BOX'==dialog"/>
+          <IconButton icon="far fa-comments" v-if="'CHAT_BOX'!=dialog" @click="setUiMode({chatBox:true})"/>
+          <IconButton icon="fas fa-list-alt" v-if="'HISTORY_VIDEO'==dialog&&!stream.streaming"/>
+          <IconButton icon="far fa-list-alt" v-if="'HISTORY_VIDEO'!=dialog&&!stream.streaming" @click="setUiMode({})"/>
+          <!-- <IconButton icon="fas fa-list-alt" v-if="'PLAYGROUND'==dialog&&stream.streaming"/>
+          <IconButton icon="far fa-list-alt" v-if="'PLAYGROUND'!=dialog&&stream.streaming" @click="setUiMode({})"/> -->
+          <IconButton icon="fas fa-user" v-if="'MY_INFO'==dialog||'LOGIN'==dialog" />
+          <IconButton icon="far fa-user" v-if="'MY_INFO'!=dialog&&'LOGIN'!=dialog" @click="updateUiMode({showAccount:true})"/>
+        </div>
       </div>
+      <div v-show="preLoaded" style="margin: 8px 4px 0px 4px">
+        <HistoryVideo v-if="'HISTORY_VIDEO'==dialog" :style="dialogStyle()"/>
+        <MyInfo v-if="'MY_INFO'==dialog" :style="dialogStyle()"/>
+        <Login v-if="'LOGIN'==dialog" :style="dialogStyle()"/>
+        <ChatBox v-if="'CHAT_BOX'==dialog" :style="dialogStyle()"/>
+        <Quiz v-if="'QUIZ'==dialog" :style="dialogStyle()"/>      
+      </div>
+      <div v-show="!preLoaded" class="loading-container">
+        <i class="fas fa-spinner fa-10x fa-pulse"/>
+      </div>
+      <Notify/>
     </div>
-    <div v-show="preLoaded" style="margin: 8px 4px 0px 4px">
-      <HistoryVideo v-if="'HISTORY_VIDEO'==dialog" :style="dialogStyle()"/>
-      <MyInfo v-if="'MY_INFO'==dialog" :style="dialogStyle()"/>
-      <Login v-if="'LOGIN'==dialog" :style="dialogStyle()"/>
-      <ChatBox v-if="'CHAT_BOX'==dialog" :style="dialogStyle()"/>
-      <Quiz v-if="'QUIZ'==dialog" :style="dialogStyle()"/>      
-    </div>
-    <div v-show="!preLoaded" class="loading-container">
-      <i class="fas fa-spinner fa-10x fa-pulse"/>
-    </div>
-    <Notify/>
   </div>
 </template>
 
@@ -79,15 +81,20 @@ export default {
       if (window.scrollY > 0)
         window.scrollTo(0, 0)
     }, 500)
-    this.resizeListener = () => this.$forceUpdate()
-    window.addEventListener('resize', this.resizeListener, false)
+    this.handleResize = () => this.$forceUpdate()
+    window.addEventListener('resize', this.handleResize, false)
+    window.addEventListener("deviceorientation", this.handleOrientation, true)
   },
   beforeDestroy() {
     this.unsubscribeAction()
     clearInterval(this.scrollInterval)
-    window.removeEventListener('resize', this.resizeListener)
+    window.removeEventListener('resize', this.handleResize)
+    window.addEventListener("deviceorientation", this.handleOrientation, true)
   },
   methods: {
+    handleOrientation() {
+
+    },
     dialogStyle() {
       return { height: document.documentElement.clientHeight - this.videoWidth * (9 / 16) - 10 + 'px' }
     },

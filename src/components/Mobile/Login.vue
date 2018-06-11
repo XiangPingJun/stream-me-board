@@ -23,12 +23,12 @@ export default {
 		this.$refs.input.focus()
 		this.unsubscribeAction = this.$store.subscribeAction((action, state) => {
 			if ('promptLogin' === action.type) {
-				this.$refs.input.focus()
 				this.$refs.input.text = ''
 				this.loading = false
 			}
 		})
 	},
+	beforeDestroy() { this.unsubscribeAction },
 	methods: {
 		onSubmit(text) {
 			this.userNameTest = text
