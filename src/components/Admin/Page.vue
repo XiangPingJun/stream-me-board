@@ -72,13 +72,6 @@ export default {
       else
         this.sendChat({ uid: 'system', text: '直播結束囉！期待下次與大家相會！', })
     },
-    voteInfo(val, oldVal) {
-      if (!val.ended)
-        return
-      let text = ''
-      this.voteRoster.forEach(item => text += ` ${item.option}(${item.total}票)`)
-      this.sendChat({ uid: 'system', text: text })
-    },
     quizInfo(val, oldVal) {
       if (val.ended) {
         this.sendChat({ uid: 'system', text: `答: ${this.quizInfo.OP[this.quizInfo.A]}` })

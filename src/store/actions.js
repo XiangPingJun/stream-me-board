@@ -249,14 +249,15 @@ export default {
 		let index = (parseInt('zzz', 36) - state.chatLines.length).toString(36)
 		index += payload.text.substr(0, 10).replace(/\//g, '／')
 		const time = getVideoTime()
-		await firestore.collection(`allChat/${state.stream.time}/chat-line`).doc(index).set({
+		await firestore.collection('allChat').doc(state.stream.time).collection('chat-line').doc(index).set({
 			...payload,
 			fingerprint: FINGERPRINT,
 			videoTime: Math.floor(time / 3600) + ':' + Math.floor(time % 3600 / 60) + ':' + Math.floor(time % 3600 % 60),
 			id: shortid.generate(),
 			time: firebase.firestore.FieldValue.serverTimestamp()
 		})
-		dispatch('addExp', 3)
+		if (state.stream.streaming)
+			dispatch('addExp', 3)
 	},
 	promptLogin({ commit, dispatch }) {
 		commit('updateUiMode', { account: 'LOGIN' })
@@ -319,8 +320,8 @@ export default {
 			ended: false
 		})
 		await firestore.doc('activity/vote').set({})
-		await new Promise(resolve => setTimeout(resolve, VOTE_TIMEOUT))
-		await firestore.doc('system/vote').update({ ended: true })
+		// await new Promise(resolve => setTimeout(resolve, VOTE_TIMEOUT))
+		// await firestore.doc('system/vote').update({ ended: true })
 	},
 	async sendVote({ getters, state, dispatch }, payload) {
 		try {

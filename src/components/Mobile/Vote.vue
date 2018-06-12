@@ -5,8 +5,8 @@
     <div v-if="voted" class="caption">已經投過票囉！</div>
     <Well v-for="(roster, i) in voteRoster" @click.native="addClick(i)" :class="optionClass(i)" class="option" :key="i">
       <i class="fas fa-angle-right"/> {{roster.option}} ({{fliper[i]}}票)
-      <span v-if="!voted && clickCount[i]" class="green">+{{("0"+clickCount[i]).slice(-2)}}</span>
-      <span v-if="clickable" class="click red"><i class="fas fa-arrow-left"/> Click!!</span>
+      <span v-if="clickCount[i]" class="green">+{{("0"+clickCount[i]).slice(-2)}}</span>
+      <span v-if="clickable" class="click red"><i class="fas fa-arrow-left"/> SELECT ME!!</span>
       <div style="display:flex;">
         <Avatar v-for="(uid, i) in roster.uids" :index="allUsers[uid].avatarSelected" :preserved="allUsers[uid].preserved" :key="i"/>
       </div>
@@ -22,6 +22,7 @@ import Well from '../Well'
 import PieChart from '../PieChart'
 import { VOTE_TIMEOUT } from '../../common'
 import { mapGetters, mapActions, mapState } from 'vuex'
+import { setTimeout } from 'timers';
 
 export default {
   data() { return { fliper: [], clickCount: [], clickable: true, timeout: null, dialogClass: 'animated flipInY', timerRate: 0 } },
@@ -50,7 +51,15 @@ export default {
   beforeDestroy() { clearInterval(this.flipInterval) },
   computed: { ...mapState(['voteRoster', 'voteInfo', 'allUsers']), ...mapGetters(['voteStartTime', 'myInfo', 'voted']) },
   watch: {
-    voted: { immediate: true, handler(val) { if (val) this.clickable = false } }
+    voted: {
+      immediate: true,
+      handler(val) {
+        if (!val)
+          return
+        this.clickable = false
+        setTimeout(() => this.clickCount.fill(0), 500)
+      }
+    }
   },
   methods: {
     optionStyle(i) { return { cursor: this.clickable ? 'pointer' : 'default' } },
@@ -69,7 +78,7 @@ export default {
       }
       this.clickCount = this.clickCount.map((count, j) => i == j ? count : 0)
       this.clickable = false
-      setTimeout(() => this.sendVote(this.clickCount), 500)
+      this.sendVote(this.clickCount)
     },
     ...mapActions(['sendVote', 'promptLogin'])
   }

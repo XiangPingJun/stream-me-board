@@ -11,7 +11,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 const quiz_1 = require("./quiz");
+const shortid = require("shortid");
 const QUIZ_TIMEOUT = 20000;
+const VOTE_TIMEOUT = 27000;
 admin.initializeApp();
 const firestore = admin.firestore();
 // Create and Deploy Your First Cloud Functions
@@ -37,4 +39,31 @@ exports.schedule = functions.https.onRequest((request, response) => __awaiter(th
     }
     response.send('Done.');
 }));
+exports.endVote = functions.firestore.document('system/vote').onWrite((change, context) => __awaiter(this, void 0, void 0, function* () {
+    if (change.before.data().time === change.after.data().time)
+        return undefined;
+    yield new Promise(resolve => setTimeout(resolve, VOTE_TIMEOUT));
+    yield firestore.doc('system/vote').update({ ended: true });
+    const voteObj = (yield firestore.doc('activity/vote').get()).data();
+    let totalArr = new Array(change.after.data().optionCount).fill(0);
+    for (const uid in voteObj)
+        totalArr = totalArr.map((total, i) => total + voteObj[uid][i]);
+    let text = '';
+    totalArr.forEach((total, i) => text += ` ${String.fromCharCode(65 + i)}(${total}票)`);
+    yield sendSystemChat(text);
+}));
+function sendSystemChat(text) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const streamTime = (yield firestore.doc('system/stream').get()).data().time;
+        const chatCount = (yield firestore.collection('allChat').doc(streamTime).collection('chat-line').get()).size;
+        let index = (parseInt('zzz', 36) - chatCount).toString(36);
+        index += text.substr(0, 10).replace(/\//g, '／');
+        yield firestore.collection('allChat').doc(streamTime).collection('chat-line').doc(index).set({
+            uid: 'system',
+            text: text,
+            id: shortid.generate(),
+            time: admin.firestore.FieldValue.serverTimestamp()
+        });
+    });
+}
 //# sourceMappingURL=index.js.map
