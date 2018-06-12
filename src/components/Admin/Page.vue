@@ -81,9 +81,9 @@ export default {
     },
     quizInfo(val, oldVal) {
       if (val.ended) {
-        this.sendChat({ uid: 'system', text: `A: ${this.quizInfo.OP[this.quizInfo.A]}` })
+        this.sendChat({ uid: 'system', text: `答: ${this.quizInfo.OP[this.quizInfo.A]}` })
       } else {
-        let text = `Q: ${this.quizInfo.Q}`
+        let text = `問: ${this.quizInfo.Q}`
         this.quizInfo.OP.forEach(op => text += ` [${op}]`)
         this.sendChat({ uid: 'system', text: text })
       }
