@@ -33,6 +33,13 @@
       </label>
       <button v-if="voteInfo.ended" @click="startVote(voteOptionCount)"><i class="fa fa-chart-bar"/> 投票</button>
       <button v-if="!voteInfo.ended" :disabled="true"><i class="fas fa-spinner fa-pulse"/> 投票進行中</button>
+      <p/>
+
+      <div>尋找uid</div>
+      <input v-model="userSearch"/>
+      <div style="height:200px; overflow-y:auto;">
+        <div v-for="uid in filteredUid" :key="uid">{{allUsers[uid].name}}　　<i>{{uid}}</i></div>
+      </div>
     </div>
     <Notify :large="true"/>
   </div>
@@ -43,13 +50,11 @@ import { mapActions, mapState } from 'vuex'
 import Notify from '../Notify'
 
 export default {
-  data() {
-    return { name: '', password: '', sending: null, voteOptionCount: 2 }
-  },
+  data() { return { name: '', password: '', sending: null, voteOptionCount: 2, userSearch: ' ', filteredUid: [] } },
   created() { this.subscribeData() },
   components: { Notify },
   methods: { ...mapActions(['subscribeData', 'loginAdmin', 'startStream', 'stopStream', 'saveVideoUrl', 'saveGameTitle', 'saveGameUrl', 'saveGameDescription', 'startVote', 'sendChat']) },
-  computed: { ...mapState(['voteInfo', 'isAdmin', 'stream', 'voteRoster', 'quizRoster', 'quizInfo']) },
+  computed: { ...mapState(['voteInfo', 'isAdmin', 'stream', 'voteRoster', 'quizRoster', 'quizInfo', 'allUsers']) },
   mounted() {
     this.unsubscribeAction = this.$store.subscribeAction((action, state) => {
       if ('notify' == action.type)
@@ -80,6 +85,21 @@ export default {
         this.quizInfo.OP.forEach(op => text += ` [${op}]`)
         this.sendChat({ uid: 'system', text: text })
       }
+    },
+    userSearch(val, oldVal) {
+      val = val.trim().toLowerCase()
+      if (!val) {
+        this.filteredUid = Object.keys(this.allUsers)
+      } else {
+        this.filteredUid = []
+        for (const [uid, user] of Object.entries(this.allUsers))
+          if (user.name.toLowerCase().indexOf(val) >= 0)
+            this.filteredUid.push(uid)
+      }
+    },
+    allUsers(val, oldVal) {
+      if (0 == Object.keys(oldVal).length)
+        this.userSearch = ''
     }
   }
 }

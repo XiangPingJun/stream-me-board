@@ -21,7 +21,7 @@ export default {
 			commit('setAllUsers', allUsers)
 		})
 		// online user
-		setInterval(() => dispatch('sendHeartbeat'), 60000)
+		setInterval(() => dispatch('sendHeartbeat'), 120000)
 		firestore.doc('activity/online').onSnapshot(doc => commit('setOnlineUids', Object.keys(doc.data())))
 		// system info
 		firestore.doc('system/stream').onSnapshot(doc => {
@@ -159,6 +159,8 @@ export default {
 				dispatch('notify', { data: { symbol: 'trophy' }, text: '上來看直播！' })
 				dispatch('addExp', 100)
 			}
+			if (!state.isAdmin)
+				dispatch('sayHello')
 			dispatch('addMyViewedStream', state.stream.time)
 		}
 	},
@@ -345,6 +347,26 @@ export default {
 	},
 	playHistory({ commit }, payload) {
 		commit('setSelectedVideoUrl', convertToYoutube(payload))
+	},
+	sayHello({ }, payload) {
+		const helloBank = [
+			"安安ice 安安祥平 平安喜樂",
+			"YO~ice~祥平",
+			"ice、祥平我來啦！",
+			"ㄤㄤice&祥平&大家！",
+			"哈囉大家～",
+			"哈囉ice&祥平",
+			"大家空邦挖～ice和祥平空邦挖～",
+			"上來看實況喔耶！",
+			"Hi~~~~ice&祥平",
+			"(拉椅子、望向ice和祥平)",
+			"(悄悄地登入)",
+			"(用力地揮手)",
+		]
+		dispatch('sendChat', {
+			uid: state.myUid,
+			text: helloBank[Math.floor(Math.random() * helloBank.length)],
+		})
 	}
 }
 
