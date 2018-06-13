@@ -48,12 +48,17 @@ exports.startQuiz = functions.https.onRequest((request, response) => __awaiter(t
         yield firestore.doc('system/quiz').set(Object.assign({ time: admin.firestore.FieldValue.serverTimestamp(), Q: question, ended: false }, quiz));
         yield firestore.doc('system/quizHistory').update({ [question]: true });
         yield firestore.doc('activity/quiz').set({});
-        let text = `問: ${question} `;
-        quiz.OP.forEach(op => text += `[${op}] `);
-        yield sendSystemChat(text);
+        const streaming = (yield firestore.doc('system/stream').get()).data().streaming;
+        console.log(streaming);
+        if (streaming) {
+            let text = `問: ${question} `;
+            quiz.OP.forEach(op => text += `[${op}] `);
+            yield sendSystemChat(text);
+        }
         yield new Promise(resolve => setTimeout(resolve, QUIZ_TIMEOUT));
         yield firestore.doc('system/quiz').update({ ended: true });
-        yield sendSystemChat(`答: ${quiz.OP[quiz.A]}`);
+        if (streaming)
+            yield sendSystemChat(`答: ${quiz.OP[quiz.A]}`);
     }
     response.send('');
 }));
@@ -76,7 +81,6 @@ exports.clearInactiveUser = functions.firestore.document('system/quizHistory').o
     const idsToRemove = {};
     for (const uid in online) {
         const time = online[uid];
-        console.log(new Date().getTime(), time.getTime());
         if (new Date().getTime() - time.getTime() > 300000)
             idsToRemove[uid] = admin.firestore.FieldValue.delete();
     }

@@ -1,9 +1,9 @@
 <template>
-  <DialogBox overflowY="auto">
+  <Content overflowY="auto">
 		<div style="display:flex; width:100%;">
       <UnderlineText><i class="fas fa-bell"/> 追蹤我們的直播</UnderlineText>
       <div class="close">
-        <DarkButton @click="updateUiMode({followUs:false})" v-tooltip.left="{content:'關閉', offset:3}"><i class="fas fa-times" style="margin:0 2px;"/></DarkButton>
+        <DarkButton @click="updateUiMode({followUs:false})"><i class="fas fa-times" style="margin:0 2px;"/></DarkButton>
       </div>
     </div>
     <div class="subtitle"><i class="fas fa-bookmark"/> 追蹤LINE官方帳號</div>
@@ -15,19 +15,19 @@
     <img src="static/fb-see-first.png" style="margin-top:5px;"/>
     <div class="subtitle"><i class="fas fa-bookmark"/> 追蹤祥平君的噗浪</div>
     <i>也歡迎來 <a href="https://www.plurk.com/shouhei" target="_blank">祥平君的噗浪</a><br/>ヽ( ﾟ▽ﾟ)ノ</i>
-  </DialogBox>
+  </Content>
 </template>
 
 <script>
 import UnderlineText from '../UnderlineText'
 import Well from '../Well'
-import DialogBox from '../DialogBox'
+import Content from './Content'
 import WhiteBorder from '../WhiteBorder'
 import DarkButton from '../DarkButton'
 import { mapMutations } from 'vuex'
 
 export default {
-  components: { UnderlineText, Well, DialogBox, DarkButton },
+  components: { UnderlineText, Well, Content, DarkButton },
   methods: { ...mapMutations(['updateUiMode']) }
 }
 </script>

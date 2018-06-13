@@ -367,6 +367,8 @@ export default {
 			uid: state.myUid,
 			text: helloBank[Math.floor(Math.random() * helloBank.length)],
 		})
+	},
+	async runTest({ state, dispatch, commit }) {
 	}
 }
 

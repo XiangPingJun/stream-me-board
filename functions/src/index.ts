@@ -48,14 +48,16 @@ export const startQuiz = functions.https.onRequest(async (request, response) => 
 		await firestore.doc('system/quizHistory').update({ [question]: true })
 		await firestore.doc('activity/quiz').set({})
 
-		let text = `問: ${question} `
-		quiz.OP.forEach(op => text += `[${op}] `)
-		await sendSystemChat(text)
-
+		const streaming = (await firestore.doc('system/stream').get()).data().streaming
+		if (streaming) {
+			let text = `問: ${question} `
+			quiz.OP.forEach(op => text += `[${op}] `)
+			await sendSystemChat(text)
+		}
 		await new Promise(resolve => setTimeout(resolve, QUIZ_TIMEOUT))
 		await firestore.doc('system/quiz').update({ ended: true })
-
-		await sendSystemChat(`答: ${quiz.OP[quiz.A]}`)
+		if (streaming)
+			await sendSystemChat(`答: ${quiz.OP[quiz.A]}`)
 	}
 
 	response.send('')

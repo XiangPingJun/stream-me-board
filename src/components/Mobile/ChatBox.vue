@@ -1,7 +1,7 @@
 <template>
 	<Content overflowY="auto" ref="chatBox">
     <div class="chat-list animated fadeIn">
-      <ChatLine v-for="(line, key) in chatLines" :key="key" :user="allUsers[line.uid]" :text="line.text" :class="lineClass(line.id)"/>
+      <ChatLine v-for="(line, i) in chatLines.slice(-150)" :key="i" :user="allUsers[line.uid]" :text="line.text" :class="lineClass(line.id)"/>
     </div>
     <div class="mask"></div>
     <div style="display:flex; justify-content: center;">

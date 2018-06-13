@@ -1,7 +1,7 @@
 <template>
 	<DialogBox overflowY="auto" ref="chatBox">
     <div class="chat-list">
-      <ChatLine v-for="(line, key) in chatLines" :key="key" :user="allUsers[line.uid]" :text="line.text" class="animated flipInX"/>
+      <ChatLine v-for="(line, key) in chatLines.slice(-300)" :key="key" :user="allUsers[line.uid]" :text="line.text" class="animated flipInX"/>
     </div>
     <div class="mask top"></div>
     <div class="mask bottom"></div>

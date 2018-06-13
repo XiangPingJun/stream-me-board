@@ -5,11 +5,13 @@
         <Avatar :index="myInfo.avatarSelected" :large="true" />
       </div>
       <div class="info">
-        <UnderlineText>{{myInfo.name}}</UnderlineText>
-        <div style="cursor:default">Lv {{Math.floor(myInfo.exp/100)}}. ({{myInfo.exp%100}}%){{levelMsg}}</div>
+        <div style="display:flex">
+          <UnderlineText>{{myInfo.name}}</UnderlineText>
+        </div>
+        <div>Lv {{Math.floor(myInfo.exp/100)}}. ({{myInfo.exp%100}}%){{levelMsg}}</div>
       </div>
       <div class="logout">
-        <DarkButton @click="logout"><i class="fa fa-sign-out-alt"/></DarkButton>
+        <b>[<a @click="logout">登出</a>]</b>
       </div>
     </div>
     <AvatarPicker class="animated flipInY"/>
@@ -58,5 +60,6 @@ export default {
   display: flex;
   justify-content: flex-end;
   align-items: flex-end;
+  padding-top: 5px;
 }
 </style>

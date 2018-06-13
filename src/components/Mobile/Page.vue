@@ -8,8 +8,8 @@
           <IconButton icon="far fa-comments" v-if="'CHAT_BOX'!=dialog" @click="setUiMode({chatBox:true})"/>
           <IconButton icon="fas fa-list-alt" v-if="'HISTORY_VIDEO'==dialog&&!stream.streaming"/>
           <IconButton icon="far fa-list-alt" v-if="'HISTORY_VIDEO'!=dialog&&!stream.streaming" @click="setUiMode({})"/>
-          <!-- <IconButton icon="fas fa-list-alt" v-if="'PLAYGROUND'==dialog&&stream.streaming"/>
-          <IconButton icon="far fa-list-alt" v-if="'PLAYGROUND'!=dialog&&stream.streaming" @click="setUiMode({})"/> -->
+          <IconButton icon="fas fa-list-alt" v-if="'PLAYGROUND'==dialog&&stream.streaming"/>
+          <IconButton icon="far fa-list-alt" v-if="'PLAYGROUND'!=dialog&&stream.streaming" @click="setUiMode({playground:true})"/>
           <IconButton icon="fas fa-user" v-if="'MY_INFO'==dialog||'LOGIN'==dialog" />
           <IconButton icon="far fa-user" v-if="'MY_INFO'!=dialog&&'LOGIN'!=dialog" @click="updateUiMode({showAccount:true})"/>
         </div>
@@ -21,6 +21,8 @@
         <Quiz v-if="'QUIZ'==dialog" :style="dialogStyle()"/>
         <HistoryVideo v-if="'HISTORY_VIDEO'==dialog" :style="dialogStyle()"/>
         <ChatBox v-if="'CHAT_BOX'==dialog" :style="dialogStyle()"/>
+        <Playground v-if="'PLAYGROUND'==dialog" :style="dialogStyle()"/>
+        <FollowUs v-if="'FOLLOW_US'==dialog" :style="dialogStyle()"/>
       </div>
       <div v-show="!preLoaded" class="loading-container">
         <i class="fas fa-spinner fa-10x fa-pulse"/>
@@ -40,11 +42,13 @@ import Notify from '../Notify'
 import ChatBox from './ChatBox'
 import Quiz from './Quiz'
 import Vote from './Vote'
+import Playground from './Playground'
+import FollowUs from './FollowUs'
 import { mapActions, mapState, mapGetters, mapMutations } from 'vuex'
 import { setInterval } from 'timers';
 
 export default {
-  components: { VideoBox, IconButton, HistoryVideo, MyInfo, Login, Notify, ChatBox, Quiz, Vote },
+  components: { VideoBox, IconButton, HistoryVideo, MyInfo, Login, Notify, ChatBox, Quiz, Vote, Playground,FollowUs },
   computed: {
     videoWidth() { return document.documentElement.clientWidth - 40 },
     dialog() {
@@ -60,6 +64,8 @@ export default {
         return 'FOLLOW_US'
       if (this.uiMode.chatBox)
         return 'CHAT_BOX'
+      if (this.uiMode.playground)
+        return 'PLAYGROUND'
       if (this.stream.streaming)
         return 'CHAT_BOX'
       if (false === this.stream.streaming)

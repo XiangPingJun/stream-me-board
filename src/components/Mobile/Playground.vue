@@ -1,5 +1,5 @@
 <template>
-  <DialogBox overflowY="auto">
+  <Content overflowY="auto">
     <div><UnderlineText><i class="fas fa-bullhorn"/> 本日主題</UnderlineText></div>
     <i>
       哈囉，今天來跟大家一起玩<br/>
@@ -14,26 +14,26 @@
 
     <div><UnderlineText><i class="fas fa-users"/> 線上的網友們</UnderlineText></div>
     <Well>
-      <UserAvatar v-for="(user, i) in onlineUsers" :user="user" :key="i"/>
+      <Avatar v-for="(user, i) in onlineUsers" :index="user.avatarSelected" :preserved="user.preserved" :whoAmI="!user.name" :key="i"/>
     </Well>
     <div class="padding-line"/>    
 
     <a @click="updateUiMode({followUs:true})">
       <i class="fas fa-bell"/> 如何追蹤我們的頻道？    
     </a>
-  </DialogBox>
+  </Content>
 </template>
 
 <script>
 import UnderlineText from '../UnderlineText'
 import Well from '../Well'
-import UserAvatar from './UserAvatar'
-import DialogBox from '../DialogBox'
+import Avatar from '../Avatar'
+import Content from './Content'
 import WhiteBorder from '../WhiteBorder'
 import { mapState, mapGetters, mapMutations } from 'vuex'
 
 export default {
-  components: { UnderlineText, Well, UserAvatar, DialogBox, },
+  components: { UnderlineText, Well, Avatar, Content, },
   computed: { ...mapState(['stream']), ...mapGetters(['onlineUsers']) },
   methods: { ...mapMutations(['updateUiMode']) }
 }

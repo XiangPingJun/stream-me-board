@@ -35,11 +35,18 @@
       <button v-if="!voteInfo.ended" :disabled="true"><i class="fas fa-spinner fa-pulse"/> 投票進行中</button>
       <p/>
 
-      <div>尋找uid</div>
+      <div>尋找uid:</div>
       <input v-model="userSearch"/>
       <div style="height:200px; overflow-y:auto;">
         <div v-for="uid in filteredUid" :key="uid">{{allUsers[uid].name}}　　<i>{{uid}}</i></div>
       </div>
+      <p/>
+
+      <div>跑測試:</div>
+      <button @click="showRunTestConfirm=true" :disabled="showRunTestConfirm">跑測試</button>
+      <button v-if="showRunTestConfirm" @click="runTest">確認測試</button>
+      <p/>
+
     </div>
     <Notify :large="true"/>
   </div>
@@ -50,11 +57,11 @@ import { mapActions, mapState } from 'vuex'
 import Notify from '../Notify'
 
 export default {
-  data() { return { name: '', password: '', sending: null, voteOptionCount: 2, userSearch: ' ', filteredUid: [] } },
+  data() { return { name: '', password: '', sending: null, voteOptionCount: 2, userSearch: ' ', filteredUid: [], showRunTestConfirm: false } },
   created() { this.subscribeData() },
   components: { Notify },
   methods: { ...mapActions(['subscribeData', 'loginAdmin', 'startStream', 'stopStream', 'saveVideoUrl', 'saveGameTitle', 'saveGameUrl', 'saveGameDescription', 'startVote', 'sendChat']) },
-  computed: { ...mapState(['voteInfo', 'isAdmin', 'stream', 'voteRoster', 'quizRoster', 'quizInfo', 'allUsers']) },
+  computed: { ...mapState(['voteInfo', 'isAdmin', 'stream', 'voteRoster', 'quizRoster', 'quizInfo', 'allUsers', 'runTest']) },
   mounted() {
     this.unsubscribeAction = this.$store.subscribeAction((action, state) => {
       if ('notify' == action.type)
@@ -76,15 +83,6 @@ export default {
         setTimeout(() => this.sendChat({ uid: 'system', text: '直播開始囉！大家坐穩啦！', }), 3000)
       else
         this.sendChat({ uid: 'system', text: '直播結束囉！期待下次與大家相會！', })
-    },
-    quizInfo(val, oldVal) {
-      if (val.ended) {
-        this.sendChat({ uid: 'system', text: `答: ${this.quizInfo.OP[this.quizInfo.A]}` })
-      } else {
-        let text = `問: ${this.quizInfo.Q}`
-        this.quizInfo.OP.forEach(op => text += ` [${op}]`)
-        this.sendChat({ uid: 'system', text: text })
-      }
     },
     userSearch(val, oldVal) {
       val = val.trim().toLowerCase()
