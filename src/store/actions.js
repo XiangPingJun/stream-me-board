@@ -348,7 +348,7 @@ export default {
 	playHistory({ commit }, payload) {
 		commit('setSelectedVideoUrl', convertToYoutube(payload))
 	},
-	sayHello({ }, payload) {
+	sayHello({ dispatch, state }, payload) {
 		const helloBank = [
 			"安安ice 安安祥平 平安喜樂",
 			"YO~ice~祥平",
