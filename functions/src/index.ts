@@ -30,7 +30,7 @@ export const startQuiz = functions.https.onRequest(async (request, response) => 
 	doc = await firestore.doc('system/quizHistory').get()
 	const quizDb = {}
 	for (const i in QUIZ_DB)
-		if (!doc.data()[i])
+		if (!doc.data()[encodeURIComponent(i)])
 			quizDb[i] = QUIZ_DB[i]
 	const questions = Object.keys(quizDb)
 
@@ -45,7 +45,7 @@ export const startQuiz = functions.https.onRequest(async (request, response) => 
 			ended: false,
 			...quiz
 		})
-		await firestore.doc('system/quizHistory').update({ [question]: true })
+		await firestore.doc('system/quizHistory').update({ [encodeURIComponent(question)]: true })
 		await firestore.doc('activity/quiz').set({})
 
 		const streaming = (await firestore.doc('system/stream').get()).data().streaming

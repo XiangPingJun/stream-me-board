@@ -60,8 +60,8 @@ export default {
   data() { return { name: '', password: '', sending: null, voteOptionCount: 2, userSearch: ' ', filteredUid: [], showRunTestConfirm: false } },
   created() { this.subscribeData() },
   components: { Notify },
-  methods: { ...mapActions(['subscribeData', 'loginAdmin', 'startStream', 'stopStream', 'saveVideoUrl', 'saveGameTitle', 'saveGameUrl', 'saveGameDescription', 'startVote', 'sendChat']) },
-  computed: { ...mapState(['voteInfo', 'isAdmin', 'stream', 'voteRoster', 'quizRoster', 'quizInfo', 'allUsers', 'runTest']) },
+  methods: { ...mapActions(['subscribeData', 'loginAdmin', 'startStream', 'stopStream', 'saveVideoUrl', 'saveGameTitle', 'saveGameUrl', 'saveGameDescription', 'startVote', 'sendChat', 'runTest']) },
+  computed: { ...mapState(['voteInfo', 'isAdmin', 'stream', 'voteRoster', 'quizRoster', 'quizInfo', 'allUsers']) },
   mounted() {
     this.unsubscribeAction = this.$store.subscribeAction((action, state) => {
       if ('notify' == action.type)

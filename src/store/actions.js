@@ -363,6 +363,8 @@ export default {
 		})
 	},
 	async runTest({ state, dispatch, commit }) {
+		const a = Object.entries(state.allUsers).map(([uid, user]) => user).sort((a, b) => b.exp - a.exp)
+		console.log(a.map(user => [user.name, user.exp]))
 	}
 }
 

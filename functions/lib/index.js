@@ -37,7 +37,7 @@ exports.startQuiz = functions.https.onRequest((request, response) => __awaiter(t
     doc = yield firestore.doc('system/quizHistory').get();
     const quizDb = {};
     for (const i in quiz_1.default)
-        if (!doc.data()[i])
+        if (!doc.data()[encodeURIComponent(i)])
             quizDb[i] = quiz_1.default[i];
     const questions = Object.keys(quizDb);
     if (0 === questions.length)
@@ -46,7 +46,7 @@ exports.startQuiz = functions.https.onRequest((request, response) => __awaiter(t
         const question = questions[Math.floor(Math.random() * questions.length)];
         const quiz = quizDb[question];
         yield firestore.doc('system/quiz').set(Object.assign({ time: admin.firestore.FieldValue.serverTimestamp(), Q: question, ended: false }, quiz));
-        yield firestore.doc('system/quizHistory').update({ [question]: true });
+        yield firestore.doc('system/quizHistory').update({ [encodeURIComponent(question)]: true });
         yield firestore.doc('activity/quiz').set({});
         const streaming = (yield firestore.doc('system/stream').get()).data().streaming;
         if (streaming) {
