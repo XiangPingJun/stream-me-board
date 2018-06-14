@@ -2,7 +2,7 @@
   <DialogBox overflowY="auto">
     <div><UnderlineText>直播結束囉！來看看過去的直播吧！</UnderlineText></div>
     <a @click="updateUiMode({followUs:true})">
-      <i class="far fa-hand-point-right"/> 如何追蹤我們的頻道？ <i class="far fa-hand-point-left"/>
+      <i class="fas fa-bell"/> 如何追蹤我們的頻道？
     </a>
     <Well>
 			<div class="grid">

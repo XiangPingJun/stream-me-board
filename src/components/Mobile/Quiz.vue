@@ -1,7 +1,7 @@
 <template>
   <Content>
     <div style="display:flex; align-items: flex-start;">
-      <UnderlineText><i class="far fa-question-circle"/> 益智問答通<PieChart :rate="timerRate" style="margin:0 3px"/></UnderlineText>
+      <UnderlineText><i class="fas fa-question"/> 益智問答通<PieChart :rate="timerRate" style="margin:0 3px"/></UnderlineText>
       <div class="back">
         <DarkButton @click="setUiMode({})">
           <i class="fas fa-times" style="margin:0 2px;"/>

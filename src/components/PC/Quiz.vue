@@ -1,6 +1,6 @@
 <template>
   <DialogBox overflowY="auto">
-    <UnderlineText><i class="far fa-question-circle"/> 益智問答通<PieChart :rate="timerRate" style="margin:0 3px"/></UnderlineText>
+    <UnderlineText><i class="fas fa-question"/> 益智問答通<PieChart :rate="timerRate" style="margin:0 3px"/></UnderlineText>
     <div class="question">{{quizInfo.Q}}</div>
     <Well v-for="(roster, i) in quizRoster" @click.native="select(i)" 
       :style="{cursor: clickable?'pointer':'default'}" :class="optionClass(i)" class="option" :key="i"

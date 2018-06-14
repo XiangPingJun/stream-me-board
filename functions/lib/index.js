@@ -49,7 +49,6 @@ exports.startQuiz = functions.https.onRequest((request, response) => __awaiter(t
         yield firestore.doc('system/quizHistory').update({ [question]: true });
         yield firestore.doc('activity/quiz').set({});
         const streaming = (yield firestore.doc('system/stream').get()).data().streaming;
-        console.log(streaming);
         if (streaming) {
             let text = `問: ${question} `;
             quiz.OP.forEach(op => text += `[${op}] `);
@@ -63,7 +62,7 @@ exports.startQuiz = functions.https.onRequest((request, response) => __awaiter(t
     response.send('');
 }));
 exports.endVote = functions.firestore.document('system/vote').onWrite((change, context) => __awaiter(this, void 0, void 0, function* () {
-    if (change.before.data().time === change.after.data().time)
+    if (change.before.data().time == change.after.data().time || change.after.data().ended)
         return undefined;
     yield new Promise(resolve => setTimeout(resolve, VOTE_TIMEOUT));
     yield firestore.doc('system/vote').update({ ended: true });

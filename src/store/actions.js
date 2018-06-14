@@ -25,6 +25,7 @@ export default {
 		firestore.doc('activity/online').onSnapshot(doc => commit('setOnlineUids', Object.keys(doc.data())))
 		// system info
 		firestore.doc('system/stream').onSnapshot(doc => {
+			// chat
 			if (state.stream.time != doc.data().time) {
 				unsubscribeChat()
 				unsubscribeChat = firestore.collection(`allChat/${doc.data().time}/chat-line`).onSnapshot(snap => {
@@ -104,15 +105,8 @@ export default {
 		})
 		// history video
 		fetch('https://www.googleapis.com/youtube/v3/search?key=AIzaSyBCYPReX74lujmX9tg8AiM-OFGqmKYMZkU&channelId=UCLeQT6hvBgnq_-aKKlcgj1Q&part=snippet,id&order=date&maxResults=50').then(res => res.json()).then(data => commit('setHistoryVideo', data.items.filter(item => item.id.videoId)))
-		// font loaded
-		Promise.all([
-			new Promise(resolve => {
-				const thank = new Image()
-				thank.src = 'static/thank.png'
-				thank.onload = resolve
-			}),
-			document.fonts.ready
-		]).then(() => commit('setPreLoaded', true))
+		commit('addPreLoadItem', 'font')
+		document.fonts.addEventListener('loadingdone', () => commit('donePreLoadItem', 'font'))
 	},
 	async saveMyExp({ state }, payload) {
 		await firestore.collection('user').doc(state.myUid).update({ exp: payload })

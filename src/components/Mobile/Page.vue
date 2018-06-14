@@ -8,10 +8,12 @@
           <IconButton icon="far fa-comments" v-if="'CHAT_BOX'!=dialog" @click="setUiMode({chatBox:true})"/>
           <IconButton icon="fas fa-list-alt" v-if="'HISTORY_VIDEO'==dialog&&!stream.streaming"/>
           <IconButton icon="far fa-list-alt" v-if="'HISTORY_VIDEO'!=dialog&&!stream.streaming" @click="setUiMode({})"/>
-          <IconButton icon="fas fa-list-alt" v-if="'PLAYGROUND'==dialog&&stream.streaming"/>
-          <IconButton icon="far fa-list-alt" v-if="'PLAYGROUND'!=dialog&&stream.streaming" @click="setUiMode({playground:true})"/>
+          <IconButton icon="fas fa-compass" v-if="'PLAYGROUND'==dialog&&stream.streaming"/>
+          <IconButton icon="far fa-compass" v-if="'PLAYGROUND'!=dialog&&stream.streaming" @click="setUiMode({playground:true})"/>
           <IconButton icon="fas fa-user" v-if="'MY_INFO'==dialog||'LOGIN'==dialog" />
-          <IconButton icon="far fa-user" v-if="'MY_INFO'!=dialog&&'LOGIN'!=dialog" @click="updateUiMode({showAccount:true})"/>
+          <IconButton icon="far fa-user" v-if="'MY_INFO'!=dialog&&'LOGIN'!=dialog" @click="setUiMode({showAccount:true})"/>
+          <IconButton icon="fas fa-bell" v-if="'FOLLOW_US'==dialog" />
+          <IconButton icon="far fa-bell" v-if="'FOLLOW_US'!=dialog" @click="setUiMode({followUs:true})"/>
         </div>
       </div>
       <div v-show="preLoaded" style="margin: 8px 4px 0px 4px">
@@ -48,7 +50,7 @@ import { mapActions, mapState, mapGetters, mapMutations } from 'vuex'
 import { setInterval } from 'timers';
 
 export default {
-  components: { VideoBox, IconButton, HistoryVideo, MyInfo, Login, Notify, ChatBox, Quiz, Vote, Playground,FollowUs },
+  components: { VideoBox, IconButton, HistoryVideo, MyInfo, Login, Notify, ChatBox, Quiz, Vote, Playground, FollowUs },
   computed: {
     videoWidth() { return document.documentElement.clientWidth - 40 },
     dialog() {
@@ -71,7 +73,7 @@ export default {
       if (false === this.stream.streaming)
         return 'HISTORY_VIDEO'
     },
-    ...mapState(['uiMode', 'stream', 'preLoaded', 'historyVideo']), ...mapGetters(['onlineUsers', 'myInfo'])
+    ...mapState(['uiMode', 'stream', 'historyVideo']), ...mapGetters(['onlineUsers', 'myInfo', 'preLoaded'])
   },
   mounted() {
     this.subscribeData()

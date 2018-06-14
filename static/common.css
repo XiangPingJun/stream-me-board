@@ -1,4 +1,4 @@
-.fas, .far, .fa {
+.fas, .far, .fa, .fab {
 	vertical-align: middle;
 }
 @font-face {
@@ -8,6 +8,14 @@
 }
 * {
 	font-family: 'Zpix';
+}
+@font-face {
+	font-family: 'Mobile Font';
+	src: url('MobileFont.ttf') format('truetype');
+	text-rendering: optimizeSpeed;
+}
+.MobileFont {
+	font-family: 'Mobile Font';
 }
 [v-cloak] {
 	display: none;

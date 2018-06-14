@@ -91,7 +91,7 @@ export default {
       } else {
         this.filteredUid = []
         for (const [uid, user] of Object.entries(this.allUsers))
-          if (user.name.toLowerCase().indexOf(val) >= 0)
+          if (user.name.toLowerCase().indexOf(val) >= 0 || uid.toLowerCase().indexOf(val) >= 0)
             this.filteredUid.push(uid)
       }
     },

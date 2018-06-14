@@ -3,11 +3,9 @@
     <UnderlineText><i class="fas fa-dice"/> 暴力投票系統<PieChart :rate="timerRate" style="margin:0 3px"/></UnderlineText>
     <div v-if="!voted" class="caption yellow">一人有多票！<br/>滑鼠點越快越多下，就投越多票！</div>
     <div v-if="voted" class="caption">已經投過票囉！</div>
-    <Well v-for="(roster, i) in voteRoster" @click.native="addClick(i)" 
-      :style="{cursor: clickable?'pointer':'default'}" :class="optionClass(i)" class="option" :key="i"
-    >
+    <Well v-for="(roster, i) in voteRoster" @click.native="addClick(i)" :style="{cursor: clickable?'pointer':'default'}" :class="optionClass(i)" class="option" :key="i">
       <i class="fas fa-angle-right"/> {{roster.option}} ({{fliper[i]}}票)
-      <span v-if="!voted && clickCount[i]" class="green">+{{("0"+clickCount[i]).slice(-2)}}</span>
+      <span v-if="!voted && clickCount[i]" class="green">+{{clickCount[i]}}</span>
       <span v-if="clickable" class="click red"><i class="fas fa-arrow-left"/> Click!!</span>
       <div style="display:flex;">
         <UserAvatar v-for="(uid, i) in roster.uids" :user="allUsers[uid]" :key="i"/>
@@ -49,10 +47,8 @@ export default {
   methods: {
     optionStyle(i) { return { cursor: this.clickable ? 'pointer' : 'default' } },
     optionClass(i) {
-      if (!this.voteInfo.ended)
-        return 'option'
-      if (Math.max(...this.voteRoster.map(roster => roster.total)) != this.voteRoster[i].total)
-        return 'option animated zoomOutLeft'
+      if (this.voteInfo.ended && Math.max(...this.voteRoster.map(roster => roster.total)) != this.voteRoster[i].total)
+        return 'animated zoomOutLeft'
     },
     addClick(i) {
       if (!this.clickable)

@@ -5,7 +5,9 @@
         <iframe ref="iframe" frameBorder="0" allow="autoplay; encrypted-media" :src="videoUrl" :style="videoSize"/>
       </div>
     </div>
-    <img src="static/thank.png" class="animated flipInY" v-if="null===videoUrl && false===stream.streaming" style="height: 80vh"/>
+    <div class="MobileFont thank-you animated flipInX" v-if="null===videoUrl && false===stream.streaming">
+      Thanks for watching!
+    </div>
   </div>
 </template>
 
@@ -87,5 +89,9 @@ export default {
 }
 .video-box .video-container iframe {
   margin: 0 0 -7px 0;
+}
+.thank-you {
+  font-size: 70px;
+  text-align: center;
 }
 </style>

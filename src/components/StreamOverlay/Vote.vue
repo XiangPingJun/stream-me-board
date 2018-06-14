@@ -4,11 +4,11 @@
 			<div class="title animated flipInX" v-if="voteStartTime"><i class="fas fa-dice"/> 投票啦!<PieChart :rate="timerRate" style="margin:0 0.1em"/></div>
 			<div class="option-container">
 				<div v-for="(roster, i) in voteRoster" class="option" :key="i" :class="optionClass(i)">
-					<div class="code animated flipInY">{{roster.option}}</div>
+					<div class="code MobileFont animated flipInY">{{roster.option}}</div>
 					<div class="count animated flipInX">({{fliper[i]}}票)</div>
-					<div class="arrow animated flipInY" v-if="roster.users.length"><i class="fas fa-arrow-up"/></div>
+					<div class="arrow animated flipInY" v-if="roster.uids.length"><i class="fas fa-arrow-up"/></div>
 					<div style="text-align:center">
-						<Avatar v-for="(user, i) in roster.users" :index="user.avatarSelected" :large="true" class="animated flipInY" :key="i"/>
+						<Avatar v-for="(uid, i) in roster.uids" :index="allUsers[uid].avatarSelected" :preserved="allUsers[uid].preserved" :large="true" class="animated flipInY" :key="i"/>
 					</div>
 				</div>
 			</div>			
@@ -47,7 +47,7 @@ export default {
 		}
 	},
 	beforeDestroy() { clearInterval(this.flipInterval) },
-	computed: { ...mapState(['voteInfo', 'voteRoster']), ...mapGetters(['voteStartTime']) },
+	computed: { ...mapState(['voteInfo', 'voteRoster', 'allUsers']), ...mapGetters(['voteStartTime']) },
 }
 </script>
 
@@ -65,18 +65,19 @@ export default {
   text-shadow: 0px 3px #705749, 3px 3px #86674d;
 }
 .title {
-  font-size: 5em;
+  font-size: 80px;
   margin-top: 70px;
+  text-align: center;
 }
 .option {
   max-width: 192px;
   margin: 0 25px;
 }
 .code {
-  font-size: 20em;
-  font-family: "VT323", monospace;
-  margin: -30px 0px -40px 0px;
+  font-size: 18em;
+  margin: 0px 0px -35px 0px;
   text-align: center;
+  font-weight: bold;
 }
 .count,
 .arrow {

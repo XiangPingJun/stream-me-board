@@ -1,8 +1,8 @@
 <template>
   <div :style="videoSize" style="display:flex; justify-content:center; align-items:center;">
     <iframe ref="iframe" frameBorder="0" allowFullScreen="true" :src="videoUrl" :style="videoSize" v-show="loaded && videoUrl"/>
-    <div v-if="null===videoUrl && false===stream.streaming" class="title yellow animated flipInX">
-      Thanks for Watching!
+    <div v-if="null===videoUrl && false===stream.streaming" class="title yellow MobileFont animated flipInX">
+      Thanks for watching!
     </div>
   </div>
 </template>

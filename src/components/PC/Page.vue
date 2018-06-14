@@ -1,5 +1,6 @@
 <template>
   <div>
+    <Background/>
     <div class="page" v-show="preLoaded">
       <VideoBox ref="video" :height="videoHeight" :width="videoWidth"/>
       <div class="right-side">
@@ -22,6 +23,9 @@
         <ChatBox ref="chatBox" v-if="chatLines.length" class="bottom animated flipInX"/>
       </div>
     </div>
+    <div v-show="!preLoaded" class="page loading-container">
+      <i class="fas fa-spinner fa-10x fa-pulse"/>
+    </div>
     <Notify :large="true"/>
   </div>
 </template>
@@ -40,11 +44,12 @@ import Notify from '../Notify'
 import HistoryVideo from './HistoryVideo'
 import FollowUs from './FollowUs'
 import Vote from './Vote'
+import Background from './Background'
 import { mapGetters, mapActions, mapState } from 'vuex'
 
 export default {
   data() { return { videoWidth: 0, videoHeight: 0 } },
-  components: { VideoBox, ChatBox, Quiz, MyInfo, AnonymousInfo, Login, Arrow, AvatarPicker, Notify, Playground, HistoryVideo, FollowUs, Vote },
+  components: { Background, VideoBox, ChatBox, Quiz, MyInfo, AnonymousInfo, Login, Arrow, AvatarPicker, Notify, Playground, HistoryVideo, FollowUs, Vote },
   mounted() {
     this.subscribeData()
     this.unsubscribeAction = this.$store.subscribeAction((action, state) => {
@@ -96,7 +101,7 @@ export default {
       if ('VOTE' == this.middleDialog && !this.voted)
         return 'VOTE'
     },
-    ...mapState(['stream', 'uiMode', 'historyVideo', 'preLoaded', 'chatLines']), ...mapGetters(['myInfo', 'voted', 'onlineUsers'])
+    ...mapState(['stream', 'uiMode', 'historyVideo', 'chatLines']), ...mapGetters(['myInfo', 'voted', 'onlineUsers', 'preLoaded'])
   },
   methods: { ...mapActions(['subscribeData']) }
 }
@@ -135,5 +140,9 @@ export default {
 .vote-arrow {
   top: 160px;
   right: 380px;
+}
+.loading-container i {
+  text-shadow: none;
+  font-size: 30px;
 }
 </style>

@@ -5,11 +5,12 @@
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <link rel="shortcut icon" type="image/png" sizes="32x32" href="static/gamepad-32x32.png"/>
     <link rel="Bookmark" type="image/png" sizes="32x32" href="static/gamepad-32x32.png"/>
-    <link rel="stylesheet" href="static/background.css">
+    <link rel="stylesheet" href="/static/common.css">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
     <link rel="stylesheet" href="static/tooltip.css">
     <link rel="stylesheet" href="/static/fontawesome/css/fontawesome-all.css">
-    <link rel="stylesheet" href="/static/common.css">
+    <link rel="preload" href="static/zpix.ttf" as="font" crossorigin="anonymous" />
+    <link rel="preload" href="static/MobileFont.ttf" as="font" crossorigin="anonymous" />
     <title>祥平與ice和你一起邊聊邊玩!</title>
     <script src="static/fp.min.js"></script>
     <script src="//www.gstatic.com/firebasejs/4.13.0/firebase.js"></script>
@@ -18,14 +19,32 @@
     <script src="//www.youtube.com/iframe_api"></script>
     <style>
       body {
-        cursor: default;
         margin: 0px;
         overflow: hidden;
+        height: 100vh;
+        color: #f8ecd5;
+        text-shadow: 0px 3px #705749, 3px 3px #86674d;
+        background: linear-gradient(-45deg, #2f6d5a, #44453e, #3d3933, #2f6d5a);
+        background-size: 200% 200%;
+        animation: Gradient 15s ease infinite;
+      }
+      @keyframes Gradient {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
       }
     </style>
   </head>
   <body>
     <div id="app"></div>
     <!-- built files will be auto injected -->
+    <span style="font-family:'Mobile Font'"></span>
+    <span style="font-family:'Zpix'"></span>
   </body>
 </html>

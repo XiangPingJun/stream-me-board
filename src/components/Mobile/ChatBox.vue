@@ -5,7 +5,7 @@
     </div>
     <div class="mask"></div>
     <div style="display:flex; justify-content: center;">
-      <InputBox placeholder="說點什麼吧:↵" ref="input" @focus="onInputFocus" @submit="submit" class="input" maxlength="140"/>
+      <InputBox placeholder="說點什麼吧:↵" ref="input" @focus="onInputFocus" @submit="submit" class="input animated flipInX" maxlength="140"/>
     </div>
     <div v-if="showScrollToBottom" class="scroll-to-bottom">
       <DarkButton @click="scrollToBottom"><i class="fas fa-chevron-down"/></DarkButton>

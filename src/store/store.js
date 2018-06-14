@@ -18,8 +18,8 @@ export default new Vuex.Store({
 		anonymousAvatar: generateRandomAvatar(),
 		chatLines: [],
 		onlineUids: [],
-		historyVideo: [],
-		preLoaded: false,
+		historyVideo: null,
+		preLoadedItems: {},
 		voteInfo: { ended: true }, voteRoster: [],
 		quizInfo: { ended: true }, quizRoster: [],
 	},
@@ -47,6 +47,7 @@ export default new Vuex.Store({
 		voted(state) { return !!state.voteRoster.find((roster, i) => roster.uids.indexOf(state.myUid) >= 0) },
 		quizStartTime(state) { return state.quizInfo.time ? state.quizInfo.time.seconds * 1000 : 0 },
 		quizAnswered(state) { return !!state.quizRoster.find((roster, i) => roster.uids.indexOf(state.myUid) >= 0) },
+		preLoaded(state) { return Object.entries(state.preLoadedItems).length > 0 && 0 > Object.entries(state.preLoadedItems).findIndex(([i, val]) => false == val) }
 	},
 	mutations: {
 		setStream(state, payload) { state.stream = payload },
@@ -59,9 +60,10 @@ export default new Vuex.Store({
 		setIsAdmin(state, payload) { state.isAdmin = payload },
 		generateAnonymousAvatar(state, payload) { state.anonymousAvatar = generateRandomAvatar() },
 		setOnlineUids(state, payload) { state.onlineUids = payload },
-		setHistoryVideo(state, payload) { state.historyVideo = payload },
+		setHistoryVideo(state, payload) { state.historyVideo = [...payload] },
 		setSelectedVideoUrl(state, payload) { state.selectedVideoUrl = payload },
-		setPreLoaded(state, payload) { state.preLoaded = payload },
+		addPreLoadItem(state, payload) { Vue.set(state.preLoadedItems, payload, false) },
+		donePreLoadItem(state, payload) { Vue.set(state.preLoadedItems, payload, true) },
 		setVoteInfo(state, payload) { state.voteInfo = payload },
 		initVoteRoster(state, payload) {
 			state.voteRoster = new Array(payload).fill(0).map((item, i) => ({
@@ -76,8 +78,10 @@ export default new Vuex.Store({
 			payload.votes.forEach((count, i) => {
 				if (0 == count || !state.voteRoster[i] || state.voteRoster[i].uids.indexOf(payload.uid) >= 0)
 					return
-				state.voteRoster[i].uids.push(payload.uid)
-				state.voteRoster[i].total += count
+				const roster = { ...state.voteRoster[i] }
+				roster.uids = [...roster.uids, payload.uid]
+				roster.total += count
+				Vue.set(state.voteRoster, i, roster)
 			})
 		},
 		setQuizInfo(state, payload) { state.quizInfo = payload },
