@@ -21,7 +21,7 @@ export default new Vuex.Store({
 		historyVideo: null,
 		preLoadedItems: {},
 		voteInfo: { ended: true }, voteRoster: [],
-		quizInfo: { ended: true }, quizRoster: [],
+		quizInfo: { ended: true }, quizRoster: [], myAnswer: null
 	},
 	getters: {
 		myInfo(state) { return state.allUsers[state.myUid] || {} },
@@ -65,6 +65,7 @@ export default new Vuex.Store({
 		addPreLoadItem(state, payload) { Vue.set(state.preLoadedItems, payload, false) },
 		donePreLoadItem(state, payload) { Vue.set(state.preLoadedItems, payload, true) },
 		setVoteInfo(state, payload) { state.voteInfo = payload },
+		setMyAnswer(state, payload) { state.myAnswer = payload },
 		initVoteRoster(state, payload) {
 			state.voteRoster = new Array(payload).fill(0).map((item, i) => ({
 				option: String.fromCharCode(65 + i),

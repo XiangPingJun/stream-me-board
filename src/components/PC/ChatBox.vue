@@ -44,7 +44,7 @@ export default {
       this.promptLogin()
     },
     isScrollBottom() {
-      return this.scrollContent.offsetHeight + this.scrollContent.scrollTop < this.scrollContent.scrollHeight + 200
+      return this.scrollContent.offsetHeight + this.scrollContent.scrollTop + 100 > this.scrollContent.scrollHeight
     },
     scrollToBottom() {
       this.scrollContent.scrollTo(0, this.scrollContent.scrollHeight)

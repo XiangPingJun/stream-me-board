@@ -89,10 +89,14 @@ export default {
 		})
 		// quiz
 		firestore.doc("system/quiz").onSnapshot(doc => {
-			if (doc.data().ended)
+			if (doc.data().ended) {
+				if (state.quizInfo.A === state.myAnswer)
+					dispatch('addExp', 12)
 				setTimeout(() => commit('updateUiMode', { quiz: false }), 3000)
-			else
+			} else {
+				commit('setMyAnswer', null)
 				commit('updateUiMode', { quiz: true })
+			}
 			if (!state.quizInfo.time || (doc.data().time && state.quizInfo.time.seconds != doc.data().time.seconds))
 				commit('initQuizRoster', doc.data().OP)
 			commit('setQuizInfo', doc.data())
@@ -147,12 +151,11 @@ export default {
 		if (!getters.myInfo.name)
 			return
 		if (state.stream.streaming && !getters.myInfo.viewedStream.includes(state.stream.time)) {
-			if (!getters.myInfo.trophy.includes('WATCH_FIRST_TIME')) {
+			if (!getters.myInfo.trophy.includes('WATCH_FIRST_TIME'))
 				dispatch('getTrophy', { text: '第一次來看直播！', id: 'WATCH_FIRST_TIME' })
-			} else {
+			else
 				dispatch('notify', { data: { symbol: 'trophy' }, text: '上來看直播！' })
-				dispatch('addExp', 100)
-			}
+			dispatch('addExp', 100)
 			if (!state.isAdmin)
 				dispatch('sayHello')
 			dispatch('addMyViewedStream', state.stream.time)
@@ -308,17 +311,12 @@ export default {
 			ended: false
 		})
 		await firestore.doc('activity/vote').set({})
-		// await new Promise(resolve => setTimeout(resolve, VOTE_TIMEOUT))
-		// await firestore.doc('system/vote').update({ ended: true })
 	},
 	async sendVote({ getters, state, dispatch }, payload) {
 		try {
 			await firestore.doc('activity/vote').update({ [state.myUid]: payload })
 			const total = payload.reduce((acc, val) => acc + val)
-			dispatch('sendChat', {
-				uid: state.myUid,
-				text: `+${total}票！`,
-			})
+			dispatch('sendChat', { text: `+${total}票！`, uid: state.myUid, })
 			if (total > 20)
 				dispatch('getTrophy', { text: '快手指！投超過20票！', id: 'QUICK_VOTE_FINGER' })
 			dispatch('addExp', total - 3)
@@ -329,9 +327,11 @@ export default {
 			throw error
 		}
 	},
-	async sendAnswer({ state, dispatch }, payload) {
+	async sendAnswer({ state, dispatch, commit }, payload) {
 		try {
 			await firestore.doc('activity/quiz').update({ [state.myUid]: payload })
+			dispatch('sendChat', { text: `${state.quizInfo.OP[payload]}+1`, uid: state.myUid, })
+			commit('setMyAnswer', payload)
 		} catch (error) {
 			if ('permission-denied' == error.code)
 				return

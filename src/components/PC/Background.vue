@@ -319,7 +319,6 @@
   animation: stars linear infinite;
 }
 .stars .container .star {
-  animation: twinkle linear infinite;
   border-radius: 100%;
   transform: translateZ(0);
 }
@@ -1737,84 +1736,12 @@
   animation-duration: 14.2s;
   background: #f5f9c9;
 }
-@-moz-keyframes stars {
-  0% {
-    transform: translateY(110vh) translateZ(0);
-  }
-  100% {
-    transform: translateY(-10vh) translateZ(0);
-  }
-}
-@-webkit-keyframes stars {
-  0% {
-    transform: translateY(110vh) translateZ(0);
-  }
-  100% {
-    transform: translateY(-10vh) translateZ(0);
-  }
-}
-@-o-keyframes stars {
-  0% {
-    transform: translateY(110vh) translateZ(0);
-  }
-  100% {
-    transform: translateY(-10vh) translateZ(0);
-  }
-}
 @keyframes stars {
   0% {
     transform: translateY(110vh) translateZ(0);
   }
   100% {
     transform: translateY(-10vh) translateZ(0);
-  }
-}
-@-moz-keyframes twinkle {
-  0%,
-  80%,
-  100% {
-    opacity: 0.7;
-    box-shadow: 0 0 0 #fff, 0 0 0 #fff;
-  }
-  95% {
-    opacity: 1;
-    box-shadow: 0 0 2px #fff, 0 0 4px #fff;
-  }
-}
-@-webkit-keyframes twinkle {
-  0%,
-  80%,
-  100% {
-    opacity: 0.7;
-    box-shadow: 0 0 0 #fff, 0 0 0 #fff;
-  }
-  95% {
-    opacity: 1;
-    box-shadow: 0 0 2px #fff, 0 0 4px #fff;
-  }
-}
-@-o-keyframes twinkle {
-  0%,
-  80%,
-  100% {
-    opacity: 0.7;
-    box-shadow: 0 0 0 #fff, 0 0 0 #fff;
-  }
-  95% {
-    opacity: 1;
-    box-shadow: 0 0 2px #fff, 0 0 4px #fff;
-  }
-}
-@keyframes twinkle {
-  0%,
-  80%,
-  100% {
-    opacity: 0.7;
-    box-shadow: 0 0 0 #fff, 0 0 0 #fff;
-  }
-  95% {
-    opacity: 1;
-    box-shadow: 0 0 2px #fff, 0 0 4px #fff;
   }
 }
 </style>
