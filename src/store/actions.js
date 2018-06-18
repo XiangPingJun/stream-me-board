@@ -32,16 +32,14 @@ export default {
 					commit('setChatLines', snap.docs.map(doc => doc.data()).reverse())
 				})
 			}
-			if (localStorage.version != doc.data().version) {
-				localStorage.version != doc.data().version
-				location.replace(location.href)
-			}
 			commit('setStream', doc.data())
 			dispatch('checkTrophy')
 		})
 		firestore.doc("system/info").onSnapshot(doc => {
-			if (null != doc.data().version && state.systemInfo && state.systemInfo.version != doc.data().version)
+			if (doc.data().version && doc.data().version != localStorage.version) {
+				localStorage.version = doc.data().version
 				window.location.reload(true)
+			}
 			commit('setSystemInfo', doc.data())
 		})
 		// my login info
