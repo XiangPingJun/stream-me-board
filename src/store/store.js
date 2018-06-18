@@ -31,7 +31,7 @@ export default new Vuex.Store({
 			const candidate = new Array(TOTAL_AVATAR).fill(0).map((item, i) => i).filter(item => getters.myInfo.avatarList.indexOf(item) < 0)
 			if (0 == candidate.length)
 				return null
-			return Math.floor(Math.random() * candidate.length)
+			return candidate[Math.floor(Math.random() * candidate.length)]
 		},
 		onlineUsers(state) {
 			return state.onlineUids.map(uid => {

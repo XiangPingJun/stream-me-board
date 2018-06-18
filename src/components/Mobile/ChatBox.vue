@@ -1,6 +1,6 @@
 <template>
 	<Content overflowY="auto" ref="chatBox">
-    <div class="chat-list animated fadeIn">
+    <div class="chat-list">
       <ChatLine v-for="(line, i) in chatLines.slice(-150)" :key="i" :user="allUsers[line.uid]" :text="line.text" :class="lineClass(line.id)"/>
     </div>
     <div class="mask"></div>
@@ -21,13 +21,14 @@ import DarkButton from '../DarkButton'
 import { mapGetters, mapActions, mapState } from 'vuex'
 
 export default {
+  props: ['visible'],
   data() { return { showScrollToBottom: false, scrollContent: null, height: 0, newLineIds: [] } },
   components: { ChatLine, InputBox, Content, DarkButton },
   computed: { ...mapState(['allUsers', 'chatLines']), ...mapGetters(['myInfo']) },
   mounted() {
     this.scrollContent = this.$refs.chatBox.$refs.content
     this.scrollContent.addEventListener('scroll', () => {
-      setTimeout(() => this.showScrollToBottom = !this.isScrollBottom())
+      this.$nextTick(() => this.showScrollToBottom = !this.isScrollBottom())
     })
     this.scrollToBottom()
     this.heightInterval = setInterval(() => {
@@ -69,9 +70,13 @@ export default {
   watch: {
     chatLines(newVal, oldVal) {
       if (!this.showScrollToBottom)
-        setTimeout(() => this.scrollToBottom())
+        this.$nextTick(() => this.scrollToBottom())
       if (oldVal.length > 0)
         this.newLineIds = newVal.filter(newLine => !oldVal.find(oldLine => oldLine.id == newLine.id)).map(line => line.id)
+    },
+    visible(newVal, oldVal) {
+      if (newVal && this.$refs.input.text)
+        this.$refs.input.focus()
     }
   }
 }

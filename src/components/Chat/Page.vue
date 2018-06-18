@@ -16,7 +16,7 @@ export default {
   created() { this.subscribeData() },
   methods: { ...mapActions(['subscribeData']) },
   watch: {
-    chatLines() { setTimeout(() => window.scrollTo(0, document.body.scrollHeight)) }
+    chatLines() { this.$nextTick(() => window.scrollTo(0, document.body.scrollHeight)) }
   }
 }
 </script>

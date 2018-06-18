@@ -22,7 +22,6 @@ import Well from '../Well'
 import PieChart from '../PieChart'
 import { VOTE_TIMEOUT } from '../../common'
 import { mapGetters, mapActions, mapState } from 'vuex'
-import { setTimeout } from 'timers';
 
 export default {
   data() { return { fliper: [], clickCount: [], clickable: true, timeout: null, dialogClass: 'animated flipInY', timerRate: 0 } },

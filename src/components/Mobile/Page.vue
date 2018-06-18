@@ -22,7 +22,7 @@
         <Vote v-if="'VOTE'==dialog" :style="dialogStyle()"/>
         <Quiz v-if="'QUIZ'==dialog" :style="dialogStyle()"/>
         <HistoryVideo v-if="'HISTORY_VIDEO'==dialog" :style="dialogStyle()"/>
-        <ChatBox v-if="'CHAT_BOX'==dialog" :style="dialogStyle()"/>
+        <ChatBox v-show="'CHAT_BOX'==dialog" :visible="'CHAT_BOX'==dialog" :style="dialogStyle()"/>
         <Playground v-if="'PLAYGROUND'==dialog" :style="dialogStyle()"/>
         <FollowUs v-if="'FOLLOW_US'==dialog" :style="dialogStyle()"/>
       </div>

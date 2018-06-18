@@ -14,7 +14,6 @@
 <script>
 import { mapGetters, mapState } from 'vuex'
 import { setVideoPlayer } from '../../common'
-import { setTimeout } from 'timers';
 
 export default {
   props: ['width', 'height'],

@@ -26,7 +26,7 @@ export default {
   mounted() {
     this.scrollContent = this.$refs.chatBox.$refs.content
     this.scrollContent.addEventListener('scroll', () => {
-      setTimeout(() => this.showScrollToBottom = !this.isScrollBottom())
+      this.$nextTick(() => this.showScrollToBottom = !this.isScrollBottom())
     })
     this.scrollToBottom()
     this.heightHandler = setInterval(() => {
@@ -63,7 +63,7 @@ export default {
   watch: {
     chatLines(newVal, oldVal) {
       if (!this.showScrollToBottom)
-        setTimeout(() => this.scrollToBottom())
+        this.$nextTick(() => this.scrollToBottom())
     }
   }
 }

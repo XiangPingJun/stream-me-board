@@ -157,7 +157,7 @@ export default {
 				dispatch('notify', { data: { symbol: 'trophy' }, text: '上來看直播！' })
 			dispatch('addExp', 100)
 			if (!state.isAdmin)
-				dispatch('sayHello')
+				setTimeout(() => dispatch('sayHello'), 3000)
 			dispatch('addMyViewedStream', state.stream.time)
 		}
 	},
@@ -330,7 +330,8 @@ export default {
 	async sendAnswer({ state, dispatch, commit }, payload) {
 		try {
 			await firestore.doc('activity/quiz').update({ [state.myUid]: payload })
-			dispatch('sendChat', { text: `${state.quizInfo.OP[payload]}+1`, uid: state.myUid, })
+			if (state.stream.streaming)
+				dispatch('sendChat', { text: `${state.quizInfo.OP[payload]}+1`, uid: state.myUid, })
 			commit('setMyAnswer', payload)
 		} catch (error) {
 			if ('permission-denied' == error.code)
@@ -363,8 +364,12 @@ export default {
 		})
 	},
 	async runTest({ state, dispatch, commit }) {
-		const a = Object.entries(state.allUsers).map(([uid, user]) => user).sort((a, b) => b.exp - a.exp)
-		console.log(a.map(user => [user.name, user.exp]))
+		for (let i in state.allUsers) {
+			if (state.allUsers[i].avatarList)
+				firestore.collection('user').doc(i).update({
+					exp: state.allUsers[i].avatarList.length * 100
+				})
+		}
 	}
 }
 

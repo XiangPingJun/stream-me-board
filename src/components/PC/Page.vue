@@ -24,7 +24,7 @@
       </div>
     </div>
     <div v-show="!preLoaded" class="page loading-container">
-      <i class="fas fa-spinner fa-10x fa-pulse"/>
+      <span style="margin-right:5px;">Loading... </span><i class="fas fa-spinner fa-pulse"/>
     </div>
     <Notify :large="true"/>
   </div>
@@ -63,7 +63,7 @@ export default {
     const width = document.documentElement.clientWidth
     const height = document.documentElement.clientHeight
     this.videoWidth = width - 390
-    setTimeout(() => {
+    this.$nextTick(() => {
       const videoHeight = parseInt(this.$refs.video.videoSize.height)
       if (videoHeight > height - 50) {
         this.videoWidth = undefined
@@ -141,8 +141,10 @@ export default {
   top: 160px;
   right: 380px;
 }
+.loading-container {
+  font-size: 2em;
+}
 .loading-container i {
   text-shadow: none;
-  font-size: 30px;
 }
 </style>

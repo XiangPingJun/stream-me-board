@@ -32,7 +32,7 @@ export default {
 	methods: {
 		onSubmit(text) {
 			this.userNameTest = text
-			setTimeout(() => {
+			this.$nextTick(() => {
 				if (this.$refs.invisible.getWidth() > 226)
 					return this.notify({ type: 'error', text: '暱稱太長了喲！' })
 				this.loading = true

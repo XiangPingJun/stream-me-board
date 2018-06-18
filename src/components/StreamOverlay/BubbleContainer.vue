@@ -20,7 +20,7 @@ export default {
 					this.chats.push({ ...chatLine })
 			})
 			this.rmObsolete()
-			setTimeout(() => this.placeChat())
+			this.$nextTick(() => this.placeChat())
 		}
 	},
 	methods: {
