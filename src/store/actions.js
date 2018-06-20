@@ -333,7 +333,7 @@ export default {
 	async sendAnswer({ state, dispatch, commit }, payload) {
 		try {
 			await firestore.doc('activity/quiz').update({ [state.myUid]: payload })
-			if (state.stream.streaming)
+			if ('STARTED' == state.stream.status)
 				dispatch('sendChat', { text: `${state.quizInfo.OP[payload]}+1`, uid: state.myUid, })
 			commit('setMyAnswer', payload)
 		} catch (error) {

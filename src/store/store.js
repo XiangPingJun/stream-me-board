@@ -42,7 +42,7 @@ export default new Vuex.Store({
 					return { avatarSelected: arr[1] }
 			})
 		},
-		videoUrl(state) { return state.stream.streaming ? state.stream.videoUrl : state.selectedVideoUrl },
+		videoUrl(state) { return 'STARTED' == state.stream.status ? state.stream.videoUrl : state.selectedVideoUrl },
 		voteStartTime(state) { return state.voteInfo.time ? state.voteInfo.time.seconds * 1000 : 0 },
 		voted(state) { return !!state.voteRoster.find((roster, i) => roster.uids.indexOf(state.myUid) >= 0) },
 		quizStartTime(state) { return state.quizInfo.time ? state.quizInfo.time.seconds * 1000 : 0 },
