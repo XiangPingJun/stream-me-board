@@ -1,8 +1,11 @@
 <template>
   <div :style="videoSize" style="display:flex; justify-content:center; align-items:center;">
     <iframe ref="iframe" frameBorder="0" allowFullScreen="true" :src="videoUrl" :style="videoSize" v-show="loaded && videoUrl"/>
-    <div v-if="null===videoUrl && false===stream.streaming" class="title yellow MobileFont animated flipInX">
-      Thanks for watching!
+    <div v-if="null===videoUrl&&'ENDED'===stream.status" class="thank-you yellow MobileFont animated flipInX">
+      Thanks for watching !!
+    </div>
+    <div v-if="null===videoUrl&&'WILL_START'===stream.status" class="will-start red MobileFont animated infinite pulse">
+      Show will be started !!
     </div>
   </div>
 </template>
@@ -55,10 +58,15 @@ export default {
 </script>
 
 <style scoped>
-.title {
+.thank-you,
+.will-start {
   font-size: 40px;
   line-height: 45px;
   font-weight: bold;
   text-align: center;
+  padding: 15px;
+}
+.will-start {
+  animation-duration: 3s;
 }
 </style>

@@ -7,8 +7,9 @@
       </form>
     </div>
     <div v-if="isAdmin">
-      <h1 v-if="stream.streaming">直播中</h1>
-      <h1 v-if="!stream.streaming">沒有直播</h1>
+      <h1 v-if="'WILL_START'==stream.status">沒有直播</h1>
+      <h1 v-if="'STARTED'==stream.status">直播中</h1>
+      <h1 v-if="'ENDED'==stream.status">沒有直播</h1>
       <p/>
       
       <div>影片網址:</div>
@@ -23,8 +24,9 @@
       <input :value="stream.gameDescription" @change="e => saveGameDescription(e.target.value.trim())" onfocus="this.select()">
       <p/>
 
-      <button @click="startStream" :disabled="stream.streaming"><i class="fas fa-link"/> 開始</button>
-      <button @click="stopStream" :disabled="!stream.streaming"><i class="fas fa-unlink"/> 結束</button>
+      <button @click="streamWillStart" :disabled="'WILL_START'==stream.status||'STARTED'==stream.status">即將開始</button>
+      <button @click="startStream" :disabled="'STARTED'==stream.status||'ENDED'==stream.status">開始</button>
+      <button @click="stopStream" :disabled="'ENDED'==stream.status">結束</button>
       <p/>
 
       <label>選項數:</label>
@@ -60,7 +62,7 @@ export default {
   data() { return { name: '', password: '', sending: null, voteOptionCount: 2, userSearch: ' ', filteredUid: [], showRunTestConfirm: false } },
   created() { this.subscribeData() },
   components: { Notify },
-  methods: { ...mapActions(['subscribeData', 'loginAdmin', 'startStream', 'stopStream', 'saveVideoUrl', 'saveGameTitle', 'saveGameUrl', 'saveGameDescription', 'startVote', 'sendChat', 'runTest']) },
+  methods: { ...mapActions(['subscribeData', 'loginAdmin', 'streamWillStart', 'startStream', 'stopStream', 'saveVideoUrl', 'saveGameTitle', 'saveGameUrl', 'saveGameDescription', 'startVote', 'sendChat', 'runTest']) },
   computed: { ...mapState(['voteInfo', 'isAdmin', 'stream', 'voteRoster', 'quizRoster', 'quizInfo', 'allUsers']) },
   mounted() {
     this.unsubscribeAction = this.$store.subscribeAction((action, state) => {
@@ -77,11 +79,11 @@ export default {
   },
   watch: {
     stream(val, oldVal) {
-      if (undefined == val.streaming || undefined == oldVal.streaming || val.streaming == oldVal.streaming)
+      if (undefined == val.status || undefined == oldVal.status || val.status == oldVal.status)
         return
-      if (val.streaming)
+      if ('STARTED' == val.status)
         setTimeout(() => this.sendChat({ uid: 'system', text: '直播開始囉！大家坐穩啦！', }), 3000)
-      else
+      else if ('ENDED' == val.status)
         this.sendChat({ uid: 'system', text: '直播結束囉！期待下次與大家相會！', })
     },
     userSearch(val, oldVal) {

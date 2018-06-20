@@ -106,7 +106,7 @@ export default {
 				commit('addAnswer', { uid, answer })
 		})
 		// history video
-		fetch('https://www.googleapis.com/youtube/v3/search?key=AIzaSyBCYPReX74lujmX9tg8AiM-OFGqmKYMZkU&channelId=UCLeQT6hvBgnq_-aKKlcgj1Q&part=snippet,id&order=date&maxResults=50').then(res => res.json()).then(data => commit('setHistoryVideo', data.items.filter(item => item.id.videoId)))
+		fetch('https://www.googleapis.com/youtube/v3/search?key=AIzaSyBCYPReX74lujmX9tg8AiM-OFGqmKYMZkU&channelId=UCLeQT6hvBgnq_-aKKlcgj1Q&part=snippet,id&order=date&maxResults=20').then(res => res.json()).then(data => commit('setHistoryVideo', data.items.filter(item => item.id.videoId)))
 		commit('addPreLoadItem', 'font')
 		document.fonts.addEventListener('loadingdone', () => commit('donePreLoadItem', 'font'))
 	},
@@ -148,7 +148,7 @@ export default {
 	checkTrophy({ getters, state, dispatch }) {
 		if (!getters.myInfo.name)
 			return
-		if (state.stream.streaming && !getters.myInfo.viewedStream.includes(state.stream.time)) {
+		if ('STARTED' == state.stream.status && !getters.myInfo.viewedStream.includes(state.stream.time)) {
 			if (!getters.myInfo.trophy.includes('WATCH_FIRST_TIME'))
 				dispatch('getTrophy', { text: '第一次來看直播！', id: 'WATCH_FIRST_TIME' })
 			else
@@ -245,7 +245,7 @@ export default {
 			id: shortid.generate(),
 			time: firebase.firestore.FieldValue.serverTimestamp()
 		})
-		if (state.stream.streaming)
+		if ('STARTED' == state.stream.status)
 			dispatch('addExp', 3)
 	},
 	promptLogin({ commit, dispatch }) {
@@ -291,18 +291,23 @@ export default {
 				return convertToYoutube(arr[1])
 		}
 	},
-	async startStream({ dispatch, state }, payload) {
+	async startStream({ }, payload) {
 		await firestore.doc('system/stream').update({
 			time: new Date().toLocaleString().replace(/\//g, '-'),
-			streaming: true
+			status: 'STARTED'
 		})
 	},
-	async stopStream({ dispatch, state }, payload) {
+	async streamWillStart({ }, payload) {
 		await firestore.doc('system/stream').update({
-			streaming: false
+			status: 'WILL_START'
 		})
 	},
-	async startVote({ dispatch, state }, payload) {
+	async stopStream({ }, payload) {
+		await firestore.doc('system/stream').update({
+			status: 'ENDED'
+		})
+	},
+	async startVote({ }, payload) {
 		await firestore.doc('system/vote').set({
 			time: firebase.firestore.FieldValue.serverTimestamp(),
 			optionCount: payload,

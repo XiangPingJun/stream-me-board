@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <div class="page">
     <Background/>
-    <div class="page" v-show="preLoaded">
+    <div v-show="preLoaded && (topDialog||middleDialog)">
       <VideoBox ref="video" :height="videoHeight" :width="videoWidth"/>
       <div class="right-side">
         <!-- top section -->
@@ -23,9 +23,7 @@
         <ChatBox ref="chatBox" v-if="chatLines.length" class="bottom animated flipInX"/>
       </div>
     </div>
-    <div v-show="!preLoaded" class="page loading-container">
-      <span style="margin-right:5px;">Loading... </span><i class="fas fa-spinner fa-pulse"/>
-    </div>
+    <div v-if="!preLoaded || (!topDialog&&!middleDialog)"><Loader/></div>
     <Notify :large="true"/>
   </div>
 </template>
@@ -45,11 +43,12 @@ import HistoryVideo from './HistoryVideo'
 import FollowUs from './FollowUs'
 import Vote from './Vote'
 import Background from './Background'
+import Loader from '../Loader'
 import { mapGetters, mapActions, mapState } from 'vuex'
 
 export default {
   data() { return { videoWidth: 0, videoHeight: 0 } },
-  components: { Background, VideoBox, ChatBox, Quiz, MyInfo, AnonymousInfo, Login, Arrow, AvatarPicker, Notify, Playground, HistoryVideo, FollowUs, Vote },
+  components: { Background, VideoBox, ChatBox, Quiz, MyInfo, AnonymousInfo, Login, Arrow, AvatarPicker, Notify, Playground, HistoryVideo, FollowUs, Vote, Loader },
   mounted() {
     this.subscribeData()
     this.unsubscribeAction = this.$store.subscribeAction((action, state) => {
@@ -82,6 +81,8 @@ export default {
         return 'ANONYMOUS'
     },
     middleDialog() {
+      if (!this.stream.status)
+        return
       if (this.uiMode.selectAvatar)
         return 'AVATAR_PICKER'
       if (this.uiMode.vote)
@@ -90,9 +91,9 @@ export default {
         return 'QUIZ'
       if (this.uiMode.followUs)
         return 'FOLLOW_US'
-      if (false == this.stream.streaming && this.historyVideo)
+      if ('ENDED' == this.stream.status && this.historyVideo)
         return 'HISTORY_VIDEO'
-      if (this.stream.streaming && this.onlineUsers)
+      if ('ENDED' != this.stream.status && this.onlineUsers)
         return 'PLAYGROUND'
     },
     arrow() {
@@ -140,11 +141,5 @@ export default {
 .vote-arrow {
   top: 160px;
   right: 380px;
-}
-.loading-container {
-  font-size: 2em;
-}
-.loading-container i {
-  text-shadow: none;
 }
 </style>
