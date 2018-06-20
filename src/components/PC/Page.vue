@@ -1,7 +1,7 @@
 <template>
-  <div class="page">
+  <div>
     <Background/>
-    <div v-show="preLoaded && (topDialog||middleDialog)">
+    <div class="page" v-show="preLoaded && (topDialog||middleDialog)">
       <VideoBox ref="video" :height="videoHeight" :width="videoWidth"/>
       <div class="right-side">
         <!-- top section -->
@@ -23,7 +23,7 @@
         <ChatBox ref="chatBox" v-if="chatLines.length" class="bottom animated flipInX"/>
       </div>
     </div>
-    <div v-if="!preLoaded || (!topDialog&&!middleDialog)"><Loader/></div>
+    <div class="page" v-if="!preLoaded || (!topDialog&&!middleDialog)"><Loader/></div>
     <Notify :large="true"/>
   </div>
 </template>
