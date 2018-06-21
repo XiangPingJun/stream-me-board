@@ -8,19 +8,20 @@
         <MyInfo v-if="'MY_INFO'==topDialog" class="top animated flipInX"/>
         <AnonymousInfo v-if="'ANONYMOUS'==topDialog" class="top animated flipInX"/>
         <Login v-if="'LOGIN'==topDialog" class="top animated flipInX"/>
-        <Arrow ref="loginArrow" v-if="'LOGIN'==arrow" class="login-arrow"/>
+        <Arrow v-if="'LOGIN'==arrow" class="login-arrow"/>
 
         <!-- middle section -->
         <Vote v-if="'VOTE'==middleDialog" class="middle"/>
         <Arrow v-if="'VOTE'==arrow" class="vote-arrow"/>
-        <Quiz v-if="'QUIZ'==middleDialog" class="middle animated flipInY"/>
-        <Playground v-if="'PLAYGROUND'==middleDialog" class="middle animated flipInY"/>
-        <AvatarPicker v-if="'AVATAR_PICKER'==middleDialog" class="middle animated flipInY"/>
-        <FollowUs v-if="'FOLLOW_US'==middleDialog" class="middle animated flipInY"/>
-        <HistoryVideo v-if="'HISTORY_VIDEO'==middleDialog" class="middle animated flipInY"/>
+        <Quiz v-if="'QUIZ'==middleDialog" class="middle"/>
+        <Playground v-if="'PLAYGROUND'==middleDialog" class="middle"/>
+        <AvatarPicker v-if="'AVATAR_PICKER'==middleDialog" class="middle"/>
+        <FollowUs v-if="'FOLLOW_US'==middleDialog" class="middle"/>
+        <HistoryVideo v-if="'HISTORY_VIDEO'==middleDialog" class="middle"/>
 
         <!-- bottom section -->
-        <ChatBox ref="chatBox" v-if="chatLines.length" class="bottom animated flipInX"/>
+        <ChatBox ref="chatBox" v-if="'CHAT_BOX'==bottomDialog" class="bottom chat-box"/>
+        <StickerPicker v-if="'STICKER_PICKER'==bottomDialog" class="bottom sticker-picker"/>
       </div>
     </div>
     <div class="page" v-if="!preLoaded || (!topDialog&&!middleDialog)"><Loader/></div>
@@ -44,11 +45,12 @@ import FollowUs from './FollowUs'
 import Vote from './Vote'
 import Background from './Background'
 import Loader from '../Loader'
+import StickerPicker from './StickerPicker'
 import { mapGetters, mapActions, mapState } from 'vuex'
 
 export default {
   data() { return { videoWidth: 0, videoHeight: 0 } },
-  components: { Background, VideoBox, ChatBox, Quiz, MyInfo, AnonymousInfo, Login, Arrow, AvatarPicker, Notify, Playground, HistoryVideo, FollowUs, Vote, Loader },
+  components: { Background, VideoBox, ChatBox, Quiz, MyInfo, AnonymousInfo, Login, Arrow, AvatarPicker, Notify, Playground, HistoryVideo, FollowUs, Vote, Loader, StickerPicker },
   mounted() {
     this.subscribeData()
     this.unsubscribeAction = this.$store.subscribeAction((action, state) => {
@@ -96,6 +98,12 @@ export default {
       if ('ENDED' != this.stream.status && this.onlineUsers)
         return 'PLAYGROUND'
     },
+    bottomDialog() {
+      if (this.uiMode.stickerPicker)
+        return 'STICKER_PICKER'
+      if (this.chatLines.length)
+        return 'CHAT_BOX'
+    },
     arrow() {
       if ('LOGIN' == this.topDialog)
         return 'LOGIN'
@@ -132,7 +140,12 @@ export default {
 .right-side .bottom {
   flex-grow: 1;
   flex-shrink: 9999999;
+}
+.right-side .bottom.chat-box {
   min-height: 220px;
+}
+.right-side .bottom.sticker-picker {
+  min-height: 300px;
 }
 .login-arrow {
   top: 60px;

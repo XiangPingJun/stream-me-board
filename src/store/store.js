@@ -64,6 +64,10 @@ export default new Vuex.Store({
 		setSelectedVideoUrl(state, payload) { state.selectedVideoUrl = payload },
 		addPreLoadItem(state, payload) { Vue.set(state.preLoadedItems, payload, false) },
 		donePreLoadItem(state, payload) { Vue.set(state.preLoadedItems, payload, true) },
+		donePreLoadAll(state, payload) {
+			for (let i in state.preLoadedItems)
+				Vue.set(state.preLoadedItems, i, true)
+		},
 		setVoteInfo(state, payload) { state.voteInfo = payload },
 		setMyAnswer(state, payload) { state.myAnswer = payload },
 		initVoteRoster(state, payload) {

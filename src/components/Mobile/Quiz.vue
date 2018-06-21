@@ -1,13 +1,6 @@
 <template>
   <Content>
-    <div style="display:flex; align-items: flex-start;">
-      <UnderlineText><i class="fas fa-question"/> 益智問答通<PieChart :rate="timerRate" style="margin:0 3px"/></UnderlineText>
-      <div class="back">
-        <DarkButton @click="setUiMode({})">
-          <i class="fas fa-times" style="margin:0 2px;"/>
-        </DarkButton>
-      </div>
-    </div>
+    <UnderlineText><i class="fas fa-question"/> 益智問答通<PieChart :rate="timerRate" style="margin:0 3px"/></UnderlineText>
     <div class="question">{{quizInfo.Q}}</div>
     <Well v-for="(roster, i) in quizRoster" @click.native="select(i)" 
       :style="{cursor: clickable?'pointer':'default'}" :class="optionClass(i)" class="option" :key="i"
@@ -26,13 +19,12 @@ import Well from '../Well'
 import Avatar from '../Avatar'
 import PieChart from '../PieChart'
 import Content from './Content'
-import DarkButton from '../DarkButton'
 import { QUIZ_TIMEOUT } from '../../common'
 import { mapState, mapActions, mapGetters, mapMutations } from 'vuex'
 
 export default {
   data() { return { clickable: true, dialogClass: 'animated flipInY', timerRate: 0 } },
-  components: { UnderlineText, Well, Avatar, PieChart, DarkButton, Content },
+  components: { UnderlineText, Well, Avatar, PieChart, Content },
   mounted() {
     this.$el.addEventListener("animationend", () => this.dialogClass = '')
     this.flipInterval = setInterval(() => this.timerRate = 1 - ((new Date().getTime() - this.quizStartTime) / QUIZ_TIMEOUT), 100)
@@ -72,12 +64,5 @@ export default {
 .option {
   margin-right: 5px;
   user-select: none;
-}
-.back {
-  flex-grow: 2;
-  display: flex;
-  justify-content: flex-end;
-  align-items: flex-end;
-  margin-right: 0px;
 }
 </style>

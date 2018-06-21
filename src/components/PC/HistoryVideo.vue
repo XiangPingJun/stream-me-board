@@ -1,5 +1,5 @@
 <template>
-  <DialogBox overflowY="auto">
+  <DialogBox overflowY="auto" :class="dialogClass">
     <div><UnderlineText>直播結束囉！來看看過去的直播吧！</UnderlineText></div>
     <a @click="updateUiMode({followUs:true})">
       <i class="fas fa-bell"/> 如何追蹤我們的頻道？
@@ -24,6 +24,8 @@ import WhiteBorder from '../WhiteBorder'
 import { mapState, mapActions, mapMutations } from 'vuex'
 
 export default {
+  data() { return { dialogClass: 'animated flipInY' } },
+  mounted() { this.$el.addEventListener("animationend", () => this.dialogClass = '') },
   components: { UnderlineText, Well, DialogBox, WhiteBorder },
   computed: { ...mapState(['historyVideo']) },
   methods: { ...mapActions(['playHistory']), ...mapMutations(['updateUiMode']) }

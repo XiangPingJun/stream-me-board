@@ -1,13 +1,14 @@
 <template>
   <form @submit.prevent="onSubmit">
-    <input v-model="text" :placeholder="placeholder" :maxlength="maxlength" 
+    <input v-model="text" :placeholder="placeholder" @focus="$emit('focus')" :maxlength="maxlength" 
       :disabled="disabled || loading" ref="input"  :style="inputStyle"/>
+    <i v-if="icon" class="icon" :class="icon"/>
   </form>
 </template>
 
 <script>
 export default {
-  props: ['placeholder', 'maxlength', 'disabled', 'loading'],
+  props: ['placeholder', 'maxlength', 'disabled', 'loading', 'icon'],
   data() { return { text: '' } },
   methods: {
     onSubmit() {
@@ -61,6 +62,16 @@ input:focus {
   background-color: #f8ecd5;
 }
 input:focus::placeholder {
+  color: #927964;
+}
+.icon {
+  position: absolute;
+  top: 5px;
+  right: 12px;
+  color: #f8ecd5;
+  text-shadow: none;
+}
+input:focus + .icon {
   color: #927964;
 }
 </style>

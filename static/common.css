@@ -35,3 +35,7 @@ a {
   color: #d95763;
   text-shadow: 0px 2px #ac3232, 3px 3px #86674d !important;
 }
+body::after{
+	position:absolute; width:0; height:0; overflow:hidden; z-index:-1;
+	content:url(static/arrow.png) url(static/avatar-border.png) url(static/character-large.png) url(static/character-small.png) url(static/preserved-large.png) url(static/preserved-small.png) url(static/sticker.png);
+}

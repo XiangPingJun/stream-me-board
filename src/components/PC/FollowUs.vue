@@ -1,5 +1,5 @@
 <template>
-  <DialogBox overflowY="auto">
+  <DialogBox overflowY="auto" :class="dialogClass">
 		<div style="display:flex; width:100%;">
       <UnderlineText>追蹤我們的直播</UnderlineText>
       <div class="close">
@@ -27,6 +27,8 @@ import DarkButton from '../DarkButton'
 import { mapMutations } from 'vuex'
 
 export default {
+  data() { return { dialogClass: 'animated flipInY' } },
+  mounted() { this.$el.addEventListener("animationend", () => this.dialogClass = '') },
   components: { UnderlineText, Well, DialogBox, DarkButton },
   methods: { ...mapMutations(['updateUiMode']) }
 }

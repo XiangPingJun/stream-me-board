@@ -102,7 +102,7 @@ export default {
     dialogStyle() {
       return { height: document.documentElement.clientHeight - this.videoWidth * (9 / 16) - 10 + 'px' }
     },
-    ...mapActions(['subscribeData']), ...mapMutations(['setUiMode', 'updateUiMode'])
+    ...mapActions(['subscribeData']), ...mapMutations(['setUiMode'])
   },
 }
 </script>

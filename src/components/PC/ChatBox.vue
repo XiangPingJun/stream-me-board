@@ -5,7 +5,8 @@
     </div>
     <div class="mask top"></div>
     <div class="mask bottom"></div>
-    <InputBox placeholder="說點什麼吧:↵" ref="input" @focus="onInputFocus" @submit="submit" class="input" maxlength="140"/>
+    <InputBox placeholder="說點什麼吧:↵" ref="input" @focus="onInputFocus" @submit="submit" class="input" maxlength="140"
+      icon="far fa-smile" @iconClick="updateUiMode({stickerPicker: true})" iconTip="表情貼圖"/>
     <div v-if="showScrollToBottom" class="scroll-to-bottom">
       <DarkButton v-tooltip.left="{content:'查看新留言', offset:3}" @click="scrollToBottom"><i class="fas fa-chevron-down"/></DarkButton>
     </div>
@@ -14,10 +15,10 @@
 
 <script>
 import ChatLine from './ChatLine'
-import InputBox from '../InputBox'
+import InputBox from './InputBox'
 import DialogBox from '../DialogBox'
 import DarkButton from '../DarkButton'
-import { mapGetters, mapActions, mapState } from 'vuex'
+import { mapGetters, mapActions, mapState, mapMutations } from 'vuex'
 
 export default {
   data() { return { showScrollToBottom: false, scrollContent: null, height: 0, heightHandler: null } },
@@ -58,7 +59,7 @@ export default {
       this.$refs.input.text = ''
       this.scrollToBottom()
     },
-    ...mapActions(['promptLogin', 'sendChat'])
+    ...mapActions(['promptLogin', 'sendChat']), ...mapMutations(['updateUiMode'])
   },
   watch: {
     chatLines(newVal, oldVal) {

@@ -1,5 +1,5 @@
 <template>
-  <DialogBox overflowY="auto">
+  <DialogBox overflowY="auto" :class="dialogClass">
     <div><UnderlineText><i class="fas fa-bullhorn"/> 本日主題</UnderlineText></div>
     <i>
       哈囉，今天來跟大家一起玩<br/>
@@ -33,6 +33,8 @@ import WhiteBorder from '../WhiteBorder'
 import { mapState, mapGetters, mapMutations } from 'vuex'
 
 export default {
+  data() { return { dialogClass: 'animated flipInY' } },
+  mounted() { this.$el.addEventListener("animationend", () => this.dialogClass = '') },
   components: { UnderlineText, Well, UserAvatar, DialogBox, },
   computed: { ...mapState(['stream']), ...mapGetters(['onlineUsers']) },
   methods: { ...mapMutations(['updateUiMode']) }

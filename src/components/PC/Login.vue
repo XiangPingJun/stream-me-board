@@ -10,7 +10,7 @@
 
 <script>
 import DialogBox from '../DialogBox'
-import InputBox from '../InputBox'
+import InputBox from './InputBox'
 import Invisible from '../Invisible'
 import { mapActions } from 'vuex'
 

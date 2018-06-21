@@ -1,5 +1,5 @@
 <template>
-  <DialogBox overflowY="auto">
+  <DialogBox overflowY="auto" :class="dialogClass">
     <div><UnderlineText>選擇您的角色： (已獲得{{myInfo.avatarList.length}}/{{TOTAL_AVATAR}})</UnderlineText></div>          
     <Well>
 			<div class="grid">
@@ -22,6 +22,8 @@ import { mapGetters } from 'vuex'
 
 export default {
   components: { UnderlineText, Well, AvatarPickerBtn, DialogBox },
+  data() { return { dialogClass: 'animated flipInY' } },
+  mounted() { this.$el.addEventListener("animationend", () => this.dialogClass = '') },
   computed: {
     avatarList() {
       const list = [...this.myInfo.avatarList]
