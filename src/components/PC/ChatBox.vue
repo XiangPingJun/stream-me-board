@@ -1,7 +1,9 @@
 <template>
-	<DialogBox overflowY="auto" ref="chatBox">
+	<DialogBox overflowY="auto" ref="chatBox" :class="dialogClass">
     <div class="chat-list">
-      <ChatLine v-for="(line, key) in chatLines.slice(-300)" :key="key" :user="allUsers[line.uid]" :text="line.text" class="animated flipInX"/>
+      <ChatLine v-for="(line, key) in chatLines.slice(-300)"
+       :user="allUsers[line.uid]" :text="line.text" :sticker="line.sticker" :stickerCategory="line.stickerCategory" :class="lineClass(line.id)" :key="key"
+      />
     </div>
     <div class="mask top"></div>
     <div class="mask bottom"></div>
@@ -21,10 +23,11 @@ import DarkButton from '../DarkButton'
 import { mapGetters, mapActions, mapState, mapMutations } from 'vuex'
 
 export default {
-  data() { return { showScrollToBottom: false, scrollContent: null, height: 0, heightHandler: null } },
+  data() { return { showScrollToBottom: false, scrollContent: null, height: 0, heightHandler: null, dialogClass: 'animated flipInX', newLineIds: [] } },
   components: { ChatLine, InputBox, DialogBox, DarkButton },
   computed: { ...mapState(['allUsers', 'chatLines']), ...mapGetters(['myInfo']) },
   mounted() {
+    this.$el.addEventListener("animationend", () => this.dialogClass = '')
     this.scrollContent = this.$refs.chatBox.$refs.content
     this.scrollContent.addEventListener('scroll', () => {
       this.$nextTick(() => this.showScrollToBottom = !this.isScrollBottom())
@@ -52,12 +55,13 @@ export default {
       this.showScrollToBottom = false
     },
     submit(text) {
-      this.sendChat({
-        uid: this.myInfo.uid,
-        text: text,
-      })
+      this.sendChat({ text: text })
       this.$refs.input.text = ''
       this.scrollToBottom()
+    },
+    lineClass(id) {
+      if (this.newLineIds.indexOf(id) >= 0)
+        return 'animated flipInX'
     },
     ...mapActions(['promptLogin', 'sendChat']), ...mapMutations(['updateUiMode'])
   },
@@ -65,6 +69,8 @@ export default {
     chatLines(newVal, oldVal) {
       if (!this.showScrollToBottom)
         this.$nextTick(() => this.scrollToBottom())
+      if (oldVal.length > 0)
+        this.newLineIds = newVal.filter(newLine => !oldVal.find(oldLine => oldLine.id == newLine.id)).map(line => line.id)
     }
   }
 }

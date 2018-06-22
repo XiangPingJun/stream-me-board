@@ -3,16 +3,18 @@
 		<Avatar :index="user.avatarSelected" class="vertical" :preserved="user.preserved"/>
     <NameBadge :user="user"/>
     <span>{{text}}</span>
+    <Sticker v-if="!isNaN(sticker)" :index="sticker" :category="stickerCategory" size="100" align='middle' style="margin-left:5px" />
 	</div>
 </template>
 
 <script>
 import Avatar from '../Avatar'
 import NameBadge from '../NameBadge'
+import Sticker from '../Sticker'
 
 export default {
-  props: ['text', 'user'],
-  components: { Avatar, NameBadge },
+  props: ['text', 'user', 'sticker', 'stickerCategory'],
+  components: { Avatar, NameBadge, Sticker },
 }
 </script>
 

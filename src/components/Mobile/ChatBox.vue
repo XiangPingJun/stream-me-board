@@ -1,7 +1,10 @@
 <template>
 	<Content overflowY="auto" ref="chatBox">
     <div class="chat-list">
-      <ChatLine v-for="(line, i) in chatLines.slice(-150)" :key="i" :user="allUsers[line.uid]" :text="line.text" :class="lineClass(line.id)"/>
+      <ChatLine v-for="(line, i) in chatLines.slice(-150)"
+        :user="allUsers[line.uid]" :text="line.text" :sticker="line.sticker" :stickerCategory="line.stickerCategory"
+        :class="lineClass(line.id)" :key="i"
+      />
     </div>
     <div class="mask"></div>
     <div style="display:flex; justify-content: center;">
@@ -53,10 +56,7 @@ export default {
       this.showScrollToBottom = false
     },
     submit(text) {
-      this.sendChat({
-        uid: this.myInfo.uid,
-        text: text,
-      })
+      this.sendChat({ text: text })
       this.$refs.input.text = ''
       this.$refs.input.unfocus()
       this.scrollToBottom()

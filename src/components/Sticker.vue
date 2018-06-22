@@ -1,10 +1,10 @@
 <template>
-	<div class="sticker" :style="style"/>
+	<img class="sticker" :style="style" src="static/blank.png" :align="align"/>
 </template>
 
 <script>
 export default {
-	props: ['index', 'category', 'size'],
+	props: ['index', 'category', 'size', 'align'],
 	computed: {
 		style() {
 			let rate = 1

@@ -1,6 +1,6 @@
 <template>
 	<div>
-  	<ChatBubble v-for="chat in chats" :key="chat.id" ref="bubbles" :chat="chat" :dummy="dummy"/>
+  	<ChatBubble v-for="chat in chats" ref="bubbles" :chat="chat" :sticker="chat.sticker" :stickerCategory="chat.stickerCategory" :key="chat.id" :dummy="dummy"/>
 	</div>
 </template>
 

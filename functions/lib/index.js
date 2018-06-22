@@ -16,8 +16,15 @@ const QUIZ_TIMEOUT = 20000;
 const VOTE_TIMEOUT = 27000;
 admin.initializeApp();
 const firestore = admin.firestore();
-// Create and Deploy Your First Cloud Functions
-// https://firebase.google.com/docs/functions/write-firebase-functions
+function hashStr(str) {
+    var hash = 0;
+    for (var i = 0; i < str.length; i++) {
+        var char = str.charCodeAt(i);
+        hash = ((hash << 5) - hash) + char;
+        hash = hash & hash; // Convert to 32bit integer
+    }
+    return hash;
+}
 const sendSystemChat = function (text) {
     return __awaiter(this, void 0, void 0, function* () {
         const streamTime = (yield firestore.doc('system/stream').get()).data().time;
@@ -37,7 +44,7 @@ exports.startQuiz = functions.https.onRequest((request, response) => __awaiter(t
     doc = yield firestore.doc('system/quizHistory').get();
     const quizDb = {};
     for (const i in quiz_1.default)
-        if (!doc.data()[encodeURIComponent(i)])
+        if (!doc.data()[hashStr(i)])
             quizDb[i] = quiz_1.default[i];
     const questions = Object.keys(quizDb);
     if (0 === questions.length)
@@ -46,7 +53,7 @@ exports.startQuiz = functions.https.onRequest((request, response) => __awaiter(t
         const question = questions[Math.floor(Math.random() * questions.length)];
         const quiz = quizDb[question];
         yield firestore.doc('system/quiz').set(Object.assign({ time: admin.firestore.FieldValue.serverTimestamp(), Q: question, ended: false }, quiz));
-        yield firestore.doc('system/quizHistory').update({ [encodeURIComponent(question)]: true });
+        yield firestore.doc('system/quizHistory').update({ [hashStr(question)]: true });
         yield firestore.doc('activity/quiz').set({});
         const status = (yield firestore.doc('system/stream').get()).data().status;
         if ('STARTED' == status) {

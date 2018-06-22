@@ -1,10 +1,10 @@
 <template>
-	<div class="avatar" :style="style"/>
+	<img class="avatar" :style="style" src="static/blank.png" :align="align"/>
 </template>
 
 <script>
 export default {
-	props: ['index', 'large', 'whoAmI', 'preserved'],
+	props: ['index', 'large', 'whoAmI', 'preserved', 'align'],
 	computed: {
 		style() {
 			let sideLen, size

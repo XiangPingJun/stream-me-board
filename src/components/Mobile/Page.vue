@@ -12,8 +12,8 @@
           <IconButton icon="far fa-compass" v-if="'PLAYGROUND'!=dialog&&'ENDED'!=stream.status" @click="setUiMode({playground:true})"/>
           <IconButton icon="fas fa-user" v-if="'MY_INFO'==dialog||'LOGIN'==dialog" />
           <IconButton icon="far fa-user" v-if="'MY_INFO'!=dialog&&'LOGIN'!=dialog" @click="setUiMode({showAccount:true})"/>
-          <IconButton icon="fas fa-bell" v-if="'FOLLOW_US'==dialog" />
-          <IconButton icon="far fa-bell" v-if="'FOLLOW_US'!=dialog" @click="setUiMode({followUs:true})"/>
+          <IconButton icon="fas fa-smile" v-if="'STICKER_PICKER'==dialog" />
+          <IconButton icon="far fa-smile" v-if="'STICKER_PICKER'!=dialog" @click="setUiMode({stickerPicker:true})"/>
         </div>
       </div>
       <div style="margin: 8px 4px 0px 4px">
@@ -25,6 +25,7 @@
         <ChatBox v-show="'CHAT_BOX'==dialog" :visible="'CHAT_BOX'==dialog" :style="dialogStyle()"/>
         <Playground v-if="'PLAYGROUND'==dialog" :style="dialogStyle()"/>
         <FollowUs v-if="'FOLLOW_US'==dialog" :style="dialogStyle()"/>
+        <StickerPicker v-if="'STICKER_PICKER'==dialog" :style="dialogStyle()"/>
       </div>
     </div>
     <div v-show="!preLoaded || !dialog" class="loading-container infinite"><Loader/></div>
@@ -45,11 +46,12 @@ import Vote from './Vote'
 import Playground from './Playground'
 import FollowUs from './FollowUs'
 import Loader from '../Loader'
+import StickerPicker from './StickerPicker'
 import { mapActions, mapState, mapGetters, mapMutations } from 'vuex'
 import { setInterval } from 'timers';
 
 export default {
-  components: { VideoBox, IconButton, HistoryVideo, MyInfo, Login, Notify, ChatBox, Quiz, Vote, Playground, FollowUs, Loader },
+  components: { VideoBox, IconButton, HistoryVideo, MyInfo, Login, Notify, ChatBox, Quiz, Vote, Playground, FollowUs, Loader, StickerPicker },
   computed: {
     videoWidth() { return document.documentElement.clientWidth - 40 },
     dialog() {
@@ -61,6 +63,8 @@ export default {
         return 'QUIZ'
       if (this.uiMode.showAccount)
         return this.myInfo.name ? 'MY_INFO' : 'LOGIN'
+      if (this.uiMode.stickerPicker)
+        return 'STICKER_PICKER'
       if (this.uiMode.followUs)
         return 'FOLLOW_US'
       if (this.uiMode.chatBox)

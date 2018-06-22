@@ -1,7 +1,10 @@
 <template>
   <div>
     <MicWarningBar/>
-    <ChatLine v-for="(line, key) in chatLines.slice(-300)" :key="key" :user="allUsers[line.uid]" :text="line.text" class="animated flipInX"/>    
+    <ChatLine v-for="(line, key) in chatLines.slice(-300)" 
+      :user="allUsers[line.uid]" :text="line.text" :sticker="line.sticker" :stickerCategory="line.stickerCategory"
+      class="animated flipInX" :key="key"
+    />
   </div>
 </template>
 
@@ -15,8 +18,6 @@ export default {
   computed: { ...mapState(['allUsers', 'chatLines']) },
   created() { this.subscribeData() },
   methods: { ...mapActions(['subscribeData']) },
-  watch: {
-    chatLines() { this.$nextTick(() => window.scrollTo(0, document.body.scrollHeight)) }
-  }
+  watch: { chatLines() { this.$nextTick(() => window.scrollTo(0, document.body.scrollHeight)) } }
 }
 </script>

@@ -9,8 +9,15 @@ const VOTE_TIMEOUT = 27000
 admin.initializeApp()
 const firestore = admin.firestore()
 
-// Create and Deploy Your First Cloud Functions
-// https://firebase.google.com/docs/functions/write-firebase-functions
+function hashStr(str) {
+	var hash = 0
+	for (var i = 0; i < str.length; i++) {
+		var char = str.charCodeAt(i)
+		hash = ((hash << 5) - hash) + char
+		hash = hash & hash // Convert to 32bit integer
+	}
+	return hash
+}
 
 const sendSystemChat = async function (text) {
 	const streamTime = (await firestore.doc('system/stream').get()).data().time
@@ -30,7 +37,7 @@ export const startQuiz = functions.https.onRequest(async (request, response) => 
 	doc = await firestore.doc('system/quizHistory').get()
 	const quizDb = {}
 	for (const i in QUIZ_DB)
-		if (!doc.data()[encodeURIComponent(i)])
+		if (!doc.data()[hashStr(i)])
 			quizDb[i] = QUIZ_DB[i]
 	const questions = Object.keys(quizDb)
 
@@ -45,7 +52,7 @@ export const startQuiz = functions.https.onRequest(async (request, response) => 
 			ended: false,
 			...quiz
 		})
-		await firestore.doc('system/quizHistory').update({ [encodeURIComponent(question)]: true })
+		await firestore.doc('system/quizHistory').update({ [hashStr(question)]: true })
 		await firestore.doc('activity/quiz').set({})
 
 		const status = (await firestore.doc('system/stream').get()).data().status

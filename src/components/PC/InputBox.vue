@@ -2,7 +2,7 @@
   <form @submit.prevent="onSubmit">
     <input v-model="text" :placeholder="placeholder" @focus="$emit('focus')" :maxlength="maxlength" 
       :disabled="disabled || loading" ref="input" :style="inputStyle"/>
-    <i v-if="icon" class="icon" :class="icon" @click="$emit('iconClick')" v-tooltip.left="{content:iconTip, offset:3}"/>
+    <i v-if="icon" class="icon" :class="icon" @click="$emit('iconClick')" v-tooltip.left="{content:iconTip}"/>
   </form>
 </template>
 
@@ -67,11 +67,12 @@ input:focus::placeholder {
 }
 .icon {
   position: absolute;
-  top: 5px;
-  right: 12px;
+  top: 0px;
+  right: 7px;
   color: #f8ecd5;
   text-shadow: none;
   cursor: pointer;
+  padding: 5px;
 }
 input:focus + .icon {
   color: #927964;

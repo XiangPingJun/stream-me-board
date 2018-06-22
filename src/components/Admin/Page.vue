@@ -82,9 +82,9 @@ export default {
       if (undefined == val.status || undefined == oldVal.status || val.status == oldVal.status)
         return
       if ('STARTED' == val.status)
-        setTimeout(() => this.sendChat({ uid: 'system', text: '直播開始囉！大家坐穩啦！', }), 3000)
+        setTimeout(() => this.sendChat({ uid: 'system', text: '直播開始囉！大家坐穩啦！' }), 3000)
       else if ('ENDED' == val.status)
-        this.sendChat({ uid: 'system', text: '直播結束囉！期待下次與大家相會！', })
+        this.sendChat({ uid: 'system', text: '直播結束囉！期待下次與大家相會！' })
     },
     userSearch(val, oldVal) {
       val = val.trim().toLowerCase()

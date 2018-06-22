@@ -1,11 +1,11 @@
-import { getVideoTime, FINGERPRINT, VOTE_TIMEOUT, preservedUsers, DISPLAY_TIMEOUT } from '../common'
+import { getVideoTime, FINGERPRINT, preservedUsers } from '../common'
 import shortid from 'shortid'
 const firestore = firebase.firestore()
 firestore.settings({ timestampsInSnapshots: true })
 let unsubscribeChat = () => { }
 
 export default {
-	notify({ }, payload) { },
+	notify({ }) { },
 	subscribeData({ state, commit, dispatch }) {
 		// Is me banned?
 		firestore.doc('system/ban').onSnapshot(doc => {
@@ -136,7 +136,7 @@ export default {
 	async addMyViewedStream({ state, getters }, payload) {
 		await firestore.collection('user').doc(state.myUid).update({ viewedStream: [...getters.myInfo.viewedStream, payload] })
 	},
-	addExp({ state, getters, dispatch }, payload) {
+	addExp({ getters, dispatch }, payload) {
 		const exp = getters.myInfo.exp + payload
 		if (Math.floor(exp / 100) > Math.floor(getters.myInfo.exp / 100)) {
 			const nextAvatar = getters.randomNextAvatar
@@ -234,16 +234,31 @@ export default {
 			throw error
 		}
 	},
-	changeAvatar({ dispatch, commit, getters }, payload) {
+	changeAvatar({ dispatch, commit }, payload) {
 		dispatch('saveMyAvatar', payload)
 		commit('updateUiMode', { selectAvatar: false })
 	},
-	async sendChat({ dispatch, commit, state }, payload) {
+	async sendChat({ dispatch, state }, payload) {
 		let index = (parseInt('zzz', 36) - state.chatLines.length).toString(36)
 		index += payload.text.substr(0, 10).replace(/\//g, '／')
 		const time = getVideoTime()
 		await firestore.collection('allChat').doc(state.stream.time).collection('chat-line').doc(index).set({
 			...payload,
+			uid: payload.uid || state.myUid,
+			fingerprint: FINGERPRINT,
+			videoTime: Math.floor(time / 3600) + ':' + Math.floor(time % 3600 / 60) + ':' + Math.floor(time % 3600 % 60),
+			id: shortid.generate(),
+			time: firebase.firestore.FieldValue.serverTimestamp()
+		})
+		if ('STARTED' == state.stream.status)
+			dispatch('addExp', 3)
+	},
+	async sendSticker({ dispatch, state }, payload) {
+		let index = (parseInt('zzz', 36) - state.chatLines.length).toString(36)
+		const time = getVideoTime()
+		await firestore.collection('allChat').doc(state.stream.time).collection('chat-line').doc(index).set({
+			...payload,
+			uid: payload.uid || state.myUid,
 			fingerprint: FINGERPRINT,
 			videoTime: Math.floor(time / 3600) + ':' + Math.floor(time % 3600 / 60) + ':' + Math.floor(time % 3600 % 60),
 			id: shortid.generate(),
@@ -259,19 +274,19 @@ export default {
 	promptSelectAvatar({ commit }) {
 		commit('updateUiMode', { selectAvatar: true })
 	},
-	async saveGameTitle({ dispatch, state }, payload) {
+	async saveGameTitle({ dispatch }, payload) {
 		await firestore.doc('system/stream').update({
 			gameTitle: payload
 		})
 		dispatch('notify', { text: '已更新直播主題' })
 	},
-	async saveGameUrl({ dispatch, state }, payload) {
+	async saveGameUrl({ dispatch }, payload) {
 		await firestore.doc('system/stream').update({
 			gameUrl: payload
 		})
 		dispatch('notify', { text: '已更新直播主題的連結' })
 	},
-	async saveGameDescription({ dispatch, state }, payload) {
+	async saveGameDescription({ dispatch }, payload) {
 		await firestore.doc('system/stream').update({
 			gameDescription: payload
 		})
@@ -295,18 +310,18 @@ export default {
 				return convertToYoutube(arr[1])
 		}
 	},
-	async startStream({ }, payload) {
+	async startStream({ }) {
 		await firestore.doc('system/stream').update({
 			time: new Date().toLocaleString().replace(/\//g, '-'),
 			status: 'STARTED'
 		})
 	},
-	async streamWillStart({ }, payload) {
+	async streamWillStart({ }) {
 		await firestore.doc('system/stream').update({
 			status: 'WILL_START'
 		})
 	},
-	async stopStream({ }, payload) {
+	async stopStream({ }) {
 		await firestore.doc('system/stream').update({
 			status: 'ENDED'
 		})
@@ -319,11 +334,11 @@ export default {
 		})
 		await firestore.doc('activity/vote').set({})
 	},
-	async sendVote({ getters, state, dispatch }, payload) {
+	async sendVote({ state, dispatch }, payload) {
 		try {
 			await firestore.doc('activity/vote').update({ [state.myUid]: payload })
 			const total = payload.reduce((acc, val) => acc + val)
-			dispatch('sendChat', { text: `+${total}票！`, uid: state.myUid, })
+			dispatch('sendChat', { text: `+${total}票！` })
 			if (total > 20)
 				dispatch('getTrophy', { text: '快手指！投超過20票！', id: 'QUICK_VOTE_FINGER' })
 			dispatch('addExp', total - 3)
@@ -338,7 +353,7 @@ export default {
 		try {
 			await firestore.doc('activity/quiz').update({ [state.myUid]: payload })
 			if ('STARTED' == state.stream.status)
-				dispatch('sendChat', { text: `${state.quizInfo.OP[payload]}+1`, uid: state.myUid, })
+				dispatch('sendChat', { text: `${state.quizInfo.OP[payload]}+1` })
 			commit('setMyAnswer', payload)
 		} catch (error) {
 			if ('permission-denied' == error.code)
@@ -350,7 +365,7 @@ export default {
 	playHistory({ commit }, payload) {
 		commit('setSelectedVideoUrl', convertToYoutube(payload))
 	},
-	sayHello({ dispatch, state }, payload) {
+	sayHello({ dispatch }) {
 		const helloBank = [
 			"安安ice 安安祥平 平安喜樂",
 			"YO~ice~祥平",
@@ -365,18 +380,10 @@ export default {
 			"(悄悄地登入)",
 			"(用力地揮手)",
 		]
-		dispatch('sendChat', {
-			uid: state.myUid,
-			text: helloBank[Math.floor(Math.random() * helloBank.length)],
-		})
+		dispatch('sendChat', { text: helloBank[Math.floor(Math.random() * helloBank.length)] })
 	},
 	async runTest({ state, dispatch, commit }) {
-		for (let i in state.allUsers) {
-			if (state.allUsers[i].avatarList)
-				firestore.collection('user').doc(i).update({
-					exp: state.allUsers[i].avatarList.length * 100
-				})
-		}
+		firestore.doc('system/quizHistory').set({})
 	}
 }
 

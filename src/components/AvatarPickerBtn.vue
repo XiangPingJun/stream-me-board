@@ -19,7 +19,7 @@ import { mapActions } from 'vuex'
 
 export default {
   components: { Avatar },
-  props: ['whoAmI', 'index', 'click'],
+  props: ['whoAmI', 'index'],
   computed: {
     containerStyle() {
       return { cursor: this.whoAmI ? 'not-allowed' : 'pointer' }
