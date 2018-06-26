@@ -18,6 +18,7 @@
         <AvatarPicker v-if="'AVATAR_PICKER'==middleDialog" class="middle"/>
         <FollowUs v-if="'FOLLOW_US'==middleDialog" class="middle"/>
         <HistoryVideo v-if="'HISTORY_VIDEO'==middleDialog" class="middle"/>
+        <ContactUs v-if="'CONTACT_US'==middleDialog" class="middle"/>
 
         <!-- bottom section -->
         <ChatBox ref="chatBox" v-if="'CHAT_BOX'==bottomDialog" class="bottom chat-box"/>
@@ -46,11 +47,12 @@ import Vote from './Vote'
 import Background from './Background'
 import Loader from '../Loader'
 import StickerPicker from './StickerPicker'
+import ContactUs from './ContactUs'
 import { mapGetters, mapActions, mapState } from 'vuex'
 
 export default {
   data() { return { videoWidth: 0, videoHeight: 0 } },
-  components: { Background, VideoBox, ChatBox, Quiz, MyInfo, AnonymousInfo, Login, Arrow, AvatarPicker, Notify, Playground, HistoryVideo, FollowUs, Vote, Loader, StickerPicker },
+  components: { Background, VideoBox, ChatBox, Quiz, MyInfo, AnonymousInfo, Login, Arrow, AvatarPicker, Notify, Playground, HistoryVideo, FollowUs, Vote, Loader, StickerPicker, ContactUs },
   mounted() {
     this.subscribeData()
     this.unsubscribeAction = this.$store.subscribeAction((action, state) => {
@@ -93,6 +95,8 @@ export default {
         return 'QUIZ'
       if (this.uiMode.followUs)
         return 'FOLLOW_US'
+      if (this.uiMode.contactUs)
+        return 'CONTACT_US'
       if ('ENDED' == this.stream.status && this.historyVideo)
         return 'HISTORY_VIDEO'
       if ('ENDED' != this.stream.status && this.onlineUsers)

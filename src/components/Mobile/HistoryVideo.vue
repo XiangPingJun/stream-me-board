@@ -3,7 +3,11 @@
     <div class="animated flipInX">
       <div><UnderlineText>直播結束囉!來看過去的直播吧!</UnderlineText></div>
       <a @click="updateUiMode({followUs:true})">
-        <i class="fas fa-bell"/> 如何追蹤我們的頻道？
+        <i class="fas fa-bell" style="width:23px"/>如何追蹤我們的頻道？
+      </a>
+      <br/>
+      <a @click="updateUiMode({contactUs:true})">
+        <i class="fas fa-user-plus" style="width:23px"/>我想+祥平君好友
       </a>
     </div>
     <div class="grid animated flipInYY">

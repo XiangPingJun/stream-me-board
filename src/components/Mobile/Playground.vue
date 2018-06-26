@@ -20,6 +20,10 @@
       <a @click="updateUiMode({followUs:true})">
         <i class="fas fa-bell"/> 如何追蹤我們的頻道？    
       </a>
+      <br/>
+      <a @click="updateUiMode({contactUs:true})">
+        <i class="fas fa-user-plus" style="width:23px"/>我想+祥平君好友
+      </a>
     </div>
   </Content>
 </template>

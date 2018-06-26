@@ -6,14 +6,14 @@
         <div class="tool-bar animated flipInY" v-if="undefined!=stream.status">
           <IconButton icon="fas fa-comments" v-if="'CHAT_BOX'==dialog"/>
           <IconButton icon="far fa-comments" v-if="'CHAT_BOX'!=dialog" @click="setUiMode({chatBox:true})"/>
+          <IconButton icon="fas fa-smile" v-if="'STICKER_PICKER'==dialog" />
+          <IconButton icon="far fa-smile" v-if="'STICKER_PICKER'!=dialog" @click="setUiMode({stickerPicker:true})"/>
           <IconButton icon="fas fa-list-alt" v-if="'HISTORY_VIDEO'==dialog&&'ENDED'==stream.status"/>
           <IconButton icon="far fa-list-alt" v-if="'HISTORY_VIDEO'!=dialog&&'ENDED'==stream.status" @click="setUiMode({})"/>
           <IconButton icon="fas fa-compass" v-if="'PLAYGROUND'==dialog&&'ENDED'!=stream.status"/>
           <IconButton icon="far fa-compass" v-if="'PLAYGROUND'!=dialog&&'ENDED'!=stream.status" @click="setUiMode({playground:true})"/>
           <IconButton icon="fas fa-user" v-if="'MY_INFO'==dialog||'LOGIN'==dialog" />
           <IconButton icon="far fa-user" v-if="'MY_INFO'!=dialog&&'LOGIN'!=dialog" @click="setUiMode({showAccount:true})"/>
-          <IconButton icon="fas fa-smile" v-if="'STICKER_PICKER'==dialog" />
-          <IconButton icon="far fa-smile" v-if="'STICKER_PICKER'!=dialog" @click="setUiMode({stickerPicker:true})"/>
         </div>
       </div>
       <div style="margin: 8px 4px 0px 4px">
@@ -25,6 +25,7 @@
         <ChatBox v-show="'CHAT_BOX'==dialog" :visible="'CHAT_BOX'==dialog" :style="dialogStyle()"/>
         <Playground v-if="'PLAYGROUND'==dialog" :style="dialogStyle()"/>
         <FollowUs v-if="'FOLLOW_US'==dialog" :style="dialogStyle()"/>
+        <ContactUs v-if="'CONTACT_US'==dialog" :style="dialogStyle()"/>
         <StickerPicker v-if="'STICKER_PICKER'==dialog" :style="dialogStyle()"/>
       </div>
     </div>
@@ -47,11 +48,12 @@ import Playground from './Playground'
 import FollowUs from './FollowUs'
 import Loader from '../Loader'
 import StickerPicker from './StickerPicker'
+import ContactUs from './ContactUs'
 import { mapActions, mapState, mapGetters, mapMutations } from 'vuex'
 import { setInterval } from 'timers';
 
 export default {
-  components: { VideoBox, IconButton, HistoryVideo, MyInfo, Login, Notify, ChatBox, Quiz, Vote, Playground, FollowUs, Loader, StickerPicker },
+  components: { VideoBox, IconButton, HistoryVideo, MyInfo, Login, Notify, ChatBox, Quiz, Vote, Playground, FollowUs, Loader, StickerPicker, ContactUs },
   computed: {
     videoWidth() { return document.documentElement.clientWidth - 40 },
     dialog() {
@@ -63,6 +65,8 @@ export default {
         return 'QUIZ'
       if (this.uiMode.showAccount)
         return this.myInfo.name ? 'MY_INFO' : 'LOGIN'
+      if (this.uiMode.contactUs)
+        return 'CONTACT_US'
       if (this.uiMode.stickerPicker)
         return 'STICKER_PICKER'
       if (this.uiMode.followUs)

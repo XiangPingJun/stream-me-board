@@ -24,12 +24,13 @@ a {
   color: #99befd !important;
 	text-shadow: 0px 2px #5B6EE1, 3px 3px #86674d !important;
 	cursor: pointer !important;
+	text-decoration: none;
 }
 .yellow {
 	color: #FBF236 !important;
 }
 .green {
-	color: #6abe30 !important;;
+	color: #82E03A !important;;
 }
 .red {
   color: #d95763;

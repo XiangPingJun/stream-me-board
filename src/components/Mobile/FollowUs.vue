@@ -45,13 +45,4 @@ export default {
   margin-top: 10px;
   margin-bottom: 5px;
 }
-.padding-line {
-  margin-bottom: 20px;
-}
-.close {
-  flex-grow: 2;
-  display: flex;
-  justify-content: flex-end;
-  align-items: flex-start;
-}
 </style>
