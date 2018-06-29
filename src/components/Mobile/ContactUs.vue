@@ -13,7 +13,7 @@
       <div class="subtitle"><i class="fab fa-nintendo-switch"/> +switch好友</div>
       <b><a>8131-5117-4922</a></b>
     </div>
-    <div class="animated flipInX green"><b>\上線時請不要吝嗇找我一起玩喔！/</b></div>
+    <div class="animated flipInX green"><b>\ 上線別吝嗇! 找我一起玩! /</b></div>
   </Content>
 </template>
 
