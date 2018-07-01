@@ -5,7 +5,7 @@ let result = JSON.parse(fs.readFileSync('index.ts', 'utf-8').replace('export def
 let lastQuestion
 fs.readFileSync('toParse.txt', 'utf-8').split('\n').forEach(line => {
 	//line = line.replace('\r', '')
-	line = line.trim().replace(/\.\.\./g, '…').replace(/\.\./g, '…').replace(/~/,'…')
+	line = line.trim().replace(/\.\.\./g, '…').replace(/\.\./g, '…').replace(/~/, '…')
 	if (!line)
 		return
 
@@ -30,14 +30,14 @@ fs.readFileSync('toParse.txt', 'utf-8').split('\n').forEach(line => {
 	// } else if (line.split(' ').length > 1) {
 	// 	result[lastQuestion].OP = result[lastQuestion].OP || line.split(' ').filter(option => option).map(option => option.trim())
 	// }
-	if (line.match(/^[^\d].*/)) {
-		lastQuestion = line
-		result[lastQuestion] = result[lastQuestion] || {}
-	} else if (line.split('　').length > 1) {
-		result[lastQuestion].OP = line.split('　').map(option => option.trim()).filter(option => option)
-		result[lastQuestion].A = result[lastQuestion].OP.findIndex(option => option.indexOf('tttt') >= 0)
-		result[lastQuestion].OP = result[lastQuestion].OP.map(op => op.replace(/tttt/g, '')).map(op => op.replace(/^\d/, ''))
-	}
+	// if (line.match(/^[^\d].*/)) {
+	// 	lastQuestion = line
+	// 	result[lastQuestion] = result[lastQuestion] || {}
+	// } else if (line.split('　').length > 1) {
+	// 	result[lastQuestion].OP = line.split('　').map(option => option.trim()).filter(option => option)
+	// 	result[lastQuestion].A = result[lastQuestion].OP.findIndex(option => option.indexOf('tttt') >= 0)
+	// 	result[lastQuestion].OP = result[lastQuestion].OP.map(op => op.replace(/tttt/g, '')).map(op => op.replace(/^\d/, ''))
+	// }
 
 	// if (line.match(/^#\d+/)) {
 	// 	lastQuestion = line.replace(/^#\d+\s*/, '').trim()
@@ -50,6 +50,10 @@ fs.readFileSync('toParse.txt', 'utf-8').split('\n').forEach(line => {
 })
 for (let i in result) {
 	if (!result[i].A || -1 == result[i].A || isNaN(result[i].A) || !result[i].OP || result[i].OP.length < 2 || result[i].OP.length > 4 || i.indexOf('中國') >= 0 || i.indexOf('我國') >= 0) {
+		delete result[i]
+		continue
+	}
+	if (1 == result[i].A) {
 		delete result[i]
 		continue
 	}
