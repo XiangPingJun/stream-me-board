@@ -1,6 +1,5 @@
 <template>
   <div>
-    <Background/>
     <div class="page" v-show="preLoaded && (topDialog||middleDialog)">
       <VideoBox ref="video" :height="videoHeight" :width="videoWidth"/>
       <div class="right-side">
@@ -44,7 +43,6 @@ import Notify from '../Notify'
 import HistoryVideo from './HistoryVideo'
 import FollowUs from './FollowUs'
 import Vote from './Vote'
-import Background from './Background'
 import Loader from '../Loader'
 import StickerPicker from './StickerPicker'
 import ContactUs from './ContactUs'
@@ -52,7 +50,7 @@ import { mapGetters, mapActions, mapState } from 'vuex'
 
 export default {
   data() { return { videoWidth: 0, videoHeight: 0 } },
-  components: { Background, VideoBox, ChatBox, Quiz, MyInfo, AnonymousInfo, Login, Arrow, AvatarPicker, Notify, Playground, HistoryVideo, FollowUs, Vote, Loader, StickerPicker, ContactUs },
+  components: { VideoBox, ChatBox, Quiz, MyInfo, AnonymousInfo, Login, Arrow, AvatarPicker, Notify, Playground, HistoryVideo, FollowUs, Vote, Loader, StickerPicker, ContactUs },
   mounted() {
     this.subscribeData()
     this.unsubscribeAction = this.$store.subscribeAction((action, state) => {
