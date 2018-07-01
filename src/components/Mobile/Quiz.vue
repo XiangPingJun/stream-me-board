@@ -31,7 +31,15 @@ export default {
   },
   beforeDestroy() { clearInterval(this.flipInterval) },
   computed: { ...mapState(['quizRoster', 'quizInfo', 'allUsers']), ...mapGetters(['quizStartTime', 'myInfo', 'quizAnswered']) },
-  watch: { quizAnswered: { immediate: true, handler(val) { if (val) this.clickable = false } } },
+  watch: {
+    quizAnswered: {
+      immediate: true,
+      handler(val) {
+        if (undefined != val)
+          this.clickable = false
+      }
+    }
+  },
   methods: {
     optionClass(i) {
       if (!this.quizInfo.ended)
@@ -42,6 +50,7 @@ export default {
     select(i) {
       if (!this.clickable)
         return
+      this.clickable = false
       if (!this.myInfo.name) {
         this.promptLogin()
         return
