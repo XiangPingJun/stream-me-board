@@ -21,9 +21,14 @@ export default {
   },
   computed: {
     inputStyle() {
-      if (this.loading) return { cursor: 'wait' }
-      else if (this.disabled) return { cursor: 'not-allowed' }
-      else return { cursor: 'text' }
+      let style = { cusor: 'text' }
+      if (this.icon)
+        style['padding-right'] = '25px'
+      if (this.loading)
+        style.cursor = 'wait'
+      else if (this.disabled)
+        style.cursor = 'not-allowed'
+      return style
     }
   },
   watch: {
@@ -46,7 +51,7 @@ input {
   box-shadow: 0px -3px #c19d6f, 0px 3px #c19d6f, 3px 0px #c19d6f,
     -3px 0px #c19d6f, -3px -3px #86674d, -3px 3px #86674d, 3px 3px #86674d,
     3px -3px #86674d;
-  width: calc(100% - 18px);
+  width: calc(100% - 38px);
   background-color: #9c8673;
   transition-duration: 0.25s;
 }
@@ -57,7 +62,7 @@ input::placeholder {
 input:focus {
   outline: none;
   margin-left: 0px;
-  width: calc(100% - 10px);
+  width: calc(100% - 30px);
   background-color: #f8ecd5;
   box-shadow: 0px -3px #f8ecd5, 0px 3px #f8ecd5, 3px 0px #f8ecd5,
     -3px 0px #f8ecd5;
