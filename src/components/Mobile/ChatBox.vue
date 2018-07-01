@@ -1,10 +1,9 @@
 <template>
 	<Content overflowY="auto" ref="chatBox">
     <div class="chat-list">
-      <ChatLine v-for="(line, i) in chatLines.slice(-150)"
-        :user="allUsers[line.uid]" :text="line.text" :sticker="line.sticker" :stickerCategory="line.stickerCategory"
-        :class="lineClass(line.id)" :key="i"
-      />
+      <div v-for="(line, key) in chatLines.slice(-300)" :key="key">
+        <ChatLine v-if="allUsers[line.uid]" :user="allUsers[line.uid]" :text="line.text" :sticker="line.sticker" :stickerCategory="line.stickerCategory" :class="lineClass(line.id)"/>
+      </div>
     </div>
     <div class="mask"></div>
     <div style="display:flex; justify-content: center;">

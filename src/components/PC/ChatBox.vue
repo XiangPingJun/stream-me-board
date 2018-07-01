@@ -1,9 +1,9 @@
 <template>
 	<DialogBox overflowY="auto" ref="chatBox" :class="dialogClass">
     <div class="chat-list">
-      <ChatLine v-for="(line, key) in chatLines.slice(-300)"
-       :user="allUsers[line.uid]" :text="line.text" :sticker="line.sticker" :stickerCategory="line.stickerCategory" :class="lineClass(line.id)" :key="key"
-      />
+      <div v-for="(line, key) in chatLines.slice(-300)" :key="key">
+        <ChatLine v-if="allUsers[line.uid]" :user="allUsers[line.uid]" :text="line.text" :sticker="line.sticker" :stickerCategory="line.stickerCategory" :class="lineClass(line.id)"/>
+      </div>
     </div>
     <div class="mask top"></div>
     <div class="mask bottom"></div>

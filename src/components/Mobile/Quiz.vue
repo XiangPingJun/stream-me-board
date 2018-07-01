@@ -35,7 +35,7 @@ export default {
     quizAnswered: {
       immediate: true,
       handler(val) {
-        if (undefined != val)
+        if (val)
           this.clickable = false
       }
     }

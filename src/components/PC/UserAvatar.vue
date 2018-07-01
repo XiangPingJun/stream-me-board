@@ -12,7 +12,7 @@ export default {
 	components: { Avatar },
 	props: ['user', 'large', 'align'],
 	computed: {
-		tooltip() { return this.user.name ? `${this.user.name} (Lv. ${Math.floor(this.user.exp / 100)})` : '不知名的訪客' },
+		tooltip() { return this.user && this.user.name ? `${this.user.name} (Lv. ${Math.floor(this.user.exp / 100)})` : '不知名的訪客' },
 	}
 }
 </script>
