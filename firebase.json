@@ -5,7 +5,7 @@
   },
   "functions": {
     "predeploy": [
-      "npm --prefix . run build"
+      "npm --prefix functions run build"
     ]
   },
   "hosting": {

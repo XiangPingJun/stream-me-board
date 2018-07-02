@@ -73,7 +73,7 @@ input:focus::placeholder {
 .icon {
   position: absolute;
   top: 0px;
-  right: 7px;
+  right: 2px;
   color: #f8ecd5;
   text-shadow: none;
   cursor: pointer;

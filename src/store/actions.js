@@ -159,16 +159,18 @@ export default {
 				dispatch('notify', { data: { symbol: 'trophy' }, text: '上來看直播！' })
 			dispatch('addExp', 100)
 			if (!state.isAdmin)
-				setTimeout(() => dispatch('sayHello'), 3000)
+				setTimeout(() => dispatch('sayHello'), 5000)
 			dispatch('addMyViewedStream', state.stream.time)
 		}
 	},
-	async sendHeartbeat({ state }) {
+	async sendHeartbeat({ state, getters }) {
 		const anonymousUid = `${FINGERPRINT} ${state.anonymousAvatar}`
 		if (state.myUid) {
 			await firestore.doc('activity/online').update({
 				[state.myUid]: firebase.firestore.FieldValue.serverTimestamp()
 			})
+			if (bowser.name != getters.myInfo.browser)
+				firestore.collection('user').doc(state.myUid).update({ browser: bowser.name })
 			await firestore.doc('activity/online').update({
 				[anonymousUid]: firebase.firestore.FieldValue.delete()
 			})
