@@ -314,12 +314,12 @@ export default {
 	},
 	async startStream({ }) {
 		await firestore.doc('system/stream').update({
-			time: new Date().toLocaleString().replace(/\//g, '-'),
 			status: 'STARTED'
 		})
 	},
 	async streamWillStart({ }) {
 		await firestore.doc('system/stream').update({
+			time: new Date().toLocaleString().replace(/\//g, '-'),
 			status: 'WILL_START'
 		})
 	},
