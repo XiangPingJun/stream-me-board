@@ -1,25 +1,30 @@
 const request = require("request")
 const fs = require('fs')
 
-let result = JSON.parse(fs.readFileSync('index.ts', 'utf-8').replace('export default ', ''))
+let result = JSON.parse(fs.readFileSync('index.js', 'utf-8').replace('export default ', ''))
 let lastQuestion
 fs.readFileSync('toParse.txt', 'utf-8').split('\n').forEach(line => {
-	//line = line.replace('\r', '')
-	line = line.trim().replace(/\.\.\./g, '…').replace(/\.\./g, '…').replace(/~/, '…')
-	if (!line)
-		return
+	line = line.replace('\r', '')
+	// line = line.trim().replace(/\.\.\./g, '…').replace(/\.\./g, '…').replace(/~/, '…')
+	// if (!line)
+	// 	return
 
-	// line.split(' ').forEach((token, i) => {
-	// 	token = token.trim()
-	// 	if (0 == i) {
-	// 		lastQuestion = token
-	// 		result[lastQuestion] = result[lastQuestion] || { OP: [] }
-	// 	} else if (5 == i)
-	// 		//result[lastQuestion].A = result[lastQuestion].OP.findIndex(option => option == token)
-	// 		result[lastQuestion].A = parseInt(token) - 1
-	// 	else
-	// 		result[lastQuestion].OP.push(token)
-	// })
+	let tokens = line.split(/[？：]/)
+	if (2 != tokens.length)
+		return
+	lastQuestion = tokens[0].trim()
+	result[lastQuestion] = { OP: [] }
+
+	tokens = tokens[1].trim().split(' ')
+	if (tokens.length != 5)
+		return
+	tokens.forEach((token, i) => {
+		token = token.trim()
+		if (isNaN(parseInt(token)))
+			result[lastQuestion].OP.push(token)
+		else if (token)
+			result[lastQuestion].A = parseInt(token) - 1
+	})
 
 	// if (line.match(/^#\d+/)) {
 	// 	lastQuestion = line.replace(/^#\d+\s*/, '').trim()
@@ -49,24 +54,21 @@ fs.readFileSync('toParse.txt', 'utf-8').split('\n').forEach(line => {
 	// }
 })
 for (let i in result) {
-	if (!result[i].A || -1 == result[i].A || isNaN(result[i].A) || !result[i].OP || result[i].OP.length < 2 || result[i].OP.length > 4 || i.indexOf('中國') >= 0 || i.indexOf('我國') >= 0) {
-		delete result[i]
-		continue
-	}
-	if (1 == result[i].A) {
+	if (-1 == result[i].A, isNaN(result[i].A), 4 != result[i].OP.length, i.indexOf('我國') >= 0) {
+		console.log(-1 == result[i].A, isNaN(result[i].A), result[i].OP.length, i.indexOf('我國') >= 0)
+		console.log(i, result[i])
 		delete result[i]
 		continue
 	}
 }
 console.log(`Total ${Object.keys(result).length} questions`)
-fs.writeFileSync('result.json', 'export default ' + JSON.stringify(result), 'utf-8')
+fs.writeFileSync('index.js', 'export default ' + JSON.stringify(result), 'utf-8')
 
 
 
 
 /*function getPages(i) {
 	let url = 'http://www.docx88.com/wkid-97329c0ca98271fe910ef998-' + i + '.html'
-	console.log(url)
 
 	return new Promise(function (resolve, reject) {
 		request({
@@ -74,8 +76,7 @@ fs.writeFileSync('result.json', 'export default ' + JSON.stringify(result), 'utf
 			json: true
 		}, function (error, response, body) {
 			if (error || response.statusCode != 200) {
-				console.log(error, response.statusCode)
-				reject(error)
+				reject(error) 
 			}
 			resolve(body)
 		})

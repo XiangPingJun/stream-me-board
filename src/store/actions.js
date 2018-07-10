@@ -385,15 +385,7 @@ export default {
 		dispatch('sendChat', { text: helloBank[Math.floor(Math.random() * helloBank.length)] })
 	},
 	async runTest({ state, dispatch, commit }) {
-		const online = (await firestore.doc('activity/online').get()).data()
-		const idsToRemove = {}
-		for (const uid in online) {
-			const time = online[uid]
-			if (new Date().getTime() - time.seconds > 300000)
-				idsToRemove[uid] = firebase.firestore.FieldValue.delete()
-		}
-		if (Object.keys(idsToRemove).length > 0)
-			await firestore.doc('activity/online').update(idsToRemove)
+		await firestore.doc('system/quizHistory').set({})
 	}
 }
 
