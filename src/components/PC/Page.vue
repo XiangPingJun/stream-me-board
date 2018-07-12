@@ -144,7 +144,7 @@ export default {
   flex-shrink: 9999999;
 }
 .right-side .bottom.chat-box {
-  min-height: 220px;
+  min-height: 270px;
 }
 .right-side .bottom.sticker-picker {
   min-height: 300px;
