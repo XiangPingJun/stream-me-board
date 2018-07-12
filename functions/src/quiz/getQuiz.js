@@ -1,57 +1,47 @@
 const request = require("request")
 const fs = require('fs')
 
-let result = JSON.parse(fs.readFileSync('index.js', 'utf-8').replace('export default ', ''))
-let lastQuestion
+let result = JSON.parse(fs.readFileSync('index.ts', 'utf-8').replace('export default ', ''))
+let lastLine = ''
+let question
+let j = 0
 fs.readFileSync('toParse.txt', 'utf-8').split('\n').forEach(line => {
-	line = line.replace('\r', '')
-	// line = line.trim().replace(/\.\.\./g, '…').replace(/\.\./g, '…').replace(/~/, '…')
-	// if (!line)
-	// 	return
-
-	let tokens = line.split(/[？：]/)
-	if (2 != tokens.length)
-		return
-	lastQuestion = tokens[0].trim()
-	result[lastQuestion] = { OP: [] }
-
-	tokens = tokens[1].trim().split(' ')
-	if (tokens.length != 5)
-		return
-	tokens.forEach((token, i) => {
-		token = token.trim()
-		if (isNaN(parseInt(token)))
-			result[lastQuestion].OP.push(token)
-		else if (token)
-			result[lastQuestion].A = parseInt(token) - 1
-	})
-
-	// if (line.match(/^#\d+/)) {
-	// 	lastQuestion = line.replace(/^#\d+\s*/, '').trim()
-	// 	result[lastQuestion] = result[lastQuestion] || {}
-	// } else if (line.match(/^A:/)) {
-	// 	const A = line.replace('A:', '').trim()
-	// 	result[lastQuestion].A = result[lastQuestion].A || result[lastQuestion].OP.findIndex(option => option == A)
-	// } else if (line.split(' ').length > 1) {
-	// 	result[lastQuestion].OP = result[lastQuestion].OP || line.split(' ').filter(option => option).map(option => option.trim())
-	// }
-	// if (line.match(/^[^\d].*/)) {
-	// 	lastQuestion = line
-	// 	result[lastQuestion] = result[lastQuestion] || {}
-	// } else if (line.split('　').length > 1) {
-	// 	result[lastQuestion].OP = line.split('　').map(option => option.trim()).filter(option => option)
-	// 	result[lastQuestion].A = result[lastQuestion].OP.findIndex(option => option.indexOf('tttt') >= 0)
-	// 	result[lastQuestion].OP = result[lastQuestion].OP.map(op => op.replace(/tttt/g, '')).map(op => op.replace(/^\d/, ''))
-	// }
-
-	// if (line.match(/^#\d+/)) {
-	// 	lastQuestion = line.replace(/^#\d+\s*/, '').trim()
-	// 	result[lastQuestion] = result[lastQuestion] || {}
-	// } else if (line.match(/^\w$/)) {
-	// 	result[lastQuestion].A = line.toUpperCase().charCodeAt(0) - 'A'.charCodeAt(0)
-	// } else if (line.split(' ').length > 1) {
-	// 	result[lastQuestion].OP = result[lastQuestion].OP || line.split(' ').filter(option => option).map(option => option.trim())
-	// }
+	line = line.trim()
+	switch (lastLine) {
+		case 'NUMBER':
+			question += line
+			lastLine = 'QUESTION'
+			break
+		case 'QUESTION':
+			let items = line.split('、').map(item => ({ text: item }))
+			items = shuffle(items)
+			items = items.map((item, i) => ({ code: String.fromCharCode(65 + i), ...item }))
+			const correct = line.split('、').map(correctItem => items.findIndex(item => item.text == correctItem))
+				.map(idx => String.fromCharCode(65 + idx))
+			for (let i = 0, item; item = items[i]; i++)
+				question += ` ${item.code}: ${item.text}`
+			const correctIdx = Math.floor(Math.random() * items.length)
+			let ops = []
+			for (let i = 0; i < correct.length; i++) {
+				if (correctIdx == i) {
+					ops[i] = correct.join(' → ')
+				} else {
+					let found = false
+					let candidate
+					do {
+						candidate = shuffle(correct).join(' → ')
+						found = ops.indexOf(candidate) != -1
+					} while (found)
+					ops[i] = candidate
+				}
+			}
+			result[question] = { OP: ops, A: correctIdx }
+			lastLine = 'OPTIONS'
+			break
+		default:
+			question = ''
+			lastLine = 'NUMBER'
+	}
 })
 for (let i in result) {
 	if (-1 == result[i].A, isNaN(result[i].A), 4 != result[i].OP.length, i.indexOf('我國') >= 0) {
@@ -62,23 +52,15 @@ for (let i in result) {
 	}
 }
 console.log(`Total ${Object.keys(result).length} questions`)
-fs.writeFileSync('index.js', 'export default ' + JSON.stringify(result), 'utf-8')
+fs.writeFileSync('index.ts', 'export default ' + JSON.stringify(result), 'utf-8')
 
-
-
-
-/*function getPages(i) {
-	let url = 'http://www.docx88.com/wkid-97329c0ca98271fe910ef998-' + i + '.html'
-
-	return new Promise(function (resolve, reject) {
-		request({
-			url: url,
-			json: true
-		}, function (error, response, body) {
-			if (error || response.statusCode != 200) {
-				reject(error) 
-			}
-			resolve(body)
-		})
-	})
-}*/
+function shuffle(array) {
+	let items = [...array]
+	for (let i = 0; i < items.length / 2; i++) {
+		const randIdx = Math.floor(Math.random() * items.length)
+		let tmp = items[i]
+		items[i] = items[randIdx]
+		items[randIdx] = tmp
+	}
+	return items
+}
