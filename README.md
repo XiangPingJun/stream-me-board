@@ -1,27 +1,83 @@
-# stream-me-board
+# stream-me-board 
 
-> An epic interface for audience interactive with live stream broadcasters.
+An epic interface for audience interactive with live stream broadcasters.
+> Using [Vue](https://github.com/vuejs/vue),  [Vuex](https://github.com/vuejs/vuex),  [firebase](firebase.google.com), [Babel](http://babeljs.io/), and [Webpack](https://webpack.js.org/).
 
-## Build Setup
+## Chat with Screen Effects!
 
-``` bash
-# install dependencies
-npm install
+<img src='http://i.imgur.com/ZPkPX9W.jpg'>
 
-# serve with hot reload at localhost:8080
-npm run dev
+> All the chat messages will pop-up like a comic bubble with motion effect.
+> Audience can also use special screen effect to cheer the party alive!
 
-# build for production with minification
-npm run build
+## Hit and Vote!
 
-# build for production and view the bundle analyzer report
-npm run build --report
+<img src='http://i.imgur.com/kqHG3su.png'>
 
-# run unit tests
-npm run unit
+> Broadcaster can also raise a vote that does not like any vote you have seen, we count all the mouse clicks for every body.
+> If the audience really like the candidate, they will sure hit harder on their mouse!
 
-# run all tests
-npm test
+## Chat robot!
+
+<img src='http://i.imgur.com/SplxupV.jpg'>
+
+> You can use the [chat robot](https://github.com/XiangPingJun/chat-robot)
+
+## Installation
+
+1. Install [firebase CLI](https://firebase.google.com/docs/hosting/quickstart) for hosting the page on firebase
+2. Init the firebase
+
+```sh
+firebase init
 ```
 
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+6. Create a file `static/firebase-conf.js` and fill your apiKey:
+
+```javascript
+firebase.initializeApp({
+	apiKey: 'XXXXXXXXXXXXXXXXXX',
+	authDomain: 'XXXXXXXXXX.firebaseapp.com',
+	databaseURL: '//XXXXXXXXXX.firebaseio.com',
+	storageBucket: '',
+	messagingSenderId: '0000000000000'
+})
+```
+
+7. Install [node.js](https://nodejs.org/) and run command:
+
+```sh
+npm install
+```
+
+## Build and run test
+```sh
+npm run start
+```
+Then you can test your page on http://localhost:8080
+
+## Build and deploy
+
+```sh
+npm build-watch
+npm build-stream
+npm build-admin
+# This will build the watch, stream, admin page
+
+firebase deploy
+# Upload the built page to firebase hosting, you can later view on firebase
+```
+
+* It will then all files in public/ for your production.
+* Merge `stream.html` to your Open Broadcaster Software for chat and screen effect.
+* Use `admin.html` with your password to begin a broadcast on youtube and start vote.
+* Share your `watch.html` link to your audience!
+
+8. System Architecture
+
+<img src='http://i.imgur.com/xmDqWPU.png'>
+
+* `stream.html` shows the comic-like dialog and screen effect, can be merge to video source through [Open Broadcaster Software](https://obsproject.com/)
+* `watch.html` is the page audience will be look at.
+* `admin.html` can be used to manage the page.
+* A [chat robot](https://github.com/XiangPingJun/chat-robot) that runs on different machine.

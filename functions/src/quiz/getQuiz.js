@@ -44,9 +44,7 @@ fs.readFileSync('toParse.txt', 'utf-8').split('\n').forEach(line => {
 	}
 })
 for (let i in result) {
-	if (-1 == result[i].A, isNaN(result[i].A), 4 != result[i].OP.length, i.indexOf('我國') >= 0) {
-		console.log(-1 == result[i].A, isNaN(result[i].A), result[i].OP.length, i.indexOf('我國') >= 0)
-		console.log(i, result[i])
+	if (-1 == result[i].A || isNaN(result[i].A) || 4 != result[i].OP.length || i.indexOf('我國') >= 0) {
 		delete result[i]
 		continue
 	}
