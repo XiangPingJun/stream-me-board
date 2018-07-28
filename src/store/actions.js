@@ -340,7 +340,12 @@ export default {
 		try {
 			await firestore.doc('activity/vote').update({ [state.myUid]: payload })
 			const total = payload.reduce((acc, val) => acc + val)
-			dispatch('sendChat', { text: `+${total}票！` })
+			let code = []
+			payload.forEach((count, i) => {
+				if (count)
+					code.push(String.fromCharCode(65 + i))
+			})
+			dispatch('sendChat', { text: `${code.join('/')} +${total}票！` })
 			if (total > 20)
 				dispatch('getTrophy', { text: '快手指！投超過20票！', id: 'QUICK_VOTE_FINGER' })
 			dispatch('addExp', total - 3)

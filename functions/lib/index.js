@@ -13,7 +13,7 @@ const admin = require("firebase-admin");
 const quiz_1 = require("./quiz");
 const shortid = require("shortid");
 const QUIZ_TIMEOUT = 30000;
-const VOTE_TIMEOUT = 27000;
+const VOTE_TIMEOUT = 25000;
 admin.initializeApp();
 const firestore = admin.firestore();
 function hashStr(str) {
