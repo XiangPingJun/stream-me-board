@@ -5,7 +5,7 @@ An epic interface for audience interactive with live stream broadcasters.
 
 ## Chat with Screen Effects!
 
-<img src='http://i.imgur.com/ZPkPX9W.jpg'>
+<img src="doc/images/ScreenshotWatch.png?raw=true">
 
 > All the chat messages will pop-up like a comic bubble with motion effect.
 > Audience can also use special screen effect to cheer the party alive!
@@ -75,7 +75,7 @@ firebase deploy
 
 8. System Architecture
 
-<img src='http://i.imgur.com/xmDqWPU.png'>
+<img src="doc/images/SystemArchitecture.png?raw=true">
 
 * `stream.html` shows the comic-like dialog and screen effect, can be merge to video source through [Open Broadcaster Software](https://obsproject.com/)
 * `watch.html` is the page audience will be look at.
