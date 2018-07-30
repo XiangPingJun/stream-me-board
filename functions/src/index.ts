@@ -3,8 +3,8 @@ import * as admin from 'firebase-admin'
 import QUIZ_DB from './quiz'
 import * as shortid from 'shortid'
 
-const QUIZ_TIMEOUT = 30000
-const VOTE_TIMEOUT = 25000
+const VOTE_TIMEOUT = 23000
+const QUIZ_TIMEOUT = 27000
 
 admin.initializeApp()
 const firestore = admin.firestore()

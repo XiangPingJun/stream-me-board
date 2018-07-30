@@ -15,8 +15,8 @@ export const setVideoPlayer = player => videoPlayer = player
 export const getVideoTime = () => videoPlayer && videoPlayer.getCurrentTime ? videoPlayer.getCurrentTime() : -1
 export const getWindowWidth = () => window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth
 export const getWindowHeight = () => window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight
-export const VOTE_TIMEOUT = 27000
-export const QUIZ_TIMEOUT = 20000
+export const VOTE_TIMEOUT = 23000
+export const QUIZ_TIMEOUT = 27000
 export const DISPLAY_TIMEOUT = 9000
 export const preservedUsers = {
 	system: {

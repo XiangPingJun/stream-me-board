@@ -18,10 +18,14 @@ An epic interface for audience interactive with live stream broadcasters.
 
 ## Hit and Vote!
 
-<img src='http://i.imgur.com/kqHG3su.png'>
+<img src="doc/images/VoteOnWatch.gif?raw=true">
 
 > Broadcaster can also raise a vote that does not like any vote you have seen, we count all the mouse clicks for every body.
 > If the audience really like the candidate, they will sure hit harder on their mouse!
+
+<img src="doc/images/VoteOverlay.gif?raw=true">
+
+> Voting and chat screen looks like this, we can see the latest voting count.
 
 ## Chat robot!
 
