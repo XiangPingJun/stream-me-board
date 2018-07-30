@@ -1,7 +1,7 @@
-# stream-me-board [![Build Status](https://travis-ci.org/yamafaktory/babel-react-rollup-starter.svg?branch=master)](https://travis-ci.org/yamafaktory/babel-react-rollup-starter) [![npm version](https://img.shields.io/npm/v/babel-react-rollup-starter.svg?style=flat)](https://www.npmjs.com/package/babel-react-rollup-starter) [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/)
+# stream-me-board 
 
 An epic interface for audience interactive with live stream broadcasters.
-> Using [React](https://facebook.github.io/react/),  [Redux](https://github.com/reactjs/redux),  [RxJS](https://github.com/Reactive-Extensions/RxJS),  [firebase](firebase.google.com), [Babel](http://babeljs.io/), and [Rollup](http://rollupjs.org/).
+> Using [Vue](https://github.com/vuejs/vue),  [Vuex](https://github.com/vuejs/vuex),  [firebase](firebase.google.com), [Babel](http://babeljs.io/), and [Webpack](https://webpack.js.org/).
 
 ## Chat with Screen Effects!
 
@@ -25,30 +25,23 @@ An epic interface for audience interactive with live stream broadcasters.
 
 ## Installation
 
-1. Apply for a firebase database.
-2. Create an admin account 'admin@admin.com' in Authentication
-3. Create a 'system' data like below:
-
-<img src='http://i.imgur.com/uvXzzk9.png'>
-
-4. Install [firebase CLI](https://firebase.google.com/docs/hosting/quickstart) for hosting the page on firebase
-5. Init the firebase
+1. Install [firebase CLI](https://firebase.google.com/docs/hosting/quickstart) for hosting the page on firebase
+2. Init the firebase
 
 ```sh
 firebase init
 ```
 
-6. Create a file `config/firebase.js` and fill your apiKey:
+6. Create a file `static/firebase-conf.js` and fill your apiKey:
 
 ```javascript
-const FirebaseConf = {
+firebase.initializeApp({
 	apiKey: 'XXXXXXXXXXXXXXXXXX',
 	authDomain: 'XXXXXXXXXX.firebaseapp.com',
 	databaseURL: '//XXXXXXXXXX.firebaseio.com',
 	storageBucket: '',
 	messagingSenderId: '0000000000000'
-}
-export default FirebaseConf
+})
 ```
 
 7. Install [node.js](https://nodejs.org/) and run command:
@@ -56,6 +49,12 @@ export default FirebaseConf
 ```sh
 npm install
 ```
+
+## Build and run test
+```sh
+npm run start
+```
+Then you can test your page on http://localhost:8080
 
 ## Build and deploy
 
@@ -74,7 +73,7 @@ firebase deploy
 * Use `admin.html` with your password to begin a broadcast on youtube and start vote.
 * Share your `watch.html` link to your audience!
 
-## System Architecture
+8. System Architecture
 
 <img src='http://i.imgur.com/xmDqWPU.png'>
 

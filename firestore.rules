@@ -1,0 +1,41 @@
+service cloud.firestore {
+  match /databases/{database}/documents {
+  	match /adminUser/{anything=**} {
+    	allow read: if isAdmin()
+    }
+  	match /system/{anything=**} {
+      allow read
+      allow write: if isAdmin()
+    }
+    match /user/{anything=**} {
+      allow read, write
+    }
+    match /allChat/{anything=**} {
+      allow read, write
+    }
+    match /activity/vote {
+      allow read
+      allow update: if !voteEnded()
+      allow write: if isAdmin()
+    }
+    match /activity/quiz {
+      allow read
+      allow update: if !quizEnded()
+    }
+    match /activity/online {
+      allow read
+      allow update
+      allow write
+    }
+    
+    function isAdmin() { 
+      return exists(/databases/$(database)/documents/adminUser/$(request.auth.uid))
+    }
+    function voteEnded() {
+      return true==get(/databases/$(database)/documents/system/vote).data.ended
+    }
+    function quizEnded() {
+      return true==get(/databases/$(database)/documents/system/quiz).data.ended
+    }
+  }
+}

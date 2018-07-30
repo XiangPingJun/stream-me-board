@@ -1,24 +1,19 @@
-import FirebaseConf from '../config/firebase.js'
-import './style/common.scss'
-import React from 'react'
-import ReactDOM from 'react-dom'
-import Admin from './containers/Admin.jsx'
-import Rx from "rxjs/Rx"
-import { Provider } from 'react-redux'
-import store from './misc/store'
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
-import getMuiTheme from 'material-ui/styles/getMuiTheme'
-import injectTapEventPlugin from 'react-tap-event-plugin'
-injectTapEventPlugin()
+// The Vue build version to load with the `import` command
+// (runtime-only or standalone) has been set in webpack.base.conf with an alias.
+import Vue from 'vue'
+import VTooltip from 'v-tooltip'
+import Page from './components/Admin/Page'
+import store from './store/store'
+import Notifications from 'vue-notification'
 
-firebase.initializeApp(FirebaseConf)
-const muiTheme = getMuiTheme({
-  fontFamily: "'Noto Sans TC', sans-serif"
+Vue.config.productionTip = false
+Vue.use(VTooltip)
+Vue.use(Notifications)
+
+/* eslint-disable no-new */
+new Vue({
+  store: store,
+  el: '#app',
+  components: { Page },
+  template: '<Page/>'
 })
-ReactDOM.render((
-  <Provider store={store}>
-    <MuiThemeProvider muiTheme={muiTheme}>
-      <Admin />
-    </MuiThemeProvider>
-  </Provider>
-), document.querySelector('main'))

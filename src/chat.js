@@ -1,18 +1,16 @@
-import FirebaseConf from '../config/firebase.js'
-import './style/common.scss'
-import './style/stream.scss'
-import './style/animate.css'
-import React from 'react'
-import ReactDOM from 'react-dom'
-import ChatView from './containers/ChatView.jsx'
-import Rx from "rxjs/Rx"
-import { Provider } from 'react-redux'
-import store from './misc/store'
+// The Vue build version to load with the `import` command
+// (runtime-only or standalone) has been set in webpack.base.conf with an alias.
+import Vue from 'vue'
+import VTooltip from 'v-tooltip'
+import Page from './components/Chat/Page'
+import store from './store/store'
 
-firebase.initializeApp(FirebaseConf)
+Vue.config.productionTip = false
 
-ReactDOM.render((
-  <Provider store={store}>
-    <ChatView />
-  </Provider>
-), document.querySelector('main'))
+/* eslint-disable no-new */
+new Vue({
+  store: store,
+  el: '#app',
+  components: { Page },
+  template: '<Page/>'
+})

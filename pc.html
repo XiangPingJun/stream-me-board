@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="shortcut icon" type="image/png" sizes="32x32" href="static/gamepad-32x32.png"/>
+    <link rel="Bookmark" type="image/png" sizes="32x32" href="static/gamepad-32x32.png"/>
+    <link rel="stylesheet" href="/static/common.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="static/tooltip.css">
+    <link rel="stylesheet" href="/static/fontawesome/css/fontawesome-all.css">
+    <link rel="preload" href="static/zpix.ttf" as="font" crossorigin="anonymous" />
+    <link rel="preload" href="static/MobileFont.ttf" as="font" crossorigin="anonymous" />
+    <title>祥平與ice和你一起邊聊邊玩!</title>
+    <script src="static/fp.min.js"></script>
+    <script src="//www.gstatic.com/firebasejs/4.13.0/firebase.js"></script>
+    <script src="//www.gstatic.com/firebasejs/4.13.0/firebase-firestore.js"></script>
+    <script src="static/firebase-conf.js"></script>
+    <script src="//www.youtube.com/iframe_api"></script>
+    <script src="static/bowser.min.js"></script>
+    <style>
+      body {
+        margin: 0px;
+        overflow: hidden;
+        height: 100vh;
+        color: #f8ecd5;
+        text-shadow: 0px 3px #705749, 3px 3px #86674d;
+        background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAI0lEQVQIW2NkwAT/GdHE/gP5jMiCYAGQIpggXAAmiCIAEgQAAE4FBbECyZcAAAAASUVORK5CYII=) #222;
+      }
+      #background {
+        position: fixed;
+        width: 100vw;
+        height: 100vh;
+      }
+      .tooltip {
+        text-shadow: none;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="background"></canvas>
+    <script src="static/background.js"></script>
+
+    <div id="app"></div>
+    <!-- built files will be auto injected -->
+    <span style="font-family:'Mobile Font'"></span>
+    <span style="font-family:'Zpix'"></span>
+  </body>
+</html>
