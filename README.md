@@ -18,7 +18,7 @@ An epic interface for audience interactive with live stream broadcasters.
 
 ## Hit and Vote!
 
-<img src="doc/images/VoteOnWatch.gif?raw=true">
+<img src="doc/images/VoteOnWatch.png?raw=true">
 
 > Broadcaster can also raise a vote that does not like any vote you have seen, we count all the mouse clicks for every body.
 > If the audience really like the candidate, they will sure hit harder on their mouse!
