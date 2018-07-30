@@ -7,10 +7,14 @@ An epic interface for audience interactive with live stream broadcasters.
 
 <img src="doc/images/ScreenshotWatch.png?raw=true">
 
-<img src="doc/images/AnimateEffect.gif?raw=true">
-
 > All the chat messages will pop-up like a comic bubble with motion effect.
 > Audience can also use special screen effect to cheer the party alive!
+
+## 8bit style and CSS animation!
+
+<img src="doc/images/AnimateEffect.gif?raw=true">
+
+> We use an 8bit styled interface and user avatars with CSS animation.
 
 ## Hit and Vote!
 
