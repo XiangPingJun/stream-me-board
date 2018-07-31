@@ -43,7 +43,7 @@ An epic interface for audience interactive with live stream broadcasters.
 
 <img src="doc/images/Admin.png?raw=true">
 
-> Broadcaster can use the controll page to start broadcast and votes.
+> Broadcaster can start broadcast and votes with a decent controll page.
 
 ## Installation
 
