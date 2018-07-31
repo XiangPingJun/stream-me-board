@@ -27,11 +27,11 @@ An epic interface for audience interactive with live stream broadcasters.
 
 > Voting and chat screen looks like this, we can see the latest voting count.
 
-## Chat robot!
+## Quiz game!
 
-<img src='http://i.imgur.com/SplxupV.jpg'>
+<img src="doc/images/Quiz?raw=true">
 
-> You can use the [chat robot](https://github.com/XiangPingJun/chat-robot)
+> There will be quiz games during broadcast, play the game to level up your character!
 
 ## Installation
 
@@ -69,25 +69,22 @@ Then you can test your page on http://localhost:8080
 ## Build and deploy
 
 ```sh
-npm build-watch
-npm build-stream
-npm build-admin
+npm run build
 # This will build the watch, stream, admin page
 
 firebase deploy
 # Upload the built page to firebase hosting, you can later view on firebase
 ```
 
-* It will then all files in public/ for your production.
-* Merge `stream.html` to your Open Broadcaster Software for chat and screen effect.
+* It will then all files in `dist/` for your production.
+* Use `streamOverlay.html` as your Open Broadcaster Software's browser source for chat and screen effect.
 * Use `admin.html` with your password to begin a broadcast on youtube and start vote.
-* Share your `watch.html` link to your audience!
+* Share your firebase root link to your audience!
 
 8. System Architecture
 
 <img src="doc/images/SystemArchitecture.png?raw=true">
 
-* `stream.html` shows the comic-like dialog and screen effect, can be merge to video source through [Open Broadcaster Software](https://obsproject.com/)
-* `watch.html` is the page audience will be look at.
+* `streamOverlay.html` shows the comic-like dialog and screen effect, can be merge to video source through [Open Broadcaster Software](https://obsproject.com/)
+* `pc.html` and `mobile.html` is the page audience will be look at.
 * `admin.html` can be used to manage the page.
-* A [chat robot](https://github.com/XiangPingJun/chat-robot) that runs on different machine.
