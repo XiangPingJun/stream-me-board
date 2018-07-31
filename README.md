@@ -39,6 +39,12 @@ An epic interface for audience interactive with live stream broadcasters.
 
 > Each of the above functions has mobile version, the audience can view it on mobile or pc device.
 
+## Management Controll Page!
+
+<img src="doc/images/Admin.png?raw=true">
+
+> Broadcaster can use the controll page to start broadcast and votes.
+
 ## Installation
 
 1. Install [firebase CLI](https://firebase.google.com/docs/hosting/quickstart) for hosting the page on firebase
