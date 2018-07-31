@@ -29,9 +29,15 @@ An epic interface for audience interactive with live stream broadcasters.
 
 ## Quiz game!
 
-<img src="doc/images/Quiz?raw=true">
+<img src="doc/images/Quiz.png?raw=true">
 
 > There will be quiz games during broadcast, play the game to level up your character!
+
+## Mobile version!
+
+<img src="doc/images/Mobile.png?raw=true">
+
+> Each of the above functions has mobile version, the audience can view it on mobile or pc device.
 
 ## Installation
 
