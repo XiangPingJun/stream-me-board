@@ -1,17 +1,18 @@
-.DS_Store
-node_modules/
-dist/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-test/unit/coverage/
+project/.DS_Store
+project/node_modules/
+project/functions/node_modules/
+project/dist/
+project/npm-debug.log*
+project/yarn-debug.log*
+project/yarn-error.log*
+project/test/unit/coverage/
 
 # Editor directories and files
-.idea
-.vscode
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
+project/.idea
+project/.vscode
+project/*.suo
+project/*.ntvs*
+project/*.njsproj
+project/*.sln
 
-static/firebase-conf.js
+project/static/firebase-conf.js
