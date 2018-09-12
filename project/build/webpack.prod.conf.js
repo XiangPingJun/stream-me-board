@@ -64,7 +64,7 @@ const webpackConfig = merge(baseWebpackConfig, {
     // see https://github.com/ampedandwired/html-webpack-plugin
     new HtmlWebpackPlugin({
       filename: config.build.pc,
-      template: 'html/pc.html',
+      template: 'pc.html',
       inject: true,
       minify: {
         removeComments: true,
@@ -76,7 +76,7 @@ const webpackConfig = merge(baseWebpackConfig, {
     }),
     new HtmlWebpackPlugin({
       filename: config.build.mobile,
-      template: 'html/mobile.html',
+      template: 'mobile.html',
       inject: true,
       minify: {
         removeComments: true,
@@ -88,7 +88,7 @@ const webpackConfig = merge(baseWebpackConfig, {
     }),
     new HtmlWebpackPlugin({
       filename: config.build.admin,
-      template: 'html/admin.html',
+      template: 'admin.html',
       inject: true,
       minify: {
         removeComments: true,
@@ -100,7 +100,7 @@ const webpackConfig = merge(baseWebpackConfig, {
     }),
     new HtmlWebpackPlugin({
       filename: config.build.chat,
-      template: 'html/chat.html',
+      template: 'chat.html',
       inject: true,
       minify: {
         removeComments: true,
@@ -112,7 +112,7 @@ const webpackConfig = merge(baseWebpackConfig, {
     }),
     new HtmlWebpackPlugin({
       filename: config.build.streamOverlay,
-      template: 'html/streamOverlay.html',
+      template: 'streamOverlay.html',
       inject: true,
       minify: {
         removeComments: true,

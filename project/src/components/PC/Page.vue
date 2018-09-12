@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="page" v-show="preLoaded && (topDialog||middleDialog)">
+    <div class="page" v-show="'PAGE'==pageMode">
       <VideoBox ref="video" :height="videoHeight" :width="videoWidth"/>
       <div class="right-side">
         <!-- top section -->
@@ -24,7 +24,8 @@
         <StickerPicker v-if="'STICKER_PICKER'==bottomDialog" class="bottom sticker-picker"/>
       </div>
     </div>
-    <div class="page" v-if="!preLoaded || (!topDialog&&!middleDialog)"><Loader/></div>
+    <div class="page" v-if="'INTRO'==pageMode"><Intro/></div>
+    <div class="page" v-if="'LOADER'==pageMode"><Loader/></div>
     <Notify :large="true"/>
   </div>
 </template>
@@ -46,11 +47,12 @@ import Vote from './Vote'
 import Loader from '../Loader'
 import StickerPicker from './StickerPicker'
 import ContactUs from './ContactUs'
+import Intro from './Intro'
 import { mapGetters, mapActions, mapState } from 'vuex'
 
 export default {
-  data() { return { videoWidth: 0, videoHeight: 0 } },
-  components: { VideoBox, ChatBox, Quiz, MyInfo, AnonymousInfo, Login, Arrow, AvatarPicker, Notify, Playground, HistoryVideo, FollowUs, Vote, Loader, StickerPicker, ContactUs },
+  data() { return { videoWidth: 0, videoHeight: 0, introDismissed: false } },
+  components: { VideoBox, ChatBox, Quiz, MyInfo, AnonymousInfo, Login, Arrow, AvatarPicker, Notify, Playground, HistoryVideo, FollowUs, Vote, Loader, StickerPicker, ContactUs, Intro },
   mounted() {
     this.subscribeData()
     this.unsubscribeAction = this.$store.subscribeAction((action, state) => {
@@ -111,6 +113,16 @@ export default {
         return 'LOGIN'
       if ('VOTE' == this.middleDialog && !this.voted)
         return 'VOTE'
+    },
+    pageMode() {
+      if (!this.preLoaded)
+        return 'LOADER'
+      else if (!this.introDismissed)
+        return 'INTRO'
+      else if (this.topDialog || this.middleDialog)
+        return 'PAGE'
+      else
+        return 'LOADER'
     },
     ...mapState(['stream', 'uiMode', 'historyVideo', 'chatLines']), ...mapGetters(['myInfo', 'voted', 'onlineUsers', 'preLoaded'])
   },

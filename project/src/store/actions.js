@@ -38,7 +38,7 @@ export default {
 		firestore.doc("system/info").onSnapshot(doc => {
 			if (doc.data().version && doc.data().version != localStorage.version) {
 				localStorage.version = doc.data().version
-				window.location.reload(true)
+				//window.location.reload(true)
 			}
 			commit('setSystemInfo', doc.data())
 		})
@@ -108,11 +108,14 @@ export default {
 		// history video
 		fetch('https://www.googleapis.com/youtube/v3/search?key=AIzaSyBCYPReX74lujmX9tg8AiM-OFGqmKYMZkU&channelId=UCLeQT6hvBgnq_-aKKlcgj1Q&part=snippet,id&order=date&maxResults=20').then(res => res.json()).then(data => commit('setHistoryVideo', data.items.filter(item => item.id.videoId)))
 		commit('addPreLoadItem', 'font')
-		if (document.fonts.check('1em Zpix') && document.fonts.check('1em Mobile Font'))
+		console.log('s')
+
+		if (document.fonts.check('1em Zpix') && document.fonts.check('1em Mobile Font')) {
+			console.log('done')
 			commit('donePreLoadItem', 'font')
-		else
+		} else
 			document.fonts.addEventListener('loadingdone', () => commit('donePreLoadItem', 'font'))
-		setTimeout(() => commit('donePreLoadAll'), 3000)
+		setTimeout(() => commit('donePreLoadAll'), 30000)
 	},
 	async saveMyExp({ state }, payload) {
 		await firestore.collection('user').doc(state.myUid).update({ exp: payload })
