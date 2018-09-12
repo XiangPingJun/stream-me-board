@@ -53,32 +53,32 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     new webpack.NoEmitOnErrorsPlugin(),
     // https://github.com/ampedandwired/html-webpack-plugin
     new HtmlWebpackPlugin({
-      filename: 'pc.html',
-      template: 'pc.html',
+      filename: 'html/pc.html',
+      template: 'html/pc.html',
       inject: true,
       chunks: ['pc']
     }),
     new HtmlWebpackPlugin({
-      filename: 'mobile.html',
-      template: 'mobile.html',
+      filename: 'html/mobile.html',
+      template: 'html/mobile.html',
       inject: true,
       chunks: ['mobile']
     }),
     new HtmlWebpackPlugin({
-      filename: 'admin.html',
-      template: 'admin.html',
+      filename: 'html/admin.html',
+      template: 'html/admin.html',
       inject: true,
       chunks: ['admin']
     }),
     new HtmlWebpackPlugin({
-      filename: 'chat.html',
-      template: 'chat.html',
+      filename: 'html/chat.html',
+      template: 'html/chat.html',
       inject: true,
       chunks: ['chat']
     }),
     new HtmlWebpackPlugin({
-      filename: 'streamOverlay.html',
-      template: 'streamOverlay.html',
+      filename: 'html/streamOverlay.html',
+      template: 'html/streamOverlay.html',
       inject: true,
       chunks: ['streamOverlay']
     }),
@@ -89,7 +89,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
         to: config.dev.assetsSubDirectory,
         ignore: ['.*']
       }, {
-        from: path.resolve(__dirname, '../index.html')
+        from: path.resolve(__dirname, '../html/index.html')
       }
     ]),
   ]
