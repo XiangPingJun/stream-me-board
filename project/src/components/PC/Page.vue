@@ -43,7 +43,6 @@ import Notify from '../Notify'
 import HistoryVideo from './HistoryVideo'
 import FollowUs from './FollowUs'
 import Vote from './Vote'
-import Loader from '../Loader'
 import StickerPicker from './StickerPicker'
 import ContactUs from './ContactUs'
 import Intro from './Intro'
@@ -51,18 +50,10 @@ import { mapGetters, mapActions, mapState, mapMutations } from 'vuex'
 
 export default {
   data() { return { videoWidth: 0, videoHeight: 0, introDismissed: false } },
-  components: { VideoBox, ChatBox, Quiz, MyInfo, AnonymousInfo, Login, Arrow, AvatarPicker, Notify, Playground, HistoryVideo, FollowUs, Vote, Loader, StickerPicker, ContactUs, Intro },
+  components: { VideoBox, ChatBox, Quiz, MyInfo, AnonymousInfo, Login, Arrow, AvatarPicker, Notify, Playground, HistoryVideo, FollowUs, Vote, StickerPicker, ContactUs, Intro },
   mounted() {
-    const img = new Image()
-    img.src = 'static/us.png'
-    this.addPreLoadItem('us.png')
-    img.onload = () => this.donePreLoadItem('us.png')
-
-    const img2 = new Image()
-    img2.src = 'static/arrow.png'
-    this.addPreLoadItem('arrow.png')
-    img2.onload = () => this.donePreLoadItem('arrow.png')
-
+    this.preLoadImg('static/us.png')
+    this.preLoadImg('static/arrow.png')
     setTimeout(() => this.donePreLoadAll(), 10000)
 
     this.subscribeData()
@@ -128,12 +119,11 @@ export default {
     pageMode() {
       if (!this.preLoaded)
         return 'LOADER'
-      else if (!this.introDismissed)
+      if (!this.introDismissed)
         return 'INTRO'
-      else if (this.topDialog || this.middleDialog)
+      if (this.topDialog || this.middleDialog)
         return 'PAGE'
-      else
-        return 'LOADER'
+      return 'LOADER'
     },
     ...mapState(['stream', 'uiMode', 'historyVideo', 'chatLines']), ...mapGetters(['myInfo', 'voted', 'onlineUsers', 'preLoaded'])
   },
@@ -141,17 +131,33 @@ export default {
     pageMode: {
       immediate: true,
       handler(newVal) {
+        if ('INTRO' == newVal)
+          document.body.addEventListener('click', this.dismissIntro, false)
+        else
+          document.body.removeEventListener('click', this.dismissIntro, false)
         document.getElementById('loader').style.display = 'LOADER' == newVal ? 'flex' : 'none'
       }
     }
   },
-  methods: { ...mapActions(['subscribeData']), ...mapMutations(['addPreLoadItem', 'donePreLoadItem', 'donePreLoadAll']) }
+  methods: {
+    preLoadImg(src) {
+      const img = new Image()
+      img.src = src
+      this.addPreLoadItem(src)
+      img.onload = () => this.donePreLoadItem(src)
+    },
+    dismissIntro() {
+      this.introDismissed = true
+    },
+    ...mapActions(['subscribeData']), ...mapMutations(['addPreLoadItem', 'donePreLoadItem', 'donePreLoadAll'])
+  }
 }
 </script>
 
 <style scoped>
 .page {
   display: flex;
+  width: 100vw;
   height: 100vh;
   align-items: center;
   justify-content: center;

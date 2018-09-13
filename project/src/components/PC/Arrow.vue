@@ -1,22 +1,11 @@
 <template>
-	<img :class="cssClass" src="static/arrow.png"/>
+	<span>
+		<img class="animated jello" src="static/arrow.png"/>
+	</span>
 </template>
 
-<script>
-export default {
-	data() {
-		return {
-			cssClass: ''
-		}
-	},
-	mounted() {
-		this.cssClass = 'animated jello'
-	}
-}
-</script>
-
 <style scoped>
-img {
+span {
   position: fixed;
   z-index: 99999;
 }
