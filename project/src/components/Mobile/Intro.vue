@@ -27,13 +27,15 @@
 </template>
 
 <script>
-import Content from './Content'
-import { mapActions } from 'vuex'
-
 export default {
-	components: { Content },
 }
 </script>
 
 <style scoped>
+img {
+  width: 100vw;
+}
+* {
+  font-family: "Meiryo UI", system-ui;
+}
 </style>
