@@ -29,8 +29,9 @@
         <StickerPicker v-if="'STICKER_PICKER'==dialog" :style="dialogStyle()"/>
       </div>
     </div>
-    <Intro v-if="!introDismissed" :style="dialogStyle()"/>
     <Notify/>
+    <div class="MobileFont">&nbsp;</div>
+    <div class="Font Awesome 5 Free">&nbsp;</div>
   </div>
 </template>
 
@@ -48,19 +49,15 @@ import Playground from './Playground'
 import FollowUs from './FollowUs'
 import StickerPicker from './StickerPicker'
 import ContactUs from './ContactUs'
-import Intro from './Intro'
 import { mapActions, mapState, mapGetters, mapMutations } from 'vuex'
 
 export default {
-  components: { VideoBox, IconButton, HistoryVideo, MyInfo, Login, Notify, ChatBox, Quiz, Vote, Playground, FollowUs, StickerPicker, ContactUs, Intro },
-  data() { return { introDismissed: false } },
+  components: { VideoBox, IconButton, HistoryVideo, MyInfo, Login, Notify, ChatBox, Quiz, Vote, Playground, FollowUs, StickerPicker, ContactUs },
   computed: {
     videoWidth() { return document.documentElement.clientWidth - 40 },
     dialog() {
-      if (!this.preLoaded)
+      if (!this.preLoaded || !this.stream.status)
         return 'LOADER'
-      if (!this.introDismissed || !this.stream.status)
-        return
       if (this.uiMode.vote)
         return 'VOTE'
       if (this.uiMode.quiz)
@@ -89,16 +86,12 @@ export default {
     dialog: {
       immediate: true,
       handler(newVal) {
-        if ('INTRO' == newVal)
-          document.body.addEventListener('click', this.dismissIntro, false)
-        else
-          document.body.removeEventListener('click', this.dismissIntro, false)
         document.getElementById('loader').style.display = 'LOADER' == newVal ? 'flex' : 'none'
       }
     }
   },
   mounted() {
-    this.preLoadImg('static/us.png')
+    this.preLoadFont('1em Mobile Font')
     setTimeout(() => this.donePreLoadAll(), 10000)
 
     this.subscribeData()
@@ -106,7 +99,7 @@ export default {
       if ('notify' == action.type)
         this.$notify({
           group: 'notify',
-          data: { ...action.payload.data },
+          data: { ...action.payload.data }, 
           ...action.payload
         })
       else if ('promptLogin' == action.type)
@@ -125,30 +118,22 @@ export default {
     window.removeEventListener('resize', this.handleResize)
   },
   watch: {
-    pageMode: {
+    dialog: {
       immediate: true,
       handler(newVal) {
-        let display
-        if ('LOADER' == newVal) {
-          display = 'flex'
-          document.body.addEventListener('click', this.dismissIntro, false)
-        } else {
-          display = 'none'
-          document.body.removeEventListener('click', this.dismissIntro, false)
-        }
-        document.getElementById('loader').style.display = display
+        document.getElementById('loader').style.display = 'LOADER' == newVal ? 'flex' : 'none'
       }
     }
   },
   methods: {
-    preLoadImg(src) {
-      const img = new Image()
-      img.src = src
-      this.addPreLoadItem(src)
-      img.onload = () => this.donePreLoadItem(src)
-    },
-    dismissIntro() {
-      this.introDismissed = true
+    preLoadFont(name) {
+      this.addPreLoadItem(name)
+      const fontCheck = setInterval(() => {
+        if (!document.fonts.check(name)) 
+          return
+        this.donePreLoadItem(name)
+        clearInterval(fontCheck)
+      }, 200)
     },
     dialogStyle() {
       return { height: document.documentElement.clientHeight - this.videoWidth * (9 / 16) - 10 + 'px' }

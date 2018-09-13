@@ -16,3 +16,8 @@ project/*.njsproj
 project/*.sln
 
 project/static/firebase-conf.js
+project/package-lock\.json
+
+project/\.firebase/
+
+project/functions/package-lock\.json

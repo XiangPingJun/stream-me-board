@@ -45,8 +45,8 @@ export default {
   data() { return { showXpArrow: false, showIceArrow: false } },
   mounted() {
     document.body.style.cursor = 'pointer'
-    setTimeout(() => this.showIceArrow = true, 800)
-    setTimeout(() => this.showXpArrow = true, 1200)
+    setTimeout(() => this.showIceArrow = true, 600)
+    setTimeout(() => this.showXpArrow = true, 1000)
   },
   beforeDestroy() {
     document.body.style.cursor = 'default'
@@ -99,7 +99,7 @@ export default {
 .ice-intro {
   top: calc(50% - 160px);
   left: calc(50% - 450px);
-  animation-delay: 0.8s;
+  animation-delay: 0.6s;
 }
 .ice-arrow {
   top: calc(50% - 40px);
@@ -109,7 +109,7 @@ export default {
 .xp-intro {
   top: calc(50% - 20px);
   left: calc(50% + 270px);
-  animation-delay: 1.2s;
+  animation-delay: 1s;
 }
 .xp-arrow {
   top: calc(50% - 170px);
