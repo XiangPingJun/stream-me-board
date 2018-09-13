@@ -106,16 +106,9 @@ export default {
 				commit('addAnswer', { uid, answer })
 		})
 		// history video
-		fetch('https://www.googleapis.com/youtube/v3/search?key=AIzaSyBCYPReX74lujmX9tg8AiM-OFGqmKYMZkU&channelId=UCLeQT6hvBgnq_-aKKlcgj1Q&part=snippet,id&order=date&maxResults=20').then(res => res.json()).then(data => commit('setHistoryVideo', data.items.filter(item => item.id.videoId)))
-		commit('addPreLoadItem', 'font')
-		console.log('s')
-
-		if (document.fonts.check('1em Zpix') && document.fonts.check('1em Mobile Font')) {
-			console.log('done')
-			commit('donePreLoadItem', 'font')
-		} else
-			document.fonts.addEventListener('loadingdone', () => commit('donePreLoadItem', 'font'))
-		setTimeout(() => commit('donePreLoadAll'), 30000)
+		fetch('https://www.googleapis.com/youtube/v3/search?key=AIzaSyBCYPReX74lujmX9tg8AiM-OFGqmKYMZkU&channelId=UCLeQT6hvBgnq_-aKKlcgj1Q&part=snippet,id&order=date&maxResults=20')
+			.then(res => res.json())
+			.then(data => commit('setHistoryVideo', data.items.filter(item => item.id.videoId)))
 	},
 	async saveMyExp({ state }, payload) {
 		await firestore.collection('user').doc(state.myUid).update({ exp: payload })

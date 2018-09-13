@@ -25,7 +25,6 @@
       </div>
     </div>
     <div class="page" v-if="'INTRO'==pageMode"><Intro/></div>
-    <div class="page" v-if="'LOADER'==pageMode"><Loader/></div>
     <Notify :large="true"/>
   </div>
 </template>
@@ -48,12 +47,24 @@ import Loader from '../Loader'
 import StickerPicker from './StickerPicker'
 import ContactUs from './ContactUs'
 import Intro from './Intro'
-import { mapGetters, mapActions, mapState } from 'vuex'
+import { mapGetters, mapActions, mapState, mapMutations } from 'vuex'
 
 export default {
   data() { return { videoWidth: 0, videoHeight: 0, introDismissed: false } },
   components: { VideoBox, ChatBox, Quiz, MyInfo, AnonymousInfo, Login, Arrow, AvatarPicker, Notify, Playground, HistoryVideo, FollowUs, Vote, Loader, StickerPicker, ContactUs, Intro },
   mounted() {
+    const img = new Image()
+    img.src = 'static/us.png'
+    this.addPreLoadItem('us.png')
+    img.onload = () => this.donePreLoadItem('us.png')
+
+    const img2 = new Image()
+    img2.src = 'static/arrow.png'
+    this.addPreLoadItem('arrow.png')
+    img2.onload = () => this.donePreLoadItem('arrow.png')
+
+    setTimeout(() => this.donePreLoadAll(), 10000)
+
     this.subscribeData()
     this.unsubscribeAction = this.$store.subscribeAction((action, state) => {
       if ('notify' == action.type)
@@ -126,7 +137,15 @@ export default {
     },
     ...mapState(['stream', 'uiMode', 'historyVideo', 'chatLines']), ...mapGetters(['myInfo', 'voted', 'onlineUsers', 'preLoaded'])
   },
-  methods: { ...mapActions(['subscribeData']) }
+  watch: {
+    pageMode: {
+      immediate: true,
+      handler(newVal) {
+        document.getElementById('loader').style.display = 'LOADER' == newVal ? 'flex' : 'none'
+      }
+    }
+  },
+  methods: { ...mapActions(['subscribeData']), ...mapMutations(['addPreLoadItem', 'donePreLoadItem', 'donePreLoadAll']) }
 }
 </script>
 

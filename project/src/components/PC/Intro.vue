@@ -1,22 +1,18 @@
 <template>
-	<div class="intro" v-if="imgLoaded">
+	<div class="intro">
     <div class="MobileFont welcome animated flipInX">
       Welcome to our show !!
     </div>
 		<img src="static/us.png" class="animated flipInY">
-		<div class="animated infinite pulse dismiss blue">
-      <a>( Click to continue )</a>
+		<div class="MobileFont animated infinite pulse dismiss">
+      &gt;&gt; Click to continue &lt;&lt;
     </div>
 	</div>
 </template>
 
 <script>
 export default {
-	data() { return { imgLoaded: false } },
 	mounted() {
-		const img = new Image()
-		img.src = 'static/us.png'
-		img.onload = () => this.imgLoaded = true
 		document.body.style.cursor = 'pointer'
 	},
 	beforeDestroy() {
@@ -34,8 +30,10 @@ export default {
   font-weight: bold;
 }
 .dismiss {
+  animation-duration: 3s;
+  color: #99befd !important;
+  text-shadow: 0px 2px #5b6ee1 !important;
   font-size: 20px;
   font-weight: bold;
-  animation-duration: 3s;
 }
 </style>
