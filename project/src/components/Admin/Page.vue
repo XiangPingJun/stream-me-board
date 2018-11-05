@@ -14,6 +14,8 @@
       
       <div>影片網址:</div>
       <input :value="stream.videoUrl" @change="e => saveVideoUrl(e.target.value.trim())" onfocus="this.select()">
+      <div>預計開始時間:</div>
+      <input :value="stream.planToStartAt" @change="e => savePlanToStartAt(e.target.value.trim())" onfocus="this.select()">
       <p/>
 
       <div>今天跟大家一起玩的是:</div>

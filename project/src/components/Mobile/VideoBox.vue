@@ -5,7 +5,7 @@
       Thanks for watching !!
     </div>
     <div v-if="null===videoUrl&&'WILL_START'===stream.status" class="will-start red MobileFont animated infinite pulse">
-      Show will be started !!
+      Show will start at {{stream.planToStartAt}} !!
     </div>
   </div>
 </template>

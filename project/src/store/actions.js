@@ -308,6 +308,12 @@ export default {
 				return convertToYoutube(arr[1])
 		}
 	},
+	async savePlanToStartAt({ dispatch }, payload) {
+		await firestore.doc('system/stream').update({
+			planToStartAt: payload
+		})
+		dispatch('notify', { text: '已更新預計開始時間' })
+	},
 	async startStream({ }) {
 		await firestore.doc('system/stream').update({
 			status: 'STARTED'
