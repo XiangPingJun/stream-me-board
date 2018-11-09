@@ -88,7 +88,7 @@ export default {
       else if ('STARTED' == val.status)
         setTimeout(() => this.sendChat({ uid: 'system', text: '直播開始囉！大家坐穩啦！' }), 3000)
       else if ('ENDED' == val.status)
-        this.sendChat({ uid: 'system', text: '直播結束囉！期待下次與大家相會！' })
+        this.sendChat({ uid: 'system', text: '直播結束囉！每周五22:00試撥中！其餘加開次請參考上方 "如何追蹤我們的頻道？"' })
     },
     userSearch(val, oldVal) {
       val = val.trim().toLowerCase()
