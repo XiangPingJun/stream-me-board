@@ -35,13 +35,6 @@ export default {
 			commit('setStream', doc.data())
 			dispatch('checkTrophy')
 		})
-		firestore.doc("system/info").onSnapshot(doc => {
-			if (doc.data().version && doc.data().version != localStorage.version) {
-				localStorage.version = doc.data().version
-				//window.location.reload(true)
-			}
-			commit('setSystemInfo', doc.data())
-		})
 		// my login info
 		firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
 		firebase.auth().onAuthStateChanged(async user => {

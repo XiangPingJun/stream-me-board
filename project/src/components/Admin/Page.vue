@@ -64,7 +64,7 @@ export default {
   data() { return { name: '', password: '', sending: null, voteOptionCount: 2, userSearch: ' ', filteredUid: [], showRunTestConfirm: false } },
   created() { this.subscribeData() },
   components: { Notify },
-  methods: { ...mapActions(['subscribeData', 'loginAdmin', 'streamWillStart', 'startStream', 'stopStream', 'saveVideoUrl', 'saveGameTitle', 'saveGameUrl', 'saveGameDescription', 'startVote', 'sendChat', 'runTest']) },
+  methods: { ...mapActions(['subscribeData', 'loginAdmin', 'streamWillStart', 'startStream', 'stopStream', 'saveVideoUrl', 'saveGameTitle', 'saveGameUrl', 'saveGameDescription','savePlanToStartAt', 'startVote', 'sendChat', 'runTest']) },
   computed: { ...mapState(['voteInfo', 'isAdmin', 'stream', 'voteRoster', 'quizRoster', 'quizInfo', 'allUsers']) },
   mounted() {
     this.unsubscribeAction = this.$store.subscribeAction((action, state) => {

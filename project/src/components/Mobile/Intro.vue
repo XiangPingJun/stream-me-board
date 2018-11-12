@@ -1,6 +1,6 @@
 <template>
   <div>
-		<img src="static/us.png" class="img animated flipInY">
+		<img src="static/reputation.png" class="img animated flipInY">
 
 		<div class="ice-intro animated flipInX">
       <h2>Ice</h2>

@@ -3,7 +3,7 @@
     <div class="welcome MobileFont animated flipInX">
       Welcome to our show !!
     </div>
-		<img src="static/us.png" class="img animated flipInY">
+		<img src="static/reputation.png" class="img animated flipInY">
     
     <Arrow v-if="showIceArrow" class="ice-arrow"/>
     <div class="ice-intro animated flipInX">
