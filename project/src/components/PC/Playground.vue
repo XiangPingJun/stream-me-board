@@ -7,7 +7,7 @@
       <div style="margin:2px 0px">
         【<a :href="stream.gameUrl" target="_blank">{{stream.gameTitle}}</a>】
       </div>
-      <div>是{{stream.gameDescription}}</div>
+      <div>{{stream.gameDescription}}</div>
       快點來加入一起聊天吧！<br/>
     </i>
     <div class="padding-line"/>
