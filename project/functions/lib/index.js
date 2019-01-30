@@ -68,7 +68,7 @@ exports.startQuiz = functions.https.onRequest((request, response) => __awaiter(t
     }
     response.send('');
 }));
-exports.endVote = functions.firestore.document('system/vote').onWrite((change, context) => __awaiter(this, void 0, void 0, function* () {
+exports.endVote = functions.firestore.document('system/vote').onUpdate((change, context) => __awaiter(this, void 0, void 0, function* () {
     if (change.before.data().time == change.after.data().time || change.after.data().ended)
         return undefined;
     yield new Promise(resolve => setTimeout(resolve, VOTE_TIMEOUT));

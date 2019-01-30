@@ -21,3 +21,5 @@ project/package-lock\.json
 project/\.firebase/
 
 project/functions/package-lock\.json
+
+project/functions/firebase-debug\.log
