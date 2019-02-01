@@ -31,10 +31,7 @@ export default {
   mounted() {
     this.$el.addEventListener("animationend", () => (this.dialogClass = ""));
     this.flipInterval = setInterval(
-      () =>
-        (this.timerRate =
-          1 - (new Date().getTime() - this.quizStartTime) / QUIZ_TIMEOUT),
-      100
+      () => this.timerRate = 1 - (new Date().getTime() - this.quizStartTime) / QUIZ_TIMEOUT, 100
     );
   },
   beforeDestroy() {

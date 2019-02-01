@@ -40,6 +40,10 @@ const sendSystemChat = function (text) {
     });
 };
 exports.startQuiz = functions.https.onRequest((request, response) => __awaiter(this, void 0, void 0, function* () {
+    if ('STARTED' !== (yield firestore.doc('system/stream').get()).data().status) {
+        response.send('');
+        return;
+    }
     let doc = yield firestore.doc('system/quiz').get();
     doc = yield firestore.doc('system/quizHistory').get();
     const quizDb = {};
@@ -55,16 +59,12 @@ exports.startQuiz = functions.https.onRequest((request, response) => __awaiter(t
         yield firestore.doc('system/quiz').set(Object.assign({ time: admin.firestore.FieldValue.serverTimestamp(), Q: question, ended: false }, quiz));
         yield firestore.doc('system/quizHistory').update({ [hashStr(question)]: true });
         yield firestore.doc('activity/quiz').set({});
-        const status = (yield firestore.doc('system/stream').get()).data().status;
-        if ('STARTED' == status) {
-            let text = `問: ${question} `;
-            quiz.OP.forEach(op => text += `[${op}] `);
-            yield sendSystemChat(text);
-        }
+        let text = `問: ${question} `;
+        quiz.OP.forEach(op => text += `[${op}] `);
+        yield sendSystemChat(text);
         yield new Promise(resolve => setTimeout(resolve, QUIZ_TIMEOUT));
         yield firestore.doc('system/quiz').update({ ended: true });
-        if ('STARTED' == status)
-            yield sendSystemChat(`答: ${quiz.OP[quiz.A]}`);
+        yield sendSystemChat(`答: ${quiz.OP[quiz.A]}`);
     }
     response.send('');
 }));

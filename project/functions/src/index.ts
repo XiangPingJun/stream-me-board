@@ -33,6 +33,11 @@ const sendSystemChat = async function (text) {
 }
 
 export const startQuiz = functions.https.onRequest(async (request, response) => {
+	if ('STARTED' !== (await firestore.doc('system/stream').get()).data().status) {
+		response.send('')
+		return
+	}
+
 	let doc = await firestore.doc('system/quiz').get()
 	doc = await firestore.doc('system/quizHistory').get()
 	const quizDb = {}
@@ -55,16 +60,12 @@ export const startQuiz = functions.https.onRequest(async (request, response) => 
 		await firestore.doc('system/quizHistory').update({ [hashStr(question)]: true })
 		await firestore.doc('activity/quiz').set({})
 
-		const status = (await firestore.doc('system/stream').get()).data().status
-		if ('STARTED' == status) {
-			let text = `問: ${question} `
-			quiz.OP.forEach(op => text += `[${op}] `)
-			await sendSystemChat(text)
-		}
+		let text = `問: ${question} `
+		quiz.OP.forEach(op => text += `[${op}] `)
+		await sendSystemChat(text)
 		await new Promise(resolve => setTimeout(resolve, QUIZ_TIMEOUT))
 		await firestore.doc('system/quiz').update({ ended: true })
-		if ('STARTED' == status)
-			await sendSystemChat(`答: ${quiz.OP[quiz.A]}`)
+		await sendSystemChat(`答: ${quiz.OP[quiz.A]}`)
 	}
 
 	response.send('')
