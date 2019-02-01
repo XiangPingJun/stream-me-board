@@ -71,7 +71,7 @@ export const startQuiz = functions.https.onRequest(async (request, response) => 
 	response.send('')
 })
 
-export const endVote = functions.firestore.document('system/vote').onWrite(async (change, context) => {
+export const endVote = functions.firestore.document('system/vote').onUpdate(async (change, context) => {
 	if (change.before.data().time == change.after.data().time || change.after.data().ended)
 		return undefined
 	await new Promise(resolve => setTimeout(resolve, VOTE_TIMEOUT))

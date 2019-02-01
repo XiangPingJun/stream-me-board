@@ -35,13 +35,6 @@ export default {
 			commit('setStream', doc.data())
 			dispatch('checkTrophy')
 		})
-		firestore.doc("system/info").onSnapshot(doc => {
-			if (doc.data().version && doc.data().version != localStorage.version) {
-				localStorage.version = doc.data().version
-				//window.location.reload(true)
-			}
-			commit('setSystemInfo', doc.data())
-		})
 		// my login info
 		firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
 		firebase.auth().onAuthStateChanged(async user => {
@@ -307,6 +300,12 @@ export default {
 			if (arr)
 				return convertToYoutube(arr[1])
 		}
+	},
+	async savePlanToStartAt({ dispatch }, payload) {
+		await firestore.doc('system/stream').update({
+			planToStartAt: payload
+		})
+		dispatch('notify', { text: '已更新預計開始時間' })
 	},
 	async startStream({ }) {
 		await firestore.doc('system/stream').update({

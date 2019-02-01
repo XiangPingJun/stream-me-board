@@ -52,7 +52,7 @@ export default {
   data() { return { videoWidth: 0, videoHeight: 0, introDismissed: false } },
   components: { VideoBox, ChatBox, Quiz, MyInfo, AnonymousInfo, Login, Arrow, AvatarPicker, Notify, Playground, HistoryVideo, FollowUs, Vote, StickerPicker, ContactUs, Intro },
   mounted() {
-    this.preLoadImg('static/us.png')
+    this.preLoadImg('static/reputation.png')
     this.preLoadImg('static/arrow.png')
     setTimeout(() => this.donePreLoadAll(), 10000)
 

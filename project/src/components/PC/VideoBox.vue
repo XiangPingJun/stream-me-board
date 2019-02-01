@@ -2,14 +2,25 @@
   <div style="display:flex; justify-content:center;" :style="{width:videoSize.width}">
     <div class="video-box animated" :class="{flipInX: loaded}" v-show="loaded && videoUrl">
       <div class="video-container">
-        <iframe ref="iframe" frameBorder="0" allow="autoplay; encrypted-media" :src="videoUrl" :style="videoSize"/>
+        <iframe
+          ref="iframe"
+          frameborder="0"
+          allowfullscreen="true"
+          :src="videoUrl"
+          :style="videoSize"
+        />
       </div>
     </div>
-    <div class="MobileFont thank-you animated flipInX" v-if="null===videoUrl&&'ENDED'==stream.status">
-      Thanks for watching !!
-    </div>
-    <div class="MobileFont will-start animated infinite pulse red" v-if="null===videoUrl&&'WILL_START'===stream.status">
-      Show will be started !!
+    <div
+      class="MobileFont thank-you animated flipInX"
+      v-if="null===videoUrl&&'ENDED'==stream.status"
+    >Thanks for watching !!</div>
+    <div
+      class="MobileFont will-start animated infinite pulse red"
+      v-if="null===videoUrl&&'WILL_START'===stream.status"
+    >Show will start
+      <br>
+      at {{stream.planToStartAt}} !!
     </div>
   </div>
 </template>

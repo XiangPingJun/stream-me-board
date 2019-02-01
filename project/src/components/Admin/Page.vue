@@ -14,6 +14,8 @@
       
       <div>影片網址:</div>
       <input :value="stream.videoUrl" @change="e => saveVideoUrl(e.target.value.trim())" onfocus="this.select()">
+      <div>預計開始時間:</div>
+      <input :value="stream.planToStartAt" @change="e => savePlanToStartAt(e.target.value.trim())" onfocus="this.select()">
       <p/>
 
       <div>今天跟大家一起玩的是:</div>
@@ -62,7 +64,7 @@ export default {
   data() { return { name: '', password: '', sending: null, voteOptionCount: 2, userSearch: ' ', filteredUid: [], showRunTestConfirm: false } },
   created() { this.subscribeData() },
   components: { Notify },
-  methods: { ...mapActions(['subscribeData', 'loginAdmin', 'streamWillStart', 'startStream', 'stopStream', 'saveVideoUrl', 'saveGameTitle', 'saveGameUrl', 'saveGameDescription', 'startVote', 'sendChat', 'runTest']) },
+  methods: { ...mapActions(['subscribeData', 'loginAdmin', 'streamWillStart', 'startStream', 'stopStream', 'saveVideoUrl', 'saveGameTitle', 'saveGameUrl', 'saveGameDescription','savePlanToStartAt', 'startVote', 'sendChat', 'runTest']) },
   computed: { ...mapState(['voteInfo', 'isAdmin', 'stream', 'voteRoster', 'quizRoster', 'quizInfo', 'allUsers']) },
   mounted() {
     this.unsubscribeAction = this.$store.subscribeAction((action, state) => {
@@ -86,7 +88,7 @@ export default {
       else if ('STARTED' == val.status)
         setTimeout(() => this.sendChat({ uid: 'system', text: '直播開始囉！大家坐穩啦！' }), 3000)
       else if ('ENDED' == val.status)
-        this.sendChat({ uid: 'system', text: '直播結束囉！期待下次與大家相會！' })
+        this.sendChat({ uid: 'system', text: '直播結束囉！每周五22:00試撥中！其餘加開次請參考上方 "如何追蹤我們的頻道？"' })
     },
     userSearch(val, oldVal) {
       val = val.trim().toLowerCase()
