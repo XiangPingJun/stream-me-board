@@ -81,7 +81,7 @@ exports.endVote = functions.firestore.document('system/vote').onUpdate((change, 
     totalArr.forEach((total, i) => text += `${String.fromCharCode(65 + i)}(${total}票) `);
     yield sendSystemChat(text);
 }));
-exports.clearInactiveUser = functions.firestore.document('system/quizHistory').onUpdate((change, context) => __awaiter(this, void 0, void 0, function* () {
+exports.clearInactiveUser = functions.firestore.document('system/{doc}').onUpdate((change, context) => __awaiter(this, void 0, void 0, function* () {
     // Remove inactive user
     const online = (yield firestore.doc('activity/online').get()).data();
     const idsToRemove = {};

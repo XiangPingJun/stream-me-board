@@ -86,7 +86,7 @@ export const endVote = functions.firestore.document('system/vote').onUpdate(asyn
 	await sendSystemChat(text)
 })
 
-export const clearInactiveUser = functions.firestore.document('system/quizHistory').onUpdate(async (change, context) => {
+export const clearInactiveUser = functions.firestore.document('system/{doc}').onUpdate(async (change, context) => {
 	// Remove inactive user
 	const online = (await firestore.doc('activity/online').get()).data()
 	const idsToRemove = {}
