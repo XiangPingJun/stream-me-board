@@ -37,9 +37,7 @@ export const startQuiz = functions.https.onRequest(async (request, response) => 
 		response.send('')
 		return
 	}
-
-	let doc = await firestore.doc('system/quiz').get()
-	doc = await firestore.doc('system/quizHistory').get()
+	const doc = await firestore.doc('system/quizHistory').get()
 	const quizDb = {}
 	for (const i in QUIZ_DB)
 		if (!doc.data()[hashStr(i)])
@@ -63,12 +61,18 @@ export const startQuiz = functions.https.onRequest(async (request, response) => 
 		let text = `問: ${question} `
 		quiz.OP.forEach(op => text += `[${op}] `)
 		await sendSystemChat(text)
-		await new Promise(resolve => setTimeout(resolve, QUIZ_TIMEOUT))
-		await firestore.doc('system/quiz').update({ ended: true })
-		await sendSystemChat(`答: ${quiz.OP[quiz.A]}`)
 	}
 
 	response.send('')
+})
+
+export const endQuiz = functions.firestore.document('system/quiz').onUpdate(async (change, context) => {
+	if (change.before.data().time == change.after.data().time || change.after.data().ended)
+		return undefined
+	await new Promise(resolve => setTimeout(resolve, QUIZ_TIMEOUT))
+	await firestore.doc('system/quiz').update({ ended: true })
+	const quiz = (await firestore.doc('system/quiz').get()).data()
+	await sendSystemChat(`答: ${quiz.OP[quiz.A]}`)
 })
 
 export const endVote = functions.firestore.document('system/vote').onUpdate(async (change, context) => {

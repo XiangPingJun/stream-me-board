@@ -44,8 +44,7 @@ exports.startQuiz = functions.https.onRequest((request, response) => __awaiter(t
         response.send('');
         return;
     }
-    let doc = yield firestore.doc('system/quiz').get();
-    doc = yield firestore.doc('system/quizHistory').get();
+    const doc = yield firestore.doc('system/quizHistory').get();
     const quizDb = {};
     for (const i in quiz_1.default)
         if (!doc.data()[hashStr(i)])
@@ -62,11 +61,16 @@ exports.startQuiz = functions.https.onRequest((request, response) => __awaiter(t
         let text = `問: ${question} `;
         quiz.OP.forEach(op => text += `[${op}] `);
         yield sendSystemChat(text);
-        yield new Promise(resolve => setTimeout(resolve, QUIZ_TIMEOUT));
-        yield firestore.doc('system/quiz').update({ ended: true });
-        yield sendSystemChat(`答: ${quiz.OP[quiz.A]}`);
     }
     response.send('');
+}));
+exports.endQuiz = functions.firestore.document('system/quiz').onUpdate((change, context) => __awaiter(this, void 0, void 0, function* () {
+    if (change.before.data().time == change.after.data().time || change.after.data().ended)
+        return undefined;
+    yield new Promise(resolve => setTimeout(resolve, QUIZ_TIMEOUT));
+    yield firestore.doc('system/quiz').update({ ended: true });
+    const quiz = (yield firestore.doc('system/quiz').get()).data();
+    yield sendSystemChat(`答: ${quiz.OP[quiz.A]}`);
 }));
 exports.endVote = functions.firestore.document('system/vote').onUpdate((change, context) => __awaiter(this, void 0, void 0, function* () {
     if (change.before.data().time == change.after.data().time || change.after.data().ended)
