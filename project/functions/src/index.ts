@@ -67,8 +67,8 @@ export const startQuiz = functions.https.onRequest(async (request, response) => 
 })
 
 export const endQuiz = functions.firestore.document('system/quiz').onUpdate(async (change, context) => {
-	if (change.before.data().time == change.after.data().time || change.after.data().ended)
-		return undefined
+	if (change.after.data().ended)
+		return
 	await new Promise(resolve => setTimeout(resolve, QUIZ_TIMEOUT))
 	await firestore.doc('system/quiz').update({ ended: true })
 	const quiz = (await firestore.doc('system/quiz').get()).data()
@@ -76,8 +76,8 @@ export const endQuiz = functions.firestore.document('system/quiz').onUpdate(asyn
 })
 
 export const endVote = functions.firestore.document('system/vote').onUpdate(async (change, context) => {
-	if (change.before.data().time == change.after.data().time || change.after.data().ended)
-		return undefined
+	if (change.after.data().ended)
+		return
 	await new Promise(resolve => setTimeout(resolve, VOTE_TIMEOUT))
 	await firestore.doc('system/vote').update({ ended: true })
 

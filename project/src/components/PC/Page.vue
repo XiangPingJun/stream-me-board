@@ -175,16 +175,17 @@ export default {
 }
 .right-side .middle {
   flex-shrink: 1;
+  height: calc(100vh - 390px);
 }
 .right-side .bottom {
   flex-grow: 1;
   flex-shrink: 9999999;
 }
 .right-side .bottom.chat-box {
-  min-height: 270px;
+  min-height: 240px;
 }
 .right-side .bottom.sticker-picker {
-  min-height: 300px;
+  min-height: 240px;
 }
 .login-arrow {
   top: 60px;

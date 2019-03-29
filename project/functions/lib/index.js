@@ -65,16 +65,16 @@ exports.startQuiz = functions.https.onRequest((request, response) => __awaiter(t
     response.send('');
 }));
 exports.endQuiz = functions.firestore.document('system/quiz').onUpdate((change, context) => __awaiter(this, void 0, void 0, function* () {
-    if (change.before.data().time == change.after.data().time || change.after.data().ended)
-        return undefined;
+    if (change.after.data().ended)
+        return;
     yield new Promise(resolve => setTimeout(resolve, QUIZ_TIMEOUT));
     yield firestore.doc('system/quiz').update({ ended: true });
     const quiz = (yield firestore.doc('system/quiz').get()).data();
     yield sendSystemChat(`答: ${quiz.OP[quiz.A]}`);
 }));
 exports.endVote = functions.firestore.document('system/vote').onUpdate((change, context) => __awaiter(this, void 0, void 0, function* () {
-    if (change.before.data().time == change.after.data().time || change.after.data().ended)
-        return undefined;
+    if (change.after.data().ended)
+        return;
     yield new Promise(resolve => setTimeout(resolve, VOTE_TIMEOUT));
     yield firestore.doc('system/vote').update({ ended: true });
     const voteObj = (yield firestore.doc('activity/vote').get()).data();
