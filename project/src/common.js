@@ -20,7 +20,7 @@ export const getWindowWidth = () => window.innerWidth || document.documentElemen
 export const getWindowHeight = () => window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight
 export const VOTE_TIMEOUT = 23000
 export const QUIZ_TIMEOUT = 27000
-export const DISPLAY_TIMEOUT = 9000
+export const DISPLAY_TIMEOUT = 3000
 export const preservedUsers = {
 	system: {
 		avatarSelected: 0,

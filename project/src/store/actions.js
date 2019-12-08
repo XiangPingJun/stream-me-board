@@ -99,9 +99,9 @@ export default {
 				commit('addAnswer', { uid, answer })
 		})
 		// history video
-		fetch('https://www.googleapis.com/youtube/v3/search?key=AIzaSyBCYPReX74lujmX9tg8AiM-OFGqmKYMZkU&channelId=UCLeQT6hvBgnq_-aKKlcgj1Q&part=snippet,id&order=date&maxResults=20')
-			.then(res => res.json())
-			.then(data => commit('setHistoryVideo', data.items.filter(item => item.id.videoId)))
+		// fetch('https://www.googleapis.com/youtube/v3/search?key=AIzaSyBCYPReX74lujmX9tg8AiM-OFGqmKYMZkU&channelId=UCLeQT6hvBgnq_-aKKlcgj1Q&part=snippet,id&order=date&maxResults=20')
+		// 	.then(res => res.json())
+		// 	.then(data => commit('setHistoryVideo', data.items.filter(item => item.id.videoId)))
 	},
 	async saveMyExp({ state }, payload) {
 		await firestore.collection('user').doc(state.myUid).update({ exp: payload })

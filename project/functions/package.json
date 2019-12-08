@@ -12,12 +12,15 @@
   "main": "lib/index.js",
   "dependencies": {
     "firebase-admin": "~5.12.1",
-    "firebase-functions": "^1.0.3",
+    "firebase-functions": "^3.3.0",
     "shortid": "^2.2.8"
   },
   "devDependencies": {
     "tslint": "^5.8.0",
     "typescript": "^2.5.3"
+  },
+  "engines": {
+    "node": "10"
   },
   "private": true
 }
